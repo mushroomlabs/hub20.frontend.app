@@ -1,0 +1,20 @@
+// Base Bootstrap
+@import "~bootstrap/scss/bootstrap.scss";
+@import "~bootstrap/scss/_variables.scss";
+
+// theme-specific imports
+@import "./paper/_variables.scss";
+@import "./paper/mixins/_buttons.scss";
+@import "./paper/mixins/_vendor-prefixes.scss";
+
+// Application base
+@import "./app/app.scss";
+
+// Base Views/pages
+@import "./app/registration.scss";
+@import "./app/dashboard.scss";
+
+// Application-wide Widgets
+@import "./app/table.scss";
+
+@import "./toolkit/widgets.scss"
