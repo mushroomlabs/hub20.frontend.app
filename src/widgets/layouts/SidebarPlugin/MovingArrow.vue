@@ -1,6 +1,5 @@
 <template>
-  <div class="moving-arrow" :style="arrowStyle">
-  </div>
+  <div class="moving-arrow" :style="arrowStyle"></div>
 </template>
 <script>
 export default {
@@ -18,10 +17,10 @@ export default {
     arrowStyle() {
       return {
         transform: `translate3d(0px, ${this.moveY}px, 0px)`
-      };
+      }
     }
   }
-};
+}
 </script>
 <style lang="scss">
 $bg-nude: #f4f3ef !default;

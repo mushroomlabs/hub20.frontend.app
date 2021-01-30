@@ -10,22 +10,20 @@
         </div>
       </div>
       <div v-if="$slots.footer">
-        <hr/>
+        <hr />
         <slot name="footer"></slot>
       </div>
     </div>
-
   </card>
 </template>
 <script>
-import Card from "./Card.vue";
+import Card from './Card.vue'
 
 export default {
-  name: "stats-card",
+  name: 'stats-card',
   components: {
     Card
   }
-};
+}
 </script>
-<style>
-</style>
+<style></style>

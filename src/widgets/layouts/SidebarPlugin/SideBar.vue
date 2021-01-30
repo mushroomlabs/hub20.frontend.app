@@ -1,27 +1,24 @@
 <template>
   <div class="sidebar">
     <router-link to="/" class="logo" exact>
-      <img src="@/assets/img/logos/ethereum.svg">
+      <img src="@/assets/img/logos/ethereum.svg" />
       <span>{{ title }}</span>
     </router-link>
     <slot></slot>
     <ul class="nav">
-      <slot name="links">
-      </slot>
+      <slot name="links"> </slot>
     </ul>
-    <moving-arrow :move-y="arrowMovePx">
-
-    </moving-arrow>
+    <moving-arrow :move-y="arrowMovePx"> </moving-arrow>
   </div>
 </template>
 <script>
-import MovingArrow from "./MovingArrow";
+import MovingArrow from './MovingArrow'
 
 export default {
   props: {
     title: {
       type: String,
-      default: "Hub20"
+      default: 'Hub20'
     },
     autoClose: {
       type: Boolean,
@@ -31,17 +28,19 @@ export default {
   provide() {
     return {
       autoClose: this.autoClose
-    };
+    }
   },
   components: {
-    MovingArrow,
+    MovingArrow
   },
   computed: {
     links() {
-      return this.$children.filter(component => { return component.$options.name === "sidebar-link" });
+      return this.$children.filter(component => {
+        return component.$options.name === 'sidebar-link'
+      })
     },
     arrowMovePx() {
-      return this.linkHeight * this.activeLinkIndex;
+      return this.linkHeight * this.activeLinkIndex
     }
   },
   data() {
@@ -50,22 +49,22 @@ export default {
       activeLinkIndex: 0,
       windowWidth: 0,
       isWindows: false,
-      hasAutoHeight: false,
-    };
+      hasAutoHeight: false
+    }
   },
   methods: {
     findActiveLink() {
       this.links.forEach((link, index) => {
         if (link.isActive) {
-          this.activeLinkIndex = index;
+          this.activeLinkIndex = index
         }
-      });
+      })
     }
   },
   mounted() {
-    this.$watch("$route", this.findActiveLink, {
+    this.$watch('$route', this.findActiveLink, {
       immediate: true
-    });
+    })
   }
-};
+}
 </script>

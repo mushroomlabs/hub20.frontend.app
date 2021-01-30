@@ -2,5 +2,5 @@
   <h1>Market</h1>
 </template>
 <script>
-  export default {}
+export default {}
 </script>

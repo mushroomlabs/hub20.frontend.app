@@ -19,7 +19,7 @@ let widgets = {
   StatsCard,
   PaperTable,
   DropDown,
-  SidebarPlugin,
+  SidebarPlugin
 }
 
 export default widgets
@@ -33,5 +33,5 @@ export {
   PaperTable,
   DropDown,
   Button,
-  SidebarPlugin,
+  SidebarPlugin
 }

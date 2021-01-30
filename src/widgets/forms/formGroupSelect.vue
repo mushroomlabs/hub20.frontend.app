@@ -15,7 +15,7 @@
       aria-describedby="addon-right addon-left"
       :multiple="multiple"
       v-model="selected"
-      >
+    >
       <option
         v-for="option in options"
         :key="option.value"
@@ -40,7 +40,7 @@ export default {
   name: 'fg-select',
   model: {
     prop: 'selected',
-    event: 'change',
+    event: 'change'
   },
   props: {
     label: String,
@@ -60,8 +60,8 @@ export default {
   },
   watch: {
     selected(newValue) {
-      this.$emit("change", newValue)
-    },
+      this.$emit('change', newValue)
+    }
   },
   computed: {
     hasIcon() {
@@ -72,7 +72,7 @@ export default {
         this.addonRightIcon !== undefined ||
         this.addonLeftIcon !== undefined
       )
-    },
-  },
+    }
+  }
 }
 </script>

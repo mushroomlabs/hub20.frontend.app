@@ -50,7 +50,7 @@ import {mapGetters, mapMutations, mapActions} from 'vuex'
 export default {
   data() {
     return {
-      validationErrors: {},
+      validationErrors: {}
     }
   },
   watch: {
@@ -74,13 +74,13 @@ export default {
       } else {
         this.$set(this.validationErrors, 'acceptedTokens', null)
       }
-    },
+    }
   },
   computed: {
     ...mapGetters('stores', {
       store: 'storeEditData',
       stores: 'storesById',
-      submissionErrors: 'storeEditError',
+      submissionErrors: 'storeEditError'
     }),
     ...mapGetters('tokens', {tokenMap: 'tokensByAddress'}),
     isNew() {
@@ -90,13 +90,13 @@ export default {
       return this.isNew ? 'Create new Store' : `Edit Store ${this.store.name}`
     },
     isValid() {
-      return Object.values(this.validationErrors).every((attr) => !attr)
+      return Object.values(this.validationErrors).every(attr => !attr)
     },
     tokenOptions() {
-      return Object.values(this.tokenMap).map((token) => {
+      return Object.values(this.tokenMap).map(token => {
         return {
           value: token.address,
-          text: token.code,
+          text: token.code
         }
       })
     },
@@ -106,7 +106,7 @@ export default {
       },
       set(value) {
         this.updateName(value.trim())
-      },
+      }
     },
     acceptedTokens: {
       get() {
@@ -114,7 +114,7 @@ export default {
       },
       set(value) {
         this.updateAcceptedTokens(value)
-      },
+      }
     },
     siteUrl: {
       get() {
@@ -122,14 +122,14 @@ export default {
       },
       set(value) {
         return this.updateSiteUrl(value)
-      },
-    },
+      }
+    }
   },
   methods: {
     ...mapMutations('stores', {
       updateName: 'STORE_EDIT_SET_NAME',
       updateSiteUrl: 'STORE_EDIT_SET_URL',
-      updateAcceptedTokens: 'STORE_EDIT_SET_ACCEPTED_TOKENS',
+      updateAcceptedTokens: 'STORE_EDIT_SET_ACCEPTED_TOKENS'
     }),
     ...mapActions('stores', ['editStore', 'updateStore', 'createStore']),
     save(storeData) {
@@ -140,12 +140,12 @@ export default {
           this.$notify({message: `${storeData.name} saved successfully`, type: 'success'})
         )
         .then(() => this.$router.push({name: 'stores'}))
-    },
+    }
   },
   mounted() {
     const storeId = this.isNew ? null : this.$route.params.id
     this.editStore(storeId).then(() => (this.validationErrors = {}))
-  },
+  }
 }
 </script>
 

@@ -7,9 +7,10 @@
         type="button"
         v-for="step in steps"
         :value="balance * step"
-        :class="{'active': (balance * step) == amount}"
+        :class="{active: balance * step == amount}"
         @click="selectAmount($event)"
-        :key="step">
+        :key="step"
+      >
         {{ 100 * step }}%
       </button>
     </div>
@@ -20,7 +21,7 @@
       v-model="amount"
       :errorMessage="validationErrors.amount"
       required
-      />
+    />
 
     <fg-input
       type="text"
@@ -28,12 +29,9 @@
       v-model="address"
       :errorMessage="validationErrors.address"
       required
-      />
+    />
 
-    <p-button
-      block
-      @click.native="createTransfer({token, amount, address})"
-      :disabled="!isValid">
+    <p-button block @click.native="createTransfer({token, amount, address})" :disabled="!isValid">
       Transfer
     </p-button>
   </card>
@@ -58,11 +56,7 @@ export default {
   watch: {
     amount() {
       if (this.amount <= 0) {
-        this.$set(
-          this.validationErrors,
-          'amount',
-          'Transfer amount should be greater than zero'
-        )
+        this.$set(this.validationErrors, 'amount', 'Transfer amount should be greater than zero')
       } else {
         this.$set(this.validationErrors, 'amount', null)
       }

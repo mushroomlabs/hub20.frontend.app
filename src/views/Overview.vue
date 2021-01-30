@@ -7,13 +7,12 @@
     </ul>
 
     <card v-if="hasAdminAccess" title="Accounting Books (Summary)">
-      <accounting-report-table/>
+      <accounting-report-table />
     </card>
 
     <card v-if="hasAdminAccess" title="Ethereum Account Balances">
-      <accounting-wallet-balances/>
+      <accounting-wallet-balances />
     </card>
-
   </div>
 </template>
 <script>
@@ -31,7 +30,7 @@ export default {
     AccountingWalletBalances
   },
   computed: {
-    ...mapGetters('account', ['openBalances', 'hasAdminAccess']),
+    ...mapGetters('account', ['openBalances', 'hasAdminAccess'])
   }
 }
 </script>

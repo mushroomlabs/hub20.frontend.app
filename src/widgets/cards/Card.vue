@@ -5,8 +5,8 @@
     </div>
     <div class="card-header" v-if="$slots.header || title">
       <slot name="header">
-        <h4 class="card-title">{{title}}</h4>
-        <p class="card-category" v-if="subTitle">{{subTitle}}</p>
+        <h4 class="card-title">{{ title }}</h4>
+        <p class="card-category" v-if="subTitle">{{ subTitle }}</p>
       </slot>
     </div>
     <div class="card-body" v-if="$slots.default">
@@ -14,21 +14,21 @@
     </div>
     <slot name="raw-content"></slot>
     <div class="card-footer" v-if="$slots.footer">
-      <hr>
+      <hr />
       <slot name="footer"></slot>
     </div>
   </component>
 </template>
 <script>
 export default {
-  name: "card",
+  name: 'card',
   props: {
     tag: {
       type: String,
-      default: "div",
+      default: 'div'
     },
     title: String,
     subTitle: String
   }
-};
+}
 </script>

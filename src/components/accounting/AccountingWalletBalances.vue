@@ -21,11 +21,10 @@ import {mixins} from 'hub20-vue-sdk'
 
 import AccountingWalletBalancesTableItem from './AccountingWalletBalancesTableItem'
 
-
 export default {
   name: 'AccountingWalletBalances',
   components: {
-    AccountingWalletBalancesTableItem,
+    AccountingWalletBalancesTableItem
   },
   mixins: [mixins.TokenMixin],
   computed: {

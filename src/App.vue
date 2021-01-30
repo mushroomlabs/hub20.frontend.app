@@ -1,9 +1,9 @@
 <template>
-<div>
-  <notifications />
-  <router-view v-if="isAuthenticated" />
-  <BaseLayout v-if="!isAuthenticated" />
-</div>
+  <div>
+    <notifications />
+    <router-view v-if="isAuthenticated" />
+    <BaseLayout v-if="!isAuthenticated" />
+  </div>
 </template>
 
 <script>
@@ -12,10 +12,10 @@ import BaseLayout from '@/layout/BaseLayout'
 
 export default {
   components: {
-    BaseLayout,
+    BaseLayout
   },
   computed: {
-    ...mapGetters('auth', ['isAuthenticated']),
+    ...mapGetters('auth', ['isAuthenticated'])
   },
   data() {
     return {
@@ -25,25 +25,25 @@ export default {
   methods: {
     refresh() {
       this.$store.dispatch('refresh')
-    },
+    }
   },
   mounted() {
     this.$store.subscribe(mutation => {
       switch (mutation.type) {
-      case 'APP_SET_INITIALIZED':
-        this.timer = setInterval(this.refresh, 60 * 1000)
-        break
-      case 'notifications/ADD_NOTIFICATION':
-        this.$notify(mutation.payload)
-        break
-      case 'APP_RESET_STATE':
-        if (this.timer) {
-          clearInterval(this.timer)
-        }
-        break
+        case 'APP_SET_INITIALIZED':
+          this.timer = setInterval(this.refresh, 60 * 1000)
+          break
+        case 'notifications/ADD_NOTIFICATION':
+          this.$notify(mutation.payload)
+          break
+        case 'APP_RESET_STATE':
+          if (this.timer) {
+            clearInterval(this.timer)
+          }
+          break
       }
     })
-  },
+  }
 }
 </script>
 

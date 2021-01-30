@@ -17,7 +17,11 @@
       @modalClosed="onModalClosed()"
     >
       <DepositTracker :token="token" v-if="hasOpenDeposit" />
-      <TransferForm :token="token" v-if="hasOpenTransfer" @transferFormSubmitted="onTransferSubmitted()" />
+      <TransferForm
+        :token="token"
+        v-if="hasOpenTransfer"
+        @transferFormSubmitted="onTransferSubmitted()"
+      />
     </Modal>
   </tr>
 </template>

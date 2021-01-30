@@ -1,26 +1,21 @@
 <template>
-  <component
-    :is="tag"
-    class="action-panel"
-    >
+  <component :is="tag" class="action-panel">
     <div class="secondary">
-      <slot name="secondary">
-      </slot>
+      <slot name="secondary"> </slot>
     </div>
     <div class="primary">
-      <slot>
-      </slot>
+      <slot> </slot>
     </div>
   </component>
 </template>
 
 <script>
 export default {
-  name: "action-panel",
+  name: 'action-panel',
   props: {
     tag: {
       type: String,
-      default: "div"
+      default: 'div'
     }
   }
 }

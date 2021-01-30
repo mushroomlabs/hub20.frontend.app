@@ -8,10 +8,7 @@
       <div v-if="registrationLoading">
         loading...
       </div>
-      <form
-        v-if="!registrationLoading && !registrationCompleted"
-        @submit.prevent="signUp(inputs)"
-      >
+      <form v-if="!registrationLoading && !registrationCompleted" @submit.prevent="signUp(inputs)">
         <fg-input
           v-model="inputs.username"
           type="text"

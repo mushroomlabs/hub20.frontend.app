@@ -1,8 +1,16 @@
 <template>
-<card :title="cardTitle">
-  <fg-input type="number" label="Amount" v-model="amount" :errorMessage="validationErrors.amount" required />
-  <p-button block @click.native="createDeposit({token, amount})" :disabled="!isValid">Deposit</p-button>
-</card>
+  <card :title="cardTitle">
+    <fg-input
+      type="number"
+      label="Amount"
+      v-model="amount"
+      :errorMessage="validationErrors.amount"
+      required
+    />
+    <p-button block @click.native="createDeposit({token, amount})" :disabled="!isValid"
+      >Deposit</p-button
+    >
+  </card>
 </template>
 <script>
 import {mapGetters, mapActions} from 'vuex'
@@ -21,7 +29,7 @@ export default {
       } else {
         this.$set(this.validationErrors, 'amount', null)
       }
-    },
+    }
   },
   computed: {
     ...mapGetters('tokens', ['tokensByAddress']),
@@ -37,7 +45,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('funding', ['createDeposit']),
+    ...mapActions('funding', ['createDeposit'])
   }
 }
 </script>

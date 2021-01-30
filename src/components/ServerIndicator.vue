@@ -10,7 +10,7 @@
 import {mapGetters, mapState} from 'vuex'
 
 export default {
-  name: "server-indicator",
+  name: 'server-indicator',
   computed: {
     ...mapGetters('server', ['isConnected']),
     ...mapState('server', ['rootUrl']),

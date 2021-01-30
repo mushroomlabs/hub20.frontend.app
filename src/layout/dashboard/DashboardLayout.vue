@@ -27,11 +27,11 @@ import DashboardContent from './Content'
 export default {
   components: {
     TopNavbar,
-    DashboardContent,
+    DashboardContent
   },
   computed: {
     ...mapGetters(['isRunning']),
     ...mapGetters('account', ['hasAdminAccess'])
-  },
+  }
 }
 </script>

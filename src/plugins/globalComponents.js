@@ -4,7 +4,7 @@ import {
   FormGroupSelect,
   Card,
   DropDown,
-  Button,
+  Button
 } from '../widgets/index'
 
 const GlobalComponents = {
@@ -15,7 +15,7 @@ const GlobalComponents = {
     Vue.component('card', Card)
     Vue.component('p-button', Button)
     Vue.component('action-panel', ActionPanel)
-  },
+  }
 }
 
 export default GlobalComponents

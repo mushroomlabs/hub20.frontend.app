@@ -98,11 +98,7 @@ export default {
     },
     amount(value) {
       if (value <= 0) {
-        this.$set(
-          this.validationErrors,
-          'amount',
-          'Transfer amount should be greater than zero'
-        )
+        this.$set(this.validationErrors, 'amount', 'Transfer amount should be greater than zero')
       } else if (value > this.balance) {
         this.$set(
           this.validationErrors,
