@@ -32,7 +32,7 @@
 </template>
 <script>
 import {mapGetters} from 'vuex'
-import {mixins} from 'vue-hub20'
+import {mixins} from 'hub20-vue-sdk'
 
 import AccountingTokenBalanceDisplay from './AccountingTokenBalanceDisplay'
 

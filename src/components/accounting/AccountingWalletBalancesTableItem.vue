@@ -8,7 +8,7 @@
 </template>
 <script>
 import {mapGetters} from 'vuex'
-import {mixins, components} from 'vue-hub20'
+import {mixins, components} from 'hub20-vue-sdk'
 
 import AccountingTokenBalanceDisplay from './AccountingTokenBalanceDisplay'
 

@@ -23,7 +23,7 @@
 </template>
 <script>
 import {mapActions, mapGetters, mapState} from 'vuex'
-import {filters as hub20filters} from 'vue-hub20'
+import {filters as hub20filters} from 'hub20-vue-sdk'
 
 import Modal from '@/widgets/dialogs/Modal'
 

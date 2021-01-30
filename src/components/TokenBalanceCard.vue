@@ -6,7 +6,7 @@
   </card>
 </template>
 <script>
-import {filters} from 'vue-hub20'
+import {filters} from 'hub20-vue-sdk'
 
 export default {
   name: 'token-balance-card',

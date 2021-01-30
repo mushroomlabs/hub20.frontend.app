@@ -4,7 +4,7 @@
 
 <script>
 import {mapActions, mapGetters} from 'vuex'
-import {components as hub20Components} from 'vue-hub20'
+import {components as hub20Components} from 'hub20-vue-sdk'
 
 export default {
   components: {

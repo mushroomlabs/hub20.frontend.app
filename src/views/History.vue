@@ -22,7 +22,7 @@
 <script>
 import {mapGetters} from "vuex";
 
-import {filters as hub20filters} from 'vue-hub20'
+import {filters as hub20filters} from 'hub20-vue-sdk'
 
 export default {
   name: "history",
