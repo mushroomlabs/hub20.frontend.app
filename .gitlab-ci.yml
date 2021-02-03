@@ -1,0 +1,17 @@
+stages:
+  - build_and_deploy
+
+deploy:
+  image: node:15
+  stage: build_and_deploy
+
+  before_script:
+    - yarn install
+
+  script:
+    - yarn build
+    - cat $IPFS_DEPLOY_ENV_FILE > .env
+    - yarn deploy:ipfs
+
+  only:
+    - master
