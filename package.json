@@ -7,7 +7,7 @@
     "lint": "vue-cli-service lint",
     "dev": "vue-cli-service serve --open --watch",
     "lint-fix": "vue-cli-service lint --fix",
-    "deploy:ipfs": "ipd dist"
+    "deploy:ipfs": "ipd dist -O"
   },
   "dependencies": {
     "@vue/cli": "^4.5.8",
