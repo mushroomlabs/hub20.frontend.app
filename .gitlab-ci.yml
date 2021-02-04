@@ -9,8 +9,8 @@ pages:
     - yarn install
 
   script:
-    - yarn install
     - yarn build
+    - mv public .public
     - mv dist public
 
   artifacts:
