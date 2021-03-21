@@ -1,21 +1,17 @@
 stages:
-  - publish
+  - build_and_deploy
 
-pages:
-  stage: publish
+deploy:
   image: node:15
+  stage: build_and_deploy
 
   before_script:
     - yarn install
 
   script:
     - yarn build
-    - mv public .public
-    - mv dist public
-
-  artifacts:
-    paths:
-      - public
+    - cat $IPFS_DEPLOY_ENV_FILE > .env
+    - yarn deploy:ipfs
 
   only:
     - master
