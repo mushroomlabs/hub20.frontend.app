@@ -11,7 +11,7 @@ deploy:
   script:
     - yarn build
     - cat $IPFS_DEPLOY_ENV_FILE > .env
-    - yarn deploy:ipfs
+    - yarn deploy:ipfs -p $IPFS_PROVIDER -d $IPFS_DNS_RESOLVER
 
   only:
     - master
