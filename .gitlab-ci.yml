@@ -1,6 +1,6 @@
 stages:
   - build
-  - build_and_deploy
+  - deploy
 
 build:
   image: node:15
@@ -12,17 +12,22 @@ build:
   script:
     - yarn build
 
+  artifacts:
+    paths:
+      - dist/
+
 deploy:
   image: node:15
-  stage: build_and_deploy
+  stage: deploy
 
   before_script:
     - yarn install
 
   script:
-    - yarn build
     - cat $IPFS_DEPLOY_ENV_FILE > .env
     - yarn deploy:ipfs -p $IPFS_PROVIDER -d $IPFS_DNS_RESOLVER
 
-  only:
-    - master
+  dependencies:
+    - build
+
+  when: manual
