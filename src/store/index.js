@@ -98,7 +98,6 @@ const actions = {
     dispatch('coingecko/initialize')
     return dispatch('server/initialize').then(() => {
       if (getters['server/isConnected']) {
-        const serverDomain = getters['server/serverDomain']
         dispatch('auth/initialize').then(() => {
           if (getters['auth/isAuthenticated']) {
             dispatch('tokens/initialize')
@@ -108,7 +107,7 @@ const actions = {
               .then(() => dispatch('stores/initialize'))
               .then(() => dispatch('funding/initialize'))
               .then(() => dispatch('users/initialize'))
-              .then(() => dispatch('events/initialize', serverDomain))
+              .then(() => dispatch('events/initialize', getters['server/eventWebsocketUrl']))
               .then(() => dispatch('events/setEventHandler', eventHandler))
               .then(() => commit(APP_SET_INITIALIZED))
           }
@@ -118,7 +117,7 @@ const actions = {
   },
   refresh({dispatch, getters}) {
     if (getters['isRunning']) {
-      dispatch('coingecko/refresh')
+      getters['tokens/listedTokens'].forEach(token => dispatch('coingecko/fetchRate', token))
 
       if (getters['server/isConnected'] && getters['auth/isAuthenticated']) {
         dispatch('account/refresh')

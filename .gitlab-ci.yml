@@ -1,5 +1,16 @@
 stages:
+  - build
   - build_and_deploy
+
+build:
+  image: node:15
+  stage: build
+
+  before_script:
+    - yarn install
+
+  script:
+    - yarn build
 
 deploy:
   image: node:15

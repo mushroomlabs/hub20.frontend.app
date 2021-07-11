@@ -43,8 +43,11 @@ div.payment-request {
     max-height: $_qrcode_max_size;
   }
 
-  button.web3-transfer {
+  div.web3-transfer {
     margin: 1vh auto;
+
+    input {
+    }
   }
 
   div.payment-route-details {
