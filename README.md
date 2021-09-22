@@ -1,4 +1,11 @@
-# frontend
+# Hub20 Frontend
+
+This is a single-page application implemented that can be
+used to connect to any (version-compatible) instance of
+[Hub20](https://hub20.io).
+
+It is implemented in Vue.js and aims to work for both regular users
+and hub operators.
 
 ## Project setup
 ```
@@ -19,6 +26,3 @@ yarn build
 ```
 yarn lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
