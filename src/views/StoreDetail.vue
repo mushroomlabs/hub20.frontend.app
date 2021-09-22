@@ -20,7 +20,7 @@
       label="URL"
       placeholder="https://acme.example.com"
       v-model="siteUrl"
-      :errorMessage="validationErrors.siteUrl"
+      :errorMessage="submissionErrorMessages.siteUrl || validationErrors.siteUrl"
       required
     />
 
@@ -29,7 +29,7 @@
       helpMessage="Check all tokens this store will accept as payment"
       v-model="acceptedTokens"
       :options="tokenOptions"
-      :errorMessage="validationErrors.acceptedTokens"
+      :errorMessage="submissionErrorMessages.acceptedTokens || validationErrors.acceptedTokens"
       multiple
     />
 
@@ -45,7 +45,7 @@
   </card>
 </template>
 <script>
-import {mapGetters, mapMutations, mapActions} from 'vuex'
+import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
 
 export default {
   data() {
@@ -77,10 +77,10 @@ export default {
     }
   },
   computed: {
+    ...mapState('stores', {store: 'editingData', submissionErrors: 'submissionErrors'}),
     ...mapGetters('stores', {
-      store: 'storeEditData',
       stores: 'storesById',
-      submissionErrors: 'storeEditError'
+      submissionErrorMessages: 'submissionErrorMessages'
     }),
     ...mapGetters('tokens', {tokenMap: 'tokensByAddress'}),
     isNew() {
@@ -95,7 +95,7 @@ export default {
     tokenOptions() {
       return Object.values(this.tokenMap).map(token => {
         return {
-          value: token.address,
+          value: token.url,
           text: token.code
         }
       })
@@ -135,11 +135,12 @@ export default {
     save(storeData) {
       const action = this.isNew ? this.createStore : this.updateStore
 
-      action(storeData)
-        .then(() =>
+      action(storeData).then(() => {
+        if (!this.submissionErrors) {
           this.$notify({message: `${storeData.name} saved successfully`, type: 'success'})
-        )
-        .then(() => this.$router.push({name: 'stores'}))
+          this.$router.push({name: 'stores'})
+        }
+      })
     }
   },
   mounted() {
