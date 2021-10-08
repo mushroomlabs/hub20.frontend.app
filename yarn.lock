@@ -7809,10 +7809,10 @@ https-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
-hub20-vue-sdk@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/hub20-vue-sdk/-/hub20-vue-sdk-0.1.0.tgz#3428d8cfebb9656de8563463cd3fa9fbc72ee04c"
-  integrity sha512-jErjHZUPShLWuFlISakWr5ncYF1fOl8rD1nB/Hx26f+0IVsGAwMXHUUUwWwn+c1t2a7CumF3VfxAU/SrIKgszg==
+hub20-vue-sdk@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/hub20-vue-sdk/-/hub20-vue-sdk-0.1.1.tgz#7d742a5e4565d5bc9e5e7f9c1708b1800c56b5b3"
+  integrity sha512-v2K4HobSXAFteMUeEbovnXKQDGBoGokbZTL3ksi5/uonDP/CRRhTrtQ+pu+WVLs+SMUMXmdTUBN+JWDQYId97g==
   dependencies:
     axios "^0.21.1"
     decimal.js-light "^2.5.1"
@@ -13991,6 +13991,13 @@ vue-clickaway@^2.1.0:
   integrity sha512-25SpjXKetL06GLYoLoC8pqAV6Cur9cQ//2g35GRFBV4FgoljbZZjTINR8g2NuVXXDMLSUXaKx5dutgO4PaDE7A==
   dependencies:
     loose-envify "^1.2.0"
+
+vue-clipboard2@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/vue-clipboard2/-/vue-clipboard2-0.3.3.tgz#331fec85f9d4f175eb0d4feaef4d77338562af36"
+  integrity sha512-aNWXIL2DKgJyY/1OOeITwAQz1fHaCIGvUFHf9h8UcoQBG5a74MkdhS/xqoYe7DNZdQmZRL+TAdIbtUs9OyVjbw==
+  dependencies:
+    clipboard "^2.0.0"
 
 vue-codemod@^0.0.4:
   version "0.0.4"

@@ -14,9 +14,10 @@
     "bootstrap-scss": "^4.5.2",
     "es6-promise": "^4.2.4",
     "ethers": "^5.4.7",
-    "hub20-vue-sdk": "^0.1.1",
+    "hub20-vue-sdk": "^0.1",
     "vue": "^2.6.11",
     "vue-clickaway": "^2.1.0",
+    "vue-clipboard2": "^0.3.3",
     "vue-notifyjs": "^0.3.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.5.1"

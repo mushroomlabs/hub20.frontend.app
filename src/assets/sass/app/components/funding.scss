@@ -18,8 +18,6 @@ div.payment-request, form[name='transfer'] {
 }
 
 div.payment-request {
-  text-align: center;
-
   canvas.qr-code {
     text-align: center;
   }
@@ -31,6 +29,36 @@ div.payment-request {
 
     &.selected {
       display: block;
+    }
+
+  }
+
+  div.blockchain-timer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+
+  dl {
+    dt {
+
+    }
+    dd {
+      margin-inline-start: 0;
+      margin-bottom: 0.5em;
+      padding: 1vh 0.75rem;
+      border: 1px solid #DDD;
+      border-radius: 4px;
+
+      span.clipboard-copier {
+        text-overflow: clip;
+        cursor: pointer;
+
+        @include icon-after("layers");
+        &::after {
+          text-align: right;
+        }
+      }
     }
   }
 
@@ -44,9 +72,25 @@ div.payment-request {
   }
 
   div.web3-transfer {
+    text-align: left;
+    width: 100%;
     margin: 1vh auto;
 
-    input {
+    div.amount-selector {
+      > span {
+        display: block;
+      }
+      input {
+        padding: 1em 0.5rem;
+        width: 100%;
+        display: block;
+      }
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      margin: 1vh auto;
     }
   }
 
