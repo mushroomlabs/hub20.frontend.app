@@ -7,6 +7,9 @@ used to connect to any (version-compatible) instance of
 It is implemented in Vue.js and aims to work for both regular users
 and hub operators.
 
+If you just want to use the frontend, it is available at
+<https://app.hub20.io>
+
 ## Project setup
 ```
 yarn install
