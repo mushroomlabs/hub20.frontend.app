@@ -1,6 +1,7 @@
 {
   "name": "hub20-vue-app",
   "version": "0.1.0",
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
