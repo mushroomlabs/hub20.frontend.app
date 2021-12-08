@@ -12,7 +12,7 @@ div.login-screen, div.registration-screen, div.setup-screen {
     box-shadow: none !important;
   }
 
-  div.login-form.submitted {
+  div.login-form.submitted, div.registration-form.submitted {
     display: none;
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <card class="registration-form" title="Create Account">
+  <card class="registration-form" title="Create Account" :class="{'submitted': registrationLoading || registrationCompleted }">
     <slot>
       <ServerIndicator>
         Register to an account on
@@ -15,6 +15,7 @@
           id="username"
           placeholder="username"
           autocomplete="username"
+          :errorMessage="registrationFieldError('username')"
           required
         />
         <fg-input
@@ -23,6 +24,7 @@
           id="password1"
           placeholder="password"
           autocomplete="new-password"
+          :errorMessage="registrationFieldError('password1')"
           required
         />
         <fg-input
@@ -31,12 +33,19 @@
           id="password2"
           placeholder="confirm password"
           autocomplete="new-password"
+          :errorMessage="registrationFieldError('password2')"
           required
         />
-        <fg-input v-model="inputs.email" type="email" id="email" placeholder="email" />
+        <fg-input
+          v-model="inputs.email"
+          type="email"
+          id="email"
+          placeholder="email"
+          :errorMessage="registrationFieldError('email')"
+          />
         <input type="submit" hidden />
-        <span class="error" v-show="registrationError">
-          An error occured while processing your request.
+        <span class="error-message" v-if="registrationErrorMessage">
+          {{ registrationErrorMessage }}
         </span>
       </form>
     </slot>
@@ -54,7 +63,7 @@
   </card>
 </template>
 <script>
-import {mapActions, mapState} from 'vuex'
+import {mapActions, mapGetters, mapState} from 'vuex'
 
 import ServerIndicator from '@/components/ServerIndicator'
 
@@ -73,20 +82,19 @@ export default {
     }
   },
   computed: {
-    ...mapState('signup', ['registrationCompleted', 'registrationError', 'registrationLoading'])
+    ...mapState('signup', ['registrationCompleted', 'registrationError', 'registrationLoading']),
+    ...mapGetters('signup', ['registrationErrorMessage', 'registrationFieldError'])
   },
   methods: {
     ...mapActions('signup', ['createAccount', 'clearRegistrationStatus']),
-    async signUp(inputs) {
-      let token = await this.createAccount(inputs)
-      this.$store.commit('auth/LOGIN_BEGIN')
-      this.$store.commit('auth/SET_TOKEN', token)
-      this.$router.push('/')
+    signUp(inputs) {
+      this.createAccount(inputs)
+        .then((token) => {
+          this.$store.commit('auth/AUTH_SET_TOKEN', token)
+          this.$store.commit('auth/AUTH_SET_USERNAME', inputs.username)
+          this.$store.commit('signup/REGISTRATION_SUCCESS', inputs.username)
+        })
     }
-  },
-  beforeRouteLeave(to, from, next) {
-    this.clearRegistrationStatus()
-    next()
   }
 }
 </script>
