@@ -20,23 +20,35 @@ import StoreDetail from '@/views/StoreDetail'
 // Everything else
 import store from '@/store/index'
 
-const requireAuthenticated = (to, from, next) => {
-  store.dispatch('initialize').then(() => {
+const requireServerConnection = (to, from, next) => {
+  store.dispatch('server/initialize').then(() => {
     if (!store.getters['server/isConnected']) {
       next('/setup')
-    } else if (!store.getters['auth/isAuthenticated']) {
-      next('/login')
     } else {
       next()
     }
   })
 }
 
-const requireAnonymous = (to, from, next) => {
+const requireAuthenticated = (to, from, next) => {
   store.dispatch('initialize').then(() => {
     if (!store.getters['server/isConnected']) {
       next('/setup')
-    } else if (store.getters['auth/isAuthenticated']) {
+      return
+    }
+
+    if (!store.getters['auth/isAuthenticated']) {
+      next('/login')
+      return
+    }
+
+    next()
+  })
+}
+
+const requireAnonymous = (to, from, next) => {
+  store.dispatch('auth/initialize').then(() => {
+    if (store.getters['auth/isAuthenticated']) {
       next('/')
     } else {
       next()
@@ -57,93 +69,94 @@ const routes = [
       {
         path: '',
         name: 'home',
-        component: Overview
+        component: Overview,
       },
       {
         path: 'history',
         name: 'history',
-        component: History
+        component: History,
       },
       {
         path: 'funding',
         name: 'funding',
-        component: Funding
+        component: Funding,
       },
       {
         path: 'receive/:token',
         name: 'payment-order',
         component: Deposit,
         meta: {
-          viewTitle: 'Request Payment'
-        }
+          viewTitle: 'Request Payment',
+        },
       },
       {
         path: 'deposit/:token',
         name: 'deposit',
-        component: Deposit
+        component: Deposit,
       },
       {
         path: 'send/:token',
         name: 'withdraw',
         component: Transfer,
         meta: {
-          viewTitle: 'Send'
-        }
+          viewTitle: 'Send',
+        },
       },
       {
         path: 'transfer/:token',
         name: 'transfer',
         component: Transfer,
         meta: {
-          viewTitle: 'Send Payment'
-        }
+          viewTitle: 'Send Payment',
+        },
       },
       {
         path: 'stores',
         name: 'stores',
-        component: Stores
+        component: Stores,
       },
       {
         path: 'store/new',
         name: 'store-create',
         component: StoreDetail,
         meta: {
-          viewTitle: 'Add Store'
-        }
+          viewTitle: 'Add Store',
+        },
       },
       {
         path: 'store/:id',
         name: 'store',
-        component: StoreDetail
-      }
-    ]
+        component: StoreDetail,
+      },
+    ],
   },
   {
     path: '/setup',
     name: 'setup',
-    component: Setup
+    component: Setup,
+    beforeEnter: requireAnonymous,
   },
   {
     path: '/login',
     name: 'login',
     component: Login,
-    beforeEnter: requireAnonymous
+    beforeEnter: requireServerConnection,
   },
   {
     path: '/logout',
     name: 'logout',
-    beforeEnter: redirectLogout
+    beforeEnter: redirectLogout,
   },
   {
     path: '/register',
     name: 'register',
     component: Register,
-    beforeEnter: requireAnonymous
+    beforeEnter: requireServerConnection,
   },
   {
     path: '*',
-    component: NotFound
-  }
+    component: NotFound,
+  },
 ]
 
 export default routes
