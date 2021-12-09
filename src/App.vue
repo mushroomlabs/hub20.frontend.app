@@ -27,6 +27,9 @@ export default {
       this.$store.dispatch('refresh')
     }
   },
+  created() {
+    document.title = 'Hub20'
+  },
   mounted() {
     this.$store.subscribe(mutation => {
       switch (mutation.type) {
