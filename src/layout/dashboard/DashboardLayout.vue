@@ -9,6 +9,7 @@
       </template>
       <template v-if="hasAdminAccess" slot="links">
         <sidebar-link to="/" name="Overview" icon="ti-dashboard" />
+        <sidebar-link to="/raiden" name="Raiden" icon="ti-bolt" />
       </template>
     </side-bar>
     <div class="main-panel">

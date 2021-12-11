@@ -14,6 +14,7 @@ import History from '@/views/History'
 import Funding from '@/views/Funding'
 import Deposit from '@/views/Deposit'
 import Transfer from '@/views/Transfer'
+import Raiden from '@/views/Raiden'
 import Stores from '@/views/Stores'
 import StoreDetail from '@/views/StoreDetail'
 
@@ -127,6 +128,11 @@ const routes = [
         path: 'store/:id',
         name: 'store',
         component: StoreDetail,
+      },
+      {
+        path: 'raiden',
+        name: 'raiden',
+        component: Raiden,
       },
     ],
   },
