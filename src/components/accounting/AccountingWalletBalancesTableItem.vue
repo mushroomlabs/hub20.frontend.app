@@ -1,6 +1,6 @@
 <template>
   <tr>
-    <td><etherscan-link :address="address" :networkId="ethereumNetworkId" /></td>
+    <td><etherscan-link :address="address" :networkId="chain.blockchain.network" /></td>
     <td v-for="token in tokensByAddress" :key="token.address">
       <accounting-token-balance-display :tokenBalance="walletBalance(address, token)" />
     </td>
@@ -20,11 +20,11 @@ export default {
     EtherscanLink: components.EtherscanLink
   },
   props: {
-    address: String
+    address: String,
+    chain: Object
   },
   computed: {
     ...mapGetters('audit', ['walletBalance']),
-    ...mapGetters('network', ['ethereumNetworkId'])
   }
 }
 </script>

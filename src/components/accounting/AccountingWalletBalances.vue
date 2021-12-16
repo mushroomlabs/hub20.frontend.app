@@ -11,6 +11,7 @@
         v-for="walletAddress in walletAddresses"
         :key="walletAddress"
         :address="walletAddress"
+        :chain="chain"
       />
     </tbody>
   </table>
@@ -24,11 +25,14 @@ import AccountingWalletBalancesTableItem from './AccountingWalletBalancesTableIt
 export default {
   name: 'AccountingWalletBalances',
   components: {
-    AccountingWalletBalancesTableItem
+    AccountingWalletBalancesTableItem,
   },
   mixins: [mixins.TokenMixin],
+  props: {
+    chain: Object
+  },
   computed: {
-    ...mapGetters('audit', ['walletAddresses'])
-  }
+    ...mapGetters('audit', ['walletAddresses']),
+  },
 }
 </script>

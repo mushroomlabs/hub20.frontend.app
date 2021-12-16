@@ -39,6 +39,11 @@ import AccountingTokenBalanceDisplay from './AccountingTokenBalanceDisplay'
 export default {
   name: 'AccountingReportTable',
   mixins: [mixins.TokenMixin],
+  props: {
+    chain: {
+      type: Object
+    }
+  },
   components: {
     AccountingTokenBalanceDisplay
   },

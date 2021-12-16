@@ -6,17 +6,25 @@
       </li>
     </ul>
 
-    <card v-if="hasAdminAccess" title="Accounting Books (Summary)">
-      <accounting-report-table />
-    </card>
+    <div v-if="hasAdminAccess">
+      <card title="Accounting Books (Summary)"
+            v-for="chain in blockchains"
+            :key="chain.network"
+            >
+        <accounting-report-table  />
+      </card>
 
-    <card v-if="hasAdminAccess" title="Ethereum Account Balances">
-      <accounting-wallet-balances />
-    </card>
+      <card :title="walletBalanceCardTitle(chain)"
+            v-for="chain in blockchains"
+            :key="chain.network"
+            >
+        <accounting-wallet-balances :chain="chain" />
+      </card>
+    </div>
   </div>
 </template>
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters, mapState} from 'vuex'
 
 import TokenBalanceCard from '@/components/TokenBalanceCard'
 import AccountingReportTable from '@/components/accounting/AccountingReportTable.vue'
@@ -30,7 +38,13 @@ export default {
     AccountingWalletBalances
   },
   computed: {
-    ...mapGetters('account', ['openBalances', 'hasAdminAccess'])
+    ...mapGetters('account', ['openBalances', 'hasAdminAccess']),
+    ...mapState('network', ['blockchains']),
+  },
+  methods: {
+    walletBalanceCardTitle(chain) {
+      return `Account Balances: Chain #${ chain.blockchain.network }`
+    }
   }
 }
 </script>
