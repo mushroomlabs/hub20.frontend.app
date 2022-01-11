@@ -2,22 +2,23 @@
   <table id="funding-data" class="table funding-status">
     <thead>
       <th class="name">Token</th>
+      <th class="chain">Network</th>
       <th class="price">Price</th>
       <th class="balance">Current Balance</th>
       <th class="actions"></th>
     </thead>
     <tbody>
       <FundingTableItem
-        v-for="(token, address) in tokensByAddress"
+        v-for="token in tokens"
         :token="token"
-        :key="address"
+        :key="token.address"
         v-on="$listeners"
       />
     </tbody>
   </table>
 </template>
 <script>
-import {mapGetters} from 'vuex'
+import {mapActions, mapGetters, mapState} from 'vuex'
 import FundingTableItem from '@/components/funding/FundingTableItem'
 
 export default {
@@ -25,7 +26,19 @@ export default {
     FundingTableItem
   },
   computed: {
-    ...mapGetters('tokens', ['tokensByAddress'])
+    ...mapGetters('account', ['openBalances']),
+    ...mapState('tokens', ['tokens'])
+  },
+  methods: {
+      ...mapActions('account', ['fetchBalances']),
+      ...mapActions('network', {loadBlockchainData: 'initialize'}),
+      ...mapActions('tokens', ['fetchToken']),
+  },
+  async created() {
+    await this.loadBlockchainData()
+    await this.fetchBalances()
+
+    this.openBalances.forEach(balance => this.fetchToken({tokenAddress: balance.address, chainId: balance.network_id}))
   }
 }
 </script>

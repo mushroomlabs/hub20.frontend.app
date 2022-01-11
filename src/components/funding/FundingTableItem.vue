@@ -1,11 +1,12 @@
 <template>
   <tr>
-    <td class="name" :title="token.address">{{ token.name }} ({{ token.code }})</td>
+    <td class="name" :title="token.address">{{ token.name }} ({{ token.symbol }})</td>
+    <td class="network" :title="chain.name">{{ chain.name }}</td>
     <td class="price">{{ exchangeRate(token) | formattedCurrency(baseCurrency) }}</td>
     <td class="balance">{{ balance }}</td>
     <td class="actions">
-      <button @click="openDepositModal()" :disabled="!ethereumNodeOk">Receive</button>
-      <button @click="openTransferModal()" :disabled="!ethereumNodeOk || !hasFunds">
+      <button @click="openDepositModal()" :disabled="!canDeposit">Receive</button>
+      <button @click="openTransferModal()" :disabled="!canWithdraw">
         Send
       </button>
     </td>
@@ -27,7 +28,7 @@
 </template>
 <script>
 import {mapActions, mapGetters, mapState} from 'vuex'
-import {filters as hub20filters} from 'hub20-vue-sdk'
+import hub20 from 'hub20-vue-sdk'
 
 import Modal from '@/widgets/dialogs/Modal'
 
@@ -41,7 +42,7 @@ export default {
     TransferForm
   },
   filters: {
-    formattedCurrency: hub20filters.formattedCurrency
+    formattedCurrency: hub20.filters.formattedCurrency
   },
   props: {
     token: {
@@ -56,11 +57,29 @@ export default {
   },
   computed: {
     ...mapGetters('account', ['tokenBalance']),
-    ...mapGetters('network', ['ethereumNodeOk']),
+    ...mapGetters('network', ['chainsById', 'IsNodeOnline', 'IsNodeSynced', 'chainData']),
     ...mapGetters('coingecko', ['exchangeRate']),
     ...mapState('coingecko', ['baseCurrency']),
+    ...mapState('network', ['blockchains']),
     balance() {
       return this.tokenBalance(this.token.address)
+    },
+    canDeposit() {
+      let chainId = this.token.network_id
+      return this.IsNodeOnline(chainId) && this.IsNodeSynced(chainId)
+    },
+    canWithdraw() {
+      let chainId = this.chain && this.chain.id
+      return this.IsNodeOnline(chainId) && this.IsNodeSynced(chainId) && this.hasFunds
+    },
+    chainId() {
+      return this.token.network_id
+    },
+    chain() {
+      return this.chainsById[this.chainId]
+    },
+    chainState() {
+      return this.chainData(this.chainId)
     },
     hasFunds() {
       return this.balance.gt(0)
@@ -92,7 +111,7 @@ export default {
       this.hasOpenTransfer = false
     }
   },
-  mounted() {
+  created() {
     this.fetchRate(this.token)
   }
 }
