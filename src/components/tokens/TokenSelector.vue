@@ -27,7 +27,7 @@ export default {
     tokenOptions() {
       return Object.values(this.tokensByAddress).map(token => ({
         value: token.address,
-        text: token.code
+        text: token.symbol
       }))
     }
   }
