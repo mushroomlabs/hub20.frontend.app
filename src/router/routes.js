@@ -32,29 +32,28 @@ const requireServerConnection = (to, from, next) => {
 }
 
 const requireAuthenticated = (to, from, next) => {
-  store.dispatch('initialize').then(() => {
-    if (!store.getters['server/isConnected']) {
-      next('/setup')
-      return
-    }
+  store.dispatch('server/initialize')
+       .then(() => store.dispatch('auth/initialize'))
+       .then(() => {
+         if (!store.getters['server/isConnected']) {
+           next('/setup')
+         }
 
-    if (!store.getters['auth/isAuthenticated']) {
-      next('/login')
-      return
-    }
+         if (!store.getters['auth/isAuthenticated']) {
+           next('/login')
+         }
 
-    next()
-  })
+         store.dispatch('initialize')
+         next()
+       })
 }
 
 const requireAnonymous = (to, from, next) => {
-  store.dispatch('auth/initialize').then(() => {
-    if (store.getters['auth/isAuthenticated']) {
-      next('/')
-    } else {
-      next()
-    }
-  })
+  if (store.getters['auth/isAuthenticated']) {
+    store.dispatch('auth/tearDown').then(() => next())
+  } else {
+    next()
+  }
 }
 
 const redirectLogout = (to, from, next) => {
