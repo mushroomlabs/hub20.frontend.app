@@ -24,7 +24,7 @@
   </div>
 </template>
 <script>
-import {mapGetters, mapState} from 'vuex'
+import {mapGetters, mapState, mapActions} from 'vuex'
 
 import TokenBalanceCard from '@/components/TokenBalanceCard'
 import AccountingReportTable from '@/components/accounting/AccountingReportTable.vue'
@@ -44,7 +44,13 @@ export default {
   methods: {
     walletBalanceCardTitle(chain) {
       return `Account Balances: Chain #${ chain.blockchain.network }`
-    }
+    },
+    ...mapActions('account', {loadAccountData: 'initialize'}),
+    ...mapActions('network', {loadBlockchainData: 'initialize'})
+  },
+  mounted() {
+    this.loadAccountData()
+    this.loadBlockchainData()
   }
 }
 </script>
