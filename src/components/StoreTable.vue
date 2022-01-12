@@ -12,7 +12,7 @@
   </table>
 </template>
 <script>
-import {mapGetters} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 import StoreTableItem from '@/components/StoreTableItem'
 
 export default {
@@ -21,6 +21,12 @@ export default {
   },
   computed: {
     ...mapGetters('stores', ['stores'])
+  },
+  methods: {
+    ...mapActions('stores', {loadStores: 'initialize'})
+  },
+  created() {
+    this.loadStores()
   }
 }
 </script>

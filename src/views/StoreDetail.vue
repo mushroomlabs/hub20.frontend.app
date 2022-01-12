@@ -22,6 +22,12 @@
       v-model="siteUrl"
       :errorMessage="submissionErrorMessages.siteUrl || validationErrors.siteUrl"
       required
+      />
+
+    <fg-input
+      label="Webhook URL"
+      placeholder="https://my.shop.example.com/process_checkout"
+      v-model="webhookUrl"
     />
 
     <fg-select
@@ -108,6 +114,14 @@ export default {
         this.updateName(value.trim())
       }
     },
+    webhookUrl: {
+      get() {
+        return this.store && this.store.checkout_webhook_url
+      },
+      set(value) {
+        this.updateWebbookUrl(value.trim())
+      }
+    },
     acceptedTokens: {
       get() {
         return this.store && this.store.accepted_currencies
@@ -129,7 +143,8 @@ export default {
     ...mapMutations('stores', {
       updateName: 'STORE_EDIT_SET_NAME',
       updateSiteUrl: 'STORE_EDIT_SET_URL',
-      updateAcceptedTokens: 'STORE_EDIT_SET_ACCEPTED_TOKENS'
+      updateWebbookUrl: 'STORE_EDIT_SET_WEBHOOK_URL',
+      updateAcceptedTokens: 'STORE_EDIT_SET_ACCEPTED_TOKENS',
     }),
     ...mapActions('stores', ['editStore', 'updateStore', 'createStore']),
     save(storeData) {
