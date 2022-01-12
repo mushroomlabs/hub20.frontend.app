@@ -3,7 +3,7 @@
     <thead>
       <th>Account Address</th>
       <th v-for="(token, address) in tokensByAddress" :key="address" :title="address">
-        {{ token.code }}
+        {{ token.symbol }}
       </th>
     </thead>
     <tbody>

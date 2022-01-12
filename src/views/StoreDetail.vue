@@ -102,7 +102,7 @@ export default {
       return Object.values(this.tokenMap).map(token => {
         return {
           value: token.url,
-          text: token.code
+          text: token.symbol
         }
       })
     },

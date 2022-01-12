@@ -160,7 +160,7 @@ export default {
       return payload
     },
     amountLabel() {
-      return `Amount (max. available: ${this.balance} ${this.token.code})`
+      return `Amount (max. available: ${this.balance} ${this.token.symbol})`
     },
     balance() {
       return this.tokenBalance(this.token.address)

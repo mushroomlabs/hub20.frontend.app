@@ -10,7 +10,7 @@
     </thead>
     <tbody>
       <tr v-for="(token, address) in tokensByAddress" :key="address">
-        <td>{{ token.code }}</td>
+        <td>{{ token.symbol }}</td>
         <td>
           <accounting-token-balance-display :token-balance="treasuryTokenBalance(token)" />
         </td>

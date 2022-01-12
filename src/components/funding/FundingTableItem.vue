@@ -86,7 +86,7 @@ export default {
     },
     modalTitle() {
       const action = this.hasOpenDeposit ? 'Deposit' : 'Transfer'
-      return `${action} ${this.token.code}`
+      return `${action} ${this.token.symbol}`
     },
     modalId() {
       return `modal-funding-${this.token.address}`
