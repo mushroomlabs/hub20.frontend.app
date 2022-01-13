@@ -11,17 +11,24 @@
       </button>
     </td>
     <Modal
-      label="funding-modal"
-      :title="modalTitle"
-      :id="modalId"
-      :hidden="!isModalOpen"
-      @modalClosed="onModalClosed()"
+      label="deposit-modal"
+      :title="depositModalTitle"
+      :id="depositModalId"
+      :hidden="!isDepositModalOpen"
+      @modalClosed="closeModals()"
     >
-      <DepositTracker :token="token" v-if="hasOpenDeposit" />
+      <DepositTracker :token="token" />
+    </Modal>
+    <Modal
+      label="withdraw-modal"
+      :title="withdrawModalTitle"
+      :id="withdrawModalId"
+      :hidden="!isWithdrawModalOpen"
+      @modalClosed="closeModals()"
+    >
       <TransferForm
         :token="token"
-        v-if="hasOpenTransfer"
-        @transferFormSubmitted="onTransferSubmitted()"
+        @transferFormSubmitted="closeModals()"
       />
     </Modal>
   </tr>
@@ -51,12 +58,13 @@ export default {
   },
   data() {
     return {
-      hasOpenDeposit: false,
-      hasOpenTransfer: false
+      isDepositModalOpen: false,
+      isWithdrawModalOpen: false
     }
   },
   computed: {
     ...mapGetters('account', ['tokenBalance']),
+    ...mapGetters('funding', ['openDepositsByToken']),
     ...mapGetters('network', ['chainsById', 'IsNodeOnline', 'IsNodeSynced', 'chainData']),
     ...mapGetters('coingecko', ['exchangeRate']),
     ...mapState('coingecko', ['baseCurrency']),
@@ -65,12 +73,10 @@ export default {
       return this.tokenBalance(this.token.address)
     },
     canDeposit() {
-      let chainId = this.token.network_id
-      return this.IsNodeOnline(chainId) && this.IsNodeSynced(chainId)
+      return this.IsNodeOnline(this.chainId) && this.IsNodeSynced(this.chainId)
     },
     canWithdraw() {
-      let chainId = this.chain && this.chain.id
-      return this.IsNodeOnline(chainId) && this.IsNodeSynced(chainId) && this.hasFunds
+      return this.IsNodeOnline(this.chainId) && this.IsNodeSynced(this.chainId) && this.hasFunds
     },
     chainId() {
       return this.token.network_id
@@ -84,31 +90,38 @@ export default {
     hasFunds() {
       return this.balance.gt(0)
     },
-    modalTitle() {
-      const action = this.hasOpenDeposit ? 'Deposit' : 'Transfer'
-      return `${action} ${this.token.symbol}`
+    depositModalTitle() {
+      return `Deposit ${this.token.symbol}`
     },
-    modalId() {
-      return `modal-funding-${this.token.address}`
+    depositModalId() {
+      return `modal-deposit-${this.token.address}`
     },
-    isModalOpen() {
-      return this.hasOpenDeposit || this.hasOpenTransfer
+    withdrawModalTitle() {
+      return `Withdraw ${this.token.symbol}`
+    },
+    withdrawModalId() {
+      return `modal-withdraw-${this.token.address}`
     }
   },
   methods: {
     ...mapActions('coingecko', ['fetchRate']),
-    openDepositModal() {
-      this.hasOpenDeposit = true
+    ...mapActions('funding', ['createDeposit']),
+    async openDepositModal() {
+      const hasOpenDeposits = (this.openDepositsByToken(this.token).length > 0)
+      if (!hasOpenDeposits) {
+        await this.createDeposit(this.token)
+      }
+      this.isDepositModalOpen = true
+    },
+    openDeposits() {
+      return this.openDepositsByToken(this.token)
     },
     openTransferModal() {
-      this.hasOpenTransfer = true
+      this.isWithdrawModalOpen = true
     },
-    onModalClosed() {
-      this.hasOpenDeposit = false
-      this.hasOpenTransfer = false
-    },
-    onTransferSubmitted() {
-      this.hasOpenTransfer = false
+    closeModals() {
+      this.isDepositModalOpen = false
+      this.isWithdrawModalOpen = false
     }
   },
   created() {

@@ -11,7 +11,7 @@
   </div>
 </template>
 <script>
-import {mapState} from 'vuex'
+import {mapActions, mapState} from 'vuex'
 
 import ChainDisconnectionWarning from '@/components/chain/ChainDisconnectionWarning'
 import FundingTable from '@/components/funding/FundingTable'
@@ -21,8 +21,32 @@ export default {
    FundingTable,
     ChainDisconnectionWarning
   },
+  data() {
+    return {
+      'chainStatePollTimer': null
+    }
+  },
   computed: {
     ...mapState('network', ['blockchains']),
+  },
+  methods: {
+    ...mapActions('network', {getChainState: 'getStatus'}),
+    clearTimer() {
+      if (this.chainStatePollTimer) {
+        clearInterval(this.chainStatePollTimer)
+      }
+    },
+    refreshChainState() {
+      this.blockchains.forEach(chain => this.getChainState(chain.id))
+    },
+  },
+  mounted() {
+    this.clearTimer()
+    this.chainStatePollTimer = setInterval(this.refreshChainState, 10 * 1000)
+  },
+  beforeDestroy() {
+    this.clearTimer()
   }
+
 }
 </script>

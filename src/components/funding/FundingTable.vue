@@ -30,14 +30,18 @@ export default {
     ...mapState('tokens', ['tokens'])
   },
   methods: {
-      ...mapActions('account', ['fetchBalances']),
-      ...mapActions('network', {loadBlockchainData: 'initialize'}),
-      ...mapActions('tokens', ['fetchToken']),
+    ...mapActions('account', ['fetchBalances']),
+    ...mapActions('funding', ['fetchOpenDeposits']),
+    ...mapActions('network', {loadBlockchainData: 'initialize'}),
+    ...mapActions('tokens', ['fetchToken']),
+    ...mapActions('users', ['fetchUsers']),
   },
   async created() {
     await this.loadBlockchainData()
     await this.fetchBalances()
 
+    this.fetchUsers()
+    this.fetchOpenDeposits()
     this.openBalances.forEach(balance => this.fetchToken({tokenAddress: balance.address, chainId: balance.network_id}))
   }
 }

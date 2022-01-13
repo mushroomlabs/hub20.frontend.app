@@ -1,39 +1,34 @@
 <template>
-  <PaymentRequest v-if="deposit" :paymentRequest="deposit" />
+  <ul class="deposit-tracker">
+    <li>
+      <PaymentRequest
+        v-for="deposit in openDeposits"
+        :paymentRequest="deposit"
+        :key="deposit.id"
+      />
+    </li>
+  </ul>
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex'
-import {components as hub20Components} from 'hub20-vue-sdk'
+import {mapGetters} from 'vuex'
+
+import hub20 from 'hub20-vue-sdk'
 
 export default {
   components: {
-    PaymentRequest: hub20Components.PaymentRequest
+    PaymentRequest: hub20.components.Payment.Invoice,
   },
   props: {
     token: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   computed: {
     ...mapGetters('funding', ['openDepositsByToken']),
-    deposit() {
-      return this.openDeposits && this.openDeposits[0]
-    },
-    hasOpenDeposits() {
-      return this.openDeposits.length > 0
-    },
     openDeposits() {
       return this.openDepositsByToken(this.token)
-    }
-  },
-  methods: {
-    ...mapActions('funding', ['createDeposit'])
-  },
-  mounted() {
-    if (!this.deposit) {
-      this.createDeposit(this.token)
-    }
+    },
   }
 }
 </script>
