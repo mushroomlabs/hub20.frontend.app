@@ -1,35 +1,28 @@
 <template>
-  <card :title="tokenBalance.symbol">
+  <card v-if="token" :title="token.symbol">
     <slot>
-      {{ tokenBalance.balance | formattedAmount(tokenBalance) }}
+      {{ tokenBalance.amount | formattedAmount(token) }}
     </slot>
   </card>
 </template>
 <script>
-import {mapGetters, mapActions} from 'vuex'
-import {filters} from 'hub20-vue-sdk'
+import {mixins} from 'hub20-vue-sdk'
 
 export default {
   name: 'token-balance-card',
-  filters: {
-    formattedAmount: filters.formattedAmount
-  },
+  mixins: [mixins.TokenMixin],
   props: {
     tokenBalance: {
       type: Object
     }
   },
   computed: {
-    ...mapGetters('tokens', ['tokensByAddress']),
     token() {
-      return this.tokensByAddress(this.tokenBalance.address)
+      return this.tokensByUrl[this.tokenBalance.token]
     },
   },
-  methods: {
-    ...mapActions('tokens', ['fetchToken']),
-  },
-  mounted() {
-    this.fetchToken({tokenAddress: this.tokenBalance.address, chainId: this.tokenBalance.network_id})
+  created() {
+    this.fetchToken(this.tokenBalance.token)
   }
 }
 </script>

@@ -1,5 +1,6 @@
 $_qrcode_size: 35vw !important;
 $_qrcode_max_size: 250px !important;
+$_vertical_padding: 0.25em;
 
 table.funding-status {
   .balance, .price {
@@ -11,9 +12,19 @@ table.funding-status {
   }
 }
 
+ul.deposit-tracker {
+  padding-left: 0;
+}
+
 div.payment-request, form[name='transfer'] {
   div.button-bar {
     text-align: center;
+  }
+
+  span.transfer-cost-estimate {
+    display: block;
+    color: #505050;
+    text-align: right;
   }
 }
 
@@ -28,9 +39,55 @@ div.payment-request {
     }
 
     &.selected {
-      display: block;
+      display: grid;
     }
 
+    .blockchain-route-countdown {
+      $line-height: 2em;
+      grid-area: routing-timer;
+
+      display: grid;
+      grid-template-areas: 'spinner .'
+                           'spinner status'
+                           'spinner .';
+      grid-template-columns: $line-height auto;
+      margin-top: 2 * $_vertical_padding;
+      padding: $_vertical_padding 0;
+
+      span.status-message {
+        grid-area: status;
+        margin-left: 1rem;
+      }
+
+      .blockchain-route-countdown-circle {
+        grid-area: spinner;
+        width: $line-height;
+        height: $line-height;
+
+        circle {
+          stroke: transparent;
+        }
+
+        path {
+          @keyframes dash {
+            50% {
+              stroke-dasharray: 90, 150;
+              stroke-dashoffset: -35;
+            }
+            100% {
+              transform: rotate(360deg);
+              stroke-dashoffset: 0;
+            }
+          }
+
+          animation: dash 2s ease-in-out infinite;
+        }
+
+        span.label {
+          display: none;
+        }
+      }
+    }
   }
 
   div.blockchain-timer {

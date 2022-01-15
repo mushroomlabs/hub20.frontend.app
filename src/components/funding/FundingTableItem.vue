@@ -26,10 +26,7 @@
       :hidden="!isWithdrawModalOpen"
       @modalClosed="closeModals()"
     >
-      <TransferForm
-        :token="token"
-        @transferFormSubmitted="closeModals()"
-      />
+      <TransferForm :token="token" @transferFormSubmitted="closeModals()" />
     </Modal>
   </tr>
 </template>
@@ -46,20 +43,20 @@ export default {
   components: {
     Modal,
     DepositTracker,
-    TransferForm
+    TransferForm,
   },
   filters: {
-    formattedCurrency: hub20.filters.formattedCurrency
+    formattedCurrency: hub20.filters.formattedCurrency,
   },
   props: {
     token: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   data() {
     return {
       isDepositModalOpen: false,
-      isWithdrawModalOpen: false
+      isWithdrawModalOpen: false,
     }
   },
   computed: {
@@ -70,7 +67,7 @@ export default {
     ...mapState('coingecko', ['baseCurrency']),
     ...mapState('network', ['blockchains']),
     balance() {
-      return this.tokenBalance(this.token.address)
+      return this.tokenBalance(this.token)
     },
     canDeposit() {
       return this.IsNodeOnline(this.chainId) && this.IsNodeSynced(this.chainId)
@@ -101,13 +98,13 @@ export default {
     },
     withdrawModalId() {
       return `modal-withdraw-${this.token.address}`
-    }
+    },
   },
   methods: {
     ...mapActions('coingecko', ['fetchRate']),
     ...mapActions('funding', ['createDeposit']),
     async openDepositModal() {
-      const hasOpenDeposits = (this.openDepositsByToken(this.token).length > 0)
+      const hasOpenDeposits = this.openDepositsByToken(this.token).length > 0
       if (!hasOpenDeposits) {
         await this.createDeposit(this.token)
       }
@@ -122,10 +119,10 @@ export default {
     closeModals() {
       this.isDepositModalOpen = false
       this.isWithdrawModalOpen = false
-    }
+    },
   },
   created() {
     this.fetchRate(this.token)
-  }
+  },
 }
 </script>

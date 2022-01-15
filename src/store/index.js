@@ -49,12 +49,12 @@ const actions = {
     dispatch('server/setUrl', url)
   },
   initialize({commit, dispatch, getters}) {
-    if (!getters['server/isConnected']){
-      throw "Not connected to any server"
+    if (!getters['server/isConnected']) {
+      throw 'Not connected to any server'
     }
 
-    if (!getters['auth/isAuthenticated']){
-      throw "Not logged in"
+    if (!getters['auth/isAuthenticated']) {
+      throw 'Not logged in'
     }
 
     const eventHandler = evt => {
@@ -63,7 +63,10 @@ const actions = {
       const eventData = message.data
       switch (message.event) {
         case eventTypes.BLOCKCHAIN_BLOCK_CREATED:
-          commit('network/NETWORK_SET_BLOCKCHAIN_HEIGHT', {chainId: eventData.chain_id, blockNumber: eventData.number})
+          commit('network/NETWORK_SET_BLOCKCHAIN_HEIGHT', {
+            chainId: eventData.chain_id,
+            blockNumber: eventData.number,
+          })
           break
         case eventTypes.BLOCKCHAIN_DEPOSIT_BROADCAST:
           commit('notifications/ADD_NOTIFICATION', {
@@ -103,28 +106,9 @@ const actions = {
       }
     }
 
-    /* dispatch('account/initialize')
-     * dispatch('audit/initialize')
-     * dispatch('network/initialize')
-     * dispatch('stores/initialize')
-     * dispatch('funding/initialize')
-     * dispatch('users/initialize') */
     dispatch('events/initialize', getters['server/eventWebsocketUrl'])
     dispatch('events/setEventHandler', eventHandler)
     commit(APP_SET_INITIALIZED)
-  },
-  refresh({dispatch, getters}) {
-    if (getters['isRunning']) {
-      if (getters['server/isConnected'] && getters['auth/isAuthenticated']) {
-        dispatch('account/refresh')
-          .then(() => dispatch('stores/refresh'))
-          .then(() => dispatch('funding/refresh'))
-      }
-
-      if (getters['account/hasAdminAccess']) {
-        dispatch('audit/refresh')
-      }
-    }
   },
   tearDown({commit, dispatch}) {
     return dispatch('auth/logout')

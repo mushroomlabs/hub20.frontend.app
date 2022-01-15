@@ -22,7 +22,7 @@
       v-model="siteUrl"
       :errorMessage="submissionErrorMessages.siteUrl || validationErrors.siteUrl"
       required
-      />
+    />
 
     <fg-input
       label="Webhook URL"
@@ -52,11 +52,14 @@
 </template>
 <script>
 import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
+import {mixins} from 'hub20-vue-sdk'
 
 export default {
+  name: 'StoreDetail',
+  mixins: [mixins.TokenMixin],
   data() {
     return {
-      validationErrors: {}
+      validationErrors: {},
     }
   },
   watch: {
@@ -75,20 +78,19 @@ export default {
       }
     },
     acceptedTokens() {
-      if (!this.acceptedTokens.length) {
+      if (this.acceptedTokens.length == 0) {
         this.$set(this.validationErrors, 'acceptedTokens', 'Stores must use at least one token')
       } else {
         this.$set(this.validationErrors, 'acceptedTokens', null)
       }
-    }
+    },
   },
   computed: {
     ...mapState('stores', {store: 'editingData', submissionErrors: 'submissionErrors'}),
     ...mapGetters('stores', {
       stores: 'storesById',
-      submissionErrorMessages: 'submissionErrorMessages'
+      submissionErrorMessages: 'submissionErrorMessages',
     }),
-    ...mapGetters('tokens', {tokenMap: 'tokensByAddress'}),
     isNew() {
       return this.$route.name == 'store-create'
     },
@@ -98,21 +100,13 @@ export default {
     isValid() {
       return Object.values(this.validationErrors).every(attr => !attr)
     },
-    tokenOptions() {
-      return Object.values(this.tokenMap).map(token => {
-        return {
-          value: token.url,
-          text: token.symbol
-        }
-      })
-    },
     name: {
       get() {
         return this.store && this.store.name
       },
       set(value) {
         this.updateName(value.trim())
-      }
+      },
     },
     webhookUrl: {
       get() {
@@ -120,7 +114,7 @@ export default {
       },
       set(value) {
         this.updateWebbookUrl(value.trim())
-      }
+      },
     },
     acceptedTokens: {
       get() {
@@ -128,7 +122,7 @@ export default {
       },
       set(value) {
         this.updateAcceptedTokens(value)
-      }
+      },
     },
     siteUrl: {
       get() {
@@ -136,8 +130,8 @@ export default {
       },
       set(value) {
         return this.updateSiteUrl(value)
-      }
-    }
+      },
+    },
   },
   methods: {
     ...mapMutations('stores', {
@@ -156,12 +150,15 @@ export default {
           this.$router.push({name: 'stores'})
         }
       })
-    }
+    },
   },
   mounted() {
     const storeId = this.isNew ? null : this.$route.params.id
-    this.editStore(storeId).then(() => (this.validationErrors = {}))
-  }
+    this.editStore(storeId).then(() => {
+      this.validationErrors = {}
+      this.acceptedTokens.forEach(tokenUrl => this.fetchToken(tokenUrl))
+    })
+  },
 }
 </script>
 

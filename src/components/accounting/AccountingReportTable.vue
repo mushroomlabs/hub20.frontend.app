@@ -2,59 +2,27 @@
   <table class="table">
     <thead>
       <th>Token</th>
-      <th>Treasury</th>
-      <th>Wallet</th>
-      <th>Raiden</th>
-      <th>Total Assets</th>
-      <th>User Accounts (Liabilities)</th>
+      <th>Chain</th>
+      <th>Total Debit</th>
+      <th>Total Credit</th>
+      <th>Balance</th>
     </thead>
     <tbody>
-      <tr v-for="(token, address) in tokensByAddress" :key="address">
-        <td>{{ token.symbol }}</td>
-        <td>
-          <accounting-token-balance-display :token-balance="treasuryTokenBalance(token)" />
-        </td>
-        <td>
-          <accounting-token-balance-display :token-balance="walletTokenBalance(token)" />
-        </td>
-        <td>
-          <accounting-token-balance-display :token-balance="raidenTokenBalance(token)" />
-        </td>
-        <td>
-          <accounting-token-balance-display :token-balance="totalTokenAssets(token)" />
-        </td>
-        <td>
-          <accounting-token-balance-display :token-balance="userTokenBalance(token)" />
-        </td>
-      </tr>
+      <AccountingBookTableEntryItem v-for="entry in book" :key="entry.token" :entry="entry" />
     </tbody>
   </table>
 </template>
 <script>
-import {mapGetters} from 'vuex'
-import {mixins} from 'hub20-vue-sdk'
-
-import AccountingTokenBalanceDisplay from './AccountingTokenBalanceDisplay'
-
+  import AccountingBookTableEntryItem from './AccountingBookTableEntryItem'
 export default {
   name: 'AccountingReportTable',
-  mixins: [mixins.TokenMixin],
-  props: {
-    chain: {
-      type: Object
-    }
-  },
   components: {
-    AccountingTokenBalanceDisplay
+    AccountingBookTableEntryItem
   },
-  computed: {
-    ...mapGetters('audit', [
-      'treasuryTokenBalance',
-      'userTokenBalance',
-      'walletTokenBalance',
-      'raidenTokenBalance',
-      'totalTokenAssets'
-    ])
+  props: {
+    book: {
+      type: Array
+    }
   }
 }
 </script>

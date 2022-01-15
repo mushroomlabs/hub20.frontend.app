@@ -58,6 +58,8 @@
         :errorMessage="validationErrors.memo"
       />
 
+      <span class="transfer-cost-estimate"> Transfer cost (estimate): {{ transferCost }} </span>
+
       <p-button block :disabled="!isValid" @click.native="submitTransfer()">
         Transfer
       </p-button>
@@ -68,12 +70,14 @@
 import {ethers} from 'ethers'
 import {mapGetters, mapActions} from 'vuex'
 
+import hub20 from 'hub20-vue-sdk'
+
 import AuthMixin from '@/mixins/auth'
 
 export default {
-  mixins: [AuthMixin],
+  mixins: [AuthMixin, hub20.mixins.TokenMixin],
   props: {
-    token: Object
+    token: Object,
   },
   data() {
     return {
@@ -84,7 +88,7 @@ export default {
       recipientUsername: null,
       memo: null,
       identifier: null,
-      submitted: false
+      submitted: false,
     }
   },
   watch: {
@@ -98,7 +102,11 @@ export default {
     },
     amount(value) {
       if (value <= 0) {
-        this.$set(this.validationErrors, 'amount', 'Transfer amount should be greater than zero')
+        this.$set(
+          this.validationErrors,
+          'amount',
+          'Transfer amount should be greater than zero'
+        )
       } else if (value > this.balance) {
         this.$set(
           this.validationErrors,
@@ -139,7 +147,7 @@ export default {
         'identifier',
         isNumericOrEmpty ? null : 'Identifier must be numeric value'
       )
-    }
+    },
   },
   computed: {
     ...mapGetters('account', ['tokenBalance']),
@@ -149,7 +157,7 @@ export default {
         token: this.token,
         amount: this.amount,
         memo: this.memo,
-        identifier: this.identifier
+        identifier: this.identifier,
       }
 
       if (this.transferType == 'internal') {
@@ -173,7 +181,7 @@ export default {
         this.amount && this.amount > 0,
         this.transferType == 'internal' ? this.recipientUsername != null : this.address != null,
         !this.validationErrors.identifier,
-        !this.validationErrors.memo
+        !this.validationErrors.memo,
       ].every(pred => Boolean(pred))
     },
     recipients() {
@@ -183,7 +191,10 @@ export default {
     },
     recipientOptions() {
       return this.recipients.map(user => ({value: user.username, text: user.username}))
-    }
+    },
+    transferCost() {
+      return '0 ETH'
+    },
   },
   methods: {
     ...mapActions('funding', ['createTransfer']),
@@ -198,7 +209,7 @@ export default {
         this.$emit('transferFormSubmitted')
         this.submitted = true
       })
-    }
-  }
+    },
+  },
 }
 </script>

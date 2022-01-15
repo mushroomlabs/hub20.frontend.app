@@ -23,11 +23,11 @@ import FundingTableItem from '@/components/funding/FundingTableItem'
 
 export default {
   components: {
-    FundingTableItem
+    FundingTableItem,
   },
   computed: {
     ...mapGetters('account', ['openBalances']),
-    ...mapState('tokens', ['tokens'])
+    ...mapState('tokens', ['tokens']),
   },
   methods: {
     ...mapActions('account', ['fetchBalances']),
@@ -42,7 +42,7 @@ export default {
 
     this.fetchUsers()
     this.fetchOpenDeposits()
-    this.openBalances.forEach(balance => this.fetchToken({tokenAddress: balance.address, chainId: balance.network_id}))
-  }
+    this.openBalances.forEach(balance => this.fetchToken(balance.token))
+  },
 }
 </script>
