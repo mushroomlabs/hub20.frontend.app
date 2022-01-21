@@ -31,12 +31,11 @@
     />
 
     <fg-select
-      label="Accepted Tokens"
-      helpMessage="Check all tokens this store will accept as payment"
-      v-model="acceptedTokens"
-      :options="tokenOptions"
-      :errorMessage="submissionErrorMessages.acceptedTokens || validationErrors.acceptedTokens"
-      multiple
+      label="Token List"
+      helpMessage="The list of tokens you want to accept for payment"
+      v-model="tokenList"
+      :options="tokenListOptions"
+      :errorMessage="submissionErrorMessages.tokenList || validationErrors.tokenList"
     />
 
     <fg-input
@@ -77,13 +76,6 @@ export default {
         this.$set(this.validationErrors, 'siteUrl', null)
       }
     },
-    acceptedTokens() {
-      if (this.acceptedTokens.length == 0) {
-        this.$set(this.validationErrors, 'acceptedTokens', 'Stores must use at least one token')
-      } else {
-        this.$set(this.validationErrors, 'acceptedTokens', null)
-      }
-    },
   },
   computed: {
     ...mapState('stores', {store: 'editingData', submissionErrors: 'submissionErrors'}),
@@ -116,12 +108,12 @@ export default {
         this.updateWebbookUrl(value.trim())
       },
     },
-    acceptedTokens: {
+    tokenList: {
       get() {
-        return this.store && this.store.accepted_currencies
+        return this.store && this.store.accepted_token_list
       },
       set(value) {
-        this.updateAcceptedTokens(value)
+        this.updateTokenList(value)
       },
     },
     siteUrl: {
@@ -138,9 +130,9 @@ export default {
       updateName: 'STORE_EDIT_SET_NAME',
       updateSiteUrl: 'STORE_EDIT_SET_URL',
       updateWebbookUrl: 'STORE_EDIT_SET_WEBHOOK_URL',
-      updateAcceptedTokens: 'STORE_EDIT_SET_ACCEPTED_TOKENS',
+      updateTokenList: 'STORE_EDIT_SET_TOKEN_LIST',
     }),
-    ...mapActions('stores', ['editStore', 'updateStore', 'createStore']),
+    ...mapActions('stores', ['editStore', 'updateStore', 'createStore', 'fetchStores']),
     save(storeData) {
       const action = this.isNew ? this.createStore : this.updateStore
 
@@ -153,10 +145,11 @@ export default {
     },
   },
   mounted() {
-    const storeId = this.isNew ? null : this.$route.params.id
-    this.editStore(storeId).then(() => {
-      this.validationErrors = {}
-      this.acceptedTokens.forEach(tokenUrl => this.fetchToken(tokenUrl))
+    this.fetchTokenLists().then(() => {
+      const storeId = this.isNew ? null : this.$route.params.id
+      this.editStore(storeId).then(() => {
+        this.validationErrors = {}
+      })
     })
   },
 }
