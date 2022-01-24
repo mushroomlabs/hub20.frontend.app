@@ -1,7 +1,7 @@
 <template>
 <tr>
   <td class="identifier">{{ channel.identifier }} </td>
-  <td class="network">{{ channel.token.network_id }} </td>
+  <td class="network">{{ channel.token.chain_id }} </td>
   <td class="balance">{{ channel.balance | formattedAmount(channel.token) }}</td>
 </tr>
 

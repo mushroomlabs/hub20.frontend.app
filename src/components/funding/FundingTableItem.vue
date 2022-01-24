@@ -76,7 +76,7 @@ export default {
       return this.IsNodeOnline(this.chainId) && this.IsNodeSynced(this.chainId) && this.hasFunds
     },
     chainId() {
-      return this.token.network_id
+      return this.token.chain_id
     },
     chain() {
       return this.chainsById[this.chainId]
