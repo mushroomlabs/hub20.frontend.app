@@ -108,6 +108,7 @@ const actions = {
 
     dispatch('events/initialize', getters['server/eventWebsocketUrl'])
     dispatch('events/setEventHandler', eventHandler)
+    dispatch('network/initialize')
     commit(APP_SET_INITIALIZED)
   },
   tearDown({commit, dispatch}) {

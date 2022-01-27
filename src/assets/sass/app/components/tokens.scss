@@ -1,0 +1,62 @@
+$light-color: #777;
+
+@mixin token-data-cell() {
+  display: grid;
+  grid-template-areas: 'token-logo token-name'
+                       'token-logo token-symbol';
+  grid-template-columns: 40px auto;
+
+  img.token-logo {
+    max-width: 32px;
+    max-height: 32px;
+    padding-right: 8px;
+    grid-area: token-logo;
+  }
+
+  .token-name {
+    grid-area: token-name;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .token-symbol {
+    grid-area: token-symbol;
+    font-size: 12px;
+    color: $light-color;
+  }
+}
+
+table.tokens {
+  thead {
+    text-transform: uppercase;
+    th {
+      text-align: left;
+      &.token-data {
+        padding-left: 55px !important;
+      }
+    }
+  }
+  tr {
+    td {
+      text-align: left;
+    }
+    td.token-data {
+      @include token-data-cell();
+    }
+  }
+}
+
+ul.search-token-results {
+  li.token-search-result {
+    @include token-data-cell();
+    grid-template-areas: 'token-logo token-name chain-name watchlist-switch'
+                         'token-logo token-symbol . .';
+    grid-template-columns: 40px 250px auto 50px;
+    .chain-name {
+      grid-area: chain-name;
+    }
+
+    input[name=token-watchlist] {
+      grid-area: watchlist-switch;
+    }
+  }
+}

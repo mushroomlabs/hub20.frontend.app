@@ -25,7 +25,7 @@ export default {
     },
   },
   created() {
-    this.fetchToken(this.entry.token)
+    this.fetchTokenByUrl(this.entry.token)
   },
 }
 </script>

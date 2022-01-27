@@ -9,40 +9,44 @@
     </thead>
     <tbody>
       <FundingTableItem
-        v-for="token in tokens"
-        :token="token"
-        :key="token.address"
+        v-for="userToken in userTokens"
+        :userToken="userToken"
+        :key="userToken.address"
         v-on="$listeners"
       />
     </tbody>
   </table>
 </template>
 <script>
-import {mapActions, mapGetters, mapState} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
+
+import {mixins} from 'hub20-vue-sdk'
+
 import FundingTableItem from '@/components/funding/FundingTableItem'
 
 export default {
+  name: 'FundingTable',
+  mixins: [mixins.TokenMixin, mixins.UserTokenMixin],
   components: {
     FundingTableItem,
   },
   computed: {
     ...mapGetters('account', ['openBalances']),
-    ...mapState('tokens', ['tokens']),
   },
   methods: {
     ...mapActions('account', ['fetchBalances']),
     ...mapActions('funding', ['fetchOpenDeposits']),
     ...mapActions('network', {loadBlockchainData: 'initialize'}),
-    ...mapActions('tokens', ['fetchToken']),
+    ...mapActions('tokens', ['fetchTokenByUrl', 'fetchUserTokens']),
     ...mapActions('users', ['fetchUsers']),
   },
   async created() {
     await this.loadBlockchainData()
     await this.fetchBalances()
+    await this.fetchUserTokens()
 
     this.fetchUsers()
     this.fetchOpenDeposits()
-    this.openBalances.forEach(balance => this.fetchToken(balance.token))
   },
 }
 </script>

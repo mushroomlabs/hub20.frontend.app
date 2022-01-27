@@ -17,6 +17,7 @@ import Transfer from '@/views/Transfer'
 import Raiden from '@/views/Raiden'
 import Stores from '@/views/Stores'
 import StoreDetail from '@/views/StoreDetail'
+import Settings from '@/views/Settings'
 
 // Everything else
 import store from '@/store/index'
@@ -132,6 +133,11 @@ const routes = [
         path: 'raiden',
         name: 'raiden',
         component: Raiden,
+      },
+      {
+        path: 'settings',
+        name: 'settings',
+        component: Settings,
       },
     ],
   },

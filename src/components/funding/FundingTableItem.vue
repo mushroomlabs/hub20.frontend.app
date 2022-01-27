@@ -1,5 +1,5 @@
 <template>
-  <tr>
+  <tr v-if="userToken">
     <td class="name" :title="token.address">{{ token.name }} ({{ token.symbol }})</td>
     <td class="network" :title="chain.name">{{ chain.name }}</td>
     <td class="price">{{ exchangeRate(token) | formattedCurrency(baseCurrency) }}</td>
@@ -40,6 +40,8 @@ import DepositTracker from './DepositTracker'
 import TransferForm from './TransferForm'
 
 export default {
+  name: 'FundingTableItem',
+  mixins: [hub20.mixins.UserTokenMixin, hub20.mixins.TokenMixin],
   components: {
     Modal,
     DepositTracker,
@@ -49,7 +51,7 @@ export default {
     formattedCurrency: hub20.filters.formattedCurrency,
   },
   props: {
-    token: {
+    userToken: {
       type: Object,
     },
   },
@@ -66,8 +68,11 @@ export default {
     ...mapGetters('coingecko', ['exchangeRate']),
     ...mapState('coingecko', ['baseCurrency']),
     ...mapState('network', ['blockchains']),
+    token() {
+      return this.asToken(this.userToken)
+    },
     balance() {
-      return this.tokenBalance(this.token)
+      return (this.token && this.tokenBalance(this.token)) || 'N/A'
     },
     canDeposit() {
       return this.IsNodeOnline(this.chainId) && this.IsNodeSynced(this.chainId)
@@ -76,7 +81,7 @@ export default {
       return this.IsNodeOnline(this.chainId) && this.IsNodeSynced(this.chainId) && this.hasFunds
     },
     chainId() {
-      return this.token.chain_id
+      return this.userToken.chain_id
     },
     chain() {
       return this.chainsById[this.chainId]
@@ -88,23 +93,23 @@ export default {
       return this.balance.gt(0)
     },
     depositModalTitle() {
-      return `Deposit ${this.token.symbol}`
+      return `Deposit ${this.userToken.symbol}`
     },
     depositModalId() {
-      return `modal-deposit-${this.token.address}`
+      return `modal-deposit-${this.userToken.address}`
     },
     withdrawModalTitle() {
-      return `Withdraw ${this.token.symbol}`
+      return `Withdraw ${this.userToken.symbol}`
     },
     withdrawModalId() {
-      return `modal-withdraw-${this.token.address}`
+      return `modal-withdraw-${this.userToken.address}`
     },
   },
   methods: {
     ...mapActions('coingecko', ['fetchRate']),
     ...mapActions('funding', ['createDeposit']),
     async openDepositModal() {
-      const hasOpenDeposits = this.openDepositsByToken(this.token).length > 0
+      const hasOpenDeposits = this.openDeposits.length > 0
       if (!hasOpenDeposits) {
         await this.createDeposit(this.token)
       }

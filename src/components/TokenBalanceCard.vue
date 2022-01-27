@@ -22,7 +22,7 @@ export default {
     },
   },
   created() {
-    this.fetchToken(this.tokenBalance.token)
+    this.fetchTokenByUrl(this.tokenBalance.token)
   }
 }
 </script>
