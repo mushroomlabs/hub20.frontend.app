@@ -1,6 +1,6 @@
 <template>
-  <table class="table">
-    <thead>
+  <table class="table" :class="{'empty': !hasEntries}">
+    <thead v-if="hasEntries">
       <th>Token</th>
       <th>Chain</th>
       <th>Total Debit</th>
@@ -8,6 +8,7 @@
       <th>Balance</th>
     </thead>
     <tbody>
+      <tr v-if="!hasEntries"><td>No book entries</td></tr>
       <AccountingBookTableEntryItem v-for="entry in book" :key="entry.token" :entry="entry" />
     </tbody>
   </table>
@@ -22,6 +23,11 @@ export default {
   props: {
     book: {
       type: Array
+    }
+  },
+  computed: {
+    hasEntries() {
+      return this.book.length > 0
     }
   }
 }
