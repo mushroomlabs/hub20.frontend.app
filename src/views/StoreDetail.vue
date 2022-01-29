@@ -105,7 +105,7 @@ export default {
         return this.store && this.store.checkout_webhook_url
       },
       set(value) {
-        this.updateWebbookUrl(value.trim())
+        this.updateWebhookUrl(value.trim())
       },
     },
     tokenList: {
@@ -129,7 +129,7 @@ export default {
     ...mapMutations('stores', {
       updateName: 'STORE_EDIT_SET_NAME',
       updateSiteUrl: 'STORE_EDIT_SET_URL',
-      updateWebbookUrl: 'STORE_EDIT_SET_WEBHOOK_URL',
+      updateWebhookUrl: 'STORE_EDIT_SET_WEBHOOK_URL',
       updateTokenList: 'STORE_EDIT_SET_TOKEN_LIST',
     }),
     ...mapActions('stores', ['editStore', 'updateStore', 'createStore', 'fetchStores']),
