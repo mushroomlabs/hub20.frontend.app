@@ -12,16 +12,16 @@ export default {
   components: {
     TokenListEditor
   },
+  computed: {
+    tokenListId() {
+      return this.$route.params.id
+    }
+  },
   methods: {
     ...mapActions('tokens', ['fetchUserTokens']),
   },
   async beforeMount() {
     await this.fetchUserTokens()
   },
-  computed: {
-    tokenListId() {
-      return this.$route.params.id
-    }
-  }
 }
 </script>
