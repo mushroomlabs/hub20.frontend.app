@@ -3,10 +3,10 @@
     <side-bar>
       <template v-if="!hasAdminAccess" slot="links">
         <sidebar-link to="/" name="Overview" icon="ti-dashboard" />
-        <sidebar-link to="/history" name="History" icon="ti-receipt" />
+        <sidebar-link to="/tokens" name="Asset Management" icon="ti-wallet" />
+        <sidebar-link to="/stores" name="Stores" icon="ti-shopping-cart" />
         <sidebar-link to="/funding" name="Funding" icon="ti-exchange-vertical" />
-        <sidebar-link to="/stores" name="Stores" icon="ti-credit-card" />
-        <sidebar-link to="/settings" name="Settings" icon="ti-panel" />
+        <sidebar-link to="/history" name="History" icon="ti-receipt" />
       </template>
       <template v-if="hasAdminAccess" slot="links">
         <sidebar-link to="/" name="Overview" icon="ti-dashboard" />

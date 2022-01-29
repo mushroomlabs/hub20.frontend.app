@@ -13,11 +13,12 @@ import Overview from '@/views/Overview'
 import History from '@/views/History'
 import Funding from '@/views/Funding'
 import Deposit from '@/views/Deposit'
-import Transfer from '@/views/Transfer'
 import Raiden from '@/views/Raiden'
 import Stores from '@/views/Stores'
 import StoreDetail from '@/views/StoreDetail'
-import Settings from '@/views/Settings'
+import Transfer from '@/views/Transfer'
+import TokenManagement from '@/views/TokenManagement'
+import TokenListDetail from '@/views/TokenListDetail'
 
 // Everything else
 import store from '@/store/index'
@@ -135,9 +136,25 @@ const routes = [
         component: Raiden,
       },
       {
-        path: 'settings',
-        name: 'settings',
-        component: Settings,
+        path: 'tokens',
+        name: 'tokens',
+        component: TokenManagement,
+      },
+      {
+        path: 'tokens/lists/new',
+        name: 'tokenlist-create',
+        component: TokenListDetail,
+        meta: {
+          viewTitle: 'Create new Token List',
+        },
+      },
+      {
+        path: 'tokens/lists/:id',
+        name: 'tokenlist-edit',
+        component: TokenListDetail,
+        meta: {
+          viewTitle: 'Edit Token List',
+        },
       },
     ],
   },

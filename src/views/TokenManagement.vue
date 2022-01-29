@@ -19,6 +19,27 @@
 
       <TokenSearch />
     </card>
+
+    <card title="Token Lists" subTitle="Sets of tokens that you manage with specific purposes">
+      <router-link :to="{name: 'tokenlist-create'}">Add New</router-link>
+      <table class="table token-list">
+        <thead>
+          <th class="name">Name</th>
+          <th class="description">Description</th>
+          <th class="current-token-list">Current Tokens</th>
+          <th class="actions"></th>
+        </thead>
+        <tbody>
+          <TokenListTableItem v-for="tokenList in userTokenLists" :key="tokenList.id" :tokenList="tokenList">
+            <td class="item-actions">
+              <router-link :to="{name: 'tokenlist-edit', params: {id: tokenList.id}}">Edit</router-link>
+            </td>
+          </TokenListTableItem>
+        </tbody>
+      </table>
+
+    </card>
+
   </div>
 </template>
 <script>
@@ -29,6 +50,7 @@ import TokenSearch from '@/components/tokens/TokenSearch'
 import TokenTable from '@/components/tokens/TokenTable'
 import TokenTableItem from '@/components/tokens/TokenTableItem'
 import TokenFavoriteSwitchButton from '@/components/tokens/TokenFavoriteSwitchButton'
+import TokenListTableItem from '@/components/tokens/TokenListTableItem'
 
 export default {
   name: 'Settings',
@@ -38,6 +60,7 @@ export default {
     TokenSearch,
     TokenTable,
     TokenTableItem,
+    TokenListTableItem,
   },
   methods: {
     ...mapActions('network', ['getBlockchains']),
@@ -45,6 +68,7 @@ export default {
   async created() {
     await this.getBlockchains()
     await this.fetchUserTokens()
+    await this.fetchUserTokenLists()
 
     this.userTokens.forEach(userToken => this.fetchToken(userToken))
   },

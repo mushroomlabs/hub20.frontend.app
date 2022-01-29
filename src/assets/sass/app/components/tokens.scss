@@ -1,15 +1,18 @@
 $light-color: #777;
+$token-size: 48px;
+$token-padding: 8px;
+
 
 @mixin token-data-cell() {
   display: grid;
   grid-template-areas: 'token-logo token-name'
                        'token-logo token-symbol';
-  grid-template-columns: 40px auto;
+  grid-template-columns: ($token-size + 8px) auto;
 
   img.token-logo {
-    max-width: 32px;
-    max-height: 32px;
-    padding-right: 8px;
+    max-width: $token-size;
+    max-height: $token-size;
+    padding-right: $token-padding;
     grid-area: token-logo;
   }
 
@@ -31,7 +34,7 @@ table.tokens {
     th {
       text-align: left;
       &.token-data {
-        padding-left: 55px !important;
+        padding-left: ($token-size + $token-padding + 15px) !important;
       }
     }
   }
@@ -45,12 +48,24 @@ table.tokens {
   }
 }
 
+table.token-list {
+  td.tokenlist-tokens {
+    max-width: 200px;
+    li {
+      display: inline
+    }
+  }
+  td.item-actions a {
+    @include button($info-color, $info-states-color);
+  }
+}
+
 ul.search-token-results {
   li.token-search-result {
     @include token-data-cell();
     grid-template-areas: 'token-logo token-name chain-name watchlist-switch'
                          'token-logo token-symbol . .';
-    grid-template-columns: 40px 250px auto 50px;
+    grid-template-columns: ($token-size + $token-padding) 250px auto 50px;
     .chain-name {
       grid-area: chain-name;
     }

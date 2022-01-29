@@ -1,5 +1,6 @@
 import FormGroupInput from './forms/formGroupInput'
 import FormGroupSelect from './forms/formGroupSelect'
+import FormGroupTextarea from './forms/formGroupTextarea'
 
 import DropDown from './pickers/Dropdown'
 import PaperTable from './dataviewers/PaperTable'
@@ -15,6 +16,7 @@ let widgets = {
   ActionPanel,
   FormGroupInput,
   FormGroupSelect,
+  FormGroupTextarea,
   Card,
   StatsCard,
   PaperTable,
@@ -28,6 +30,7 @@ export {
   ActionPanel,
   FormGroupInput,
   FormGroupSelect,
+  FormGroupTextarea,
   Card,
   StatsCard,
   PaperTable,
