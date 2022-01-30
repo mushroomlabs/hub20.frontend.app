@@ -29,3 +29,19 @@ table {
     }
   }
 }
+
+ul.table-action-menu {
+  li {
+    text-align: right;
+    margin-right: 15px;
+
+    a {
+      @include button($default-color, $default-states-color);
+    }
+
+    &:last-child {
+      padding-right: 15px;
+    }
+
+  }
+}

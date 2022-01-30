@@ -154,14 +154,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss">
-#store-detail {
-  div.form-group.input-group {
-    label {
-      display: block;
-      width: 100%;
-    }
-  }
-}
-</style>

@@ -106,7 +106,10 @@ export default {
       setTokens: 'USER_TOKENLIST_EDIT_SET_TOKENS'
     }),
     save() {
-      this.saveUserTokenList(this.tokenList)
+      this.saveUserTokenList(this.tokenList).then(() => {
+        this.$notify({message: `${this.tokenList.name} saved successfully`, type: 'success'})
+        this.$router.push({name: 'tokens'})
+      })
     },
   },
   created() {

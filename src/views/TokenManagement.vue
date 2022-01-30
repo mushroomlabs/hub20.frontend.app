@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="token-management">
     <card title="Tokens" subTitle="See and choose tokens available for trading">
       <p>
         The base currency of every active chain is always going to be in your watchlist, because
@@ -20,24 +20,30 @@
       <TokenSearch />
     </card>
 
-    <card title="Token Lists" subTitle="Sets of tokens that you manage with specific purposes">
-      <router-link :to="{name: 'tokenlist-create'}">Add New</router-link>
+    <card title="Token Lists" subTitle="Sets of tokens that you manage with specific purposes" class="user-tokenlists">
+
+      <ul class="table-action-menu">
+        <li>
+          <router-link :to="{name: 'tokenlist-create'}">Add New</router-link>
+        </li>
+      </ul>
+
       <table class="table token-list">
         <thead>
-          <th class="name">Name</th>
-          <th class="description">Description</th>
-          <th class="current-token-list">Current Tokens</th>
-          <th class="actions"></th>
+            <th class="name">Name</th>
+            <th class="description">Description</th>
+            <th class="current-token-list">Current Tokens</th>
+            <th class="actions"></th>
         </thead>
         <tbody>
           <TokenListTableItem v-for="tokenList in userTokenLists" :key="tokenList.id" :tokenList="tokenList">
-            <td class="item-actions">
+            <td class="actions">
               <router-link :to="{name: 'tokenlist-edit', params: {id: tokenList.id}}">Edit</router-link>
             </td>
           </TokenListTableItem>
         </tbody>
-      </table>
 
+      </table>
     </card>
 
   </div>
@@ -53,7 +59,7 @@ import TokenFavoriteSwitchButton from '@/components/tokens/TokenFavoriteSwitchBu
 import TokenListTableItem from '@/components/tokens/TokenListTableItem'
 
 export default {
-  name: 'Settings',
+  name: 'TokenManagement',
   mixins: [mixins.TokenMixin, mixins.UserTokenMixin],
   components: {
     TokenFavoriteSwitchButton,

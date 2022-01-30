@@ -55,9 +55,11 @@ table.token-list {
       display: inline
     }
   }
-  td.item-actions a {
-    @include button($info-color, $info-states-color);
+
+  a {
+    @include button($info-color, $info-states-color, $font-size: $font-size-small);
   }
+
 }
 
 ul.search-token-results {
