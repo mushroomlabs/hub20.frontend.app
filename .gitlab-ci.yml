@@ -1,5 +1,6 @@
 stages:
   - build
+  - release
   - deploy
 
 build:
@@ -15,6 +16,22 @@ build:
   artifacts:
     paths:
       - dist/
+
+
+publish_npm_release:
+  image: node:15
+  stage: release
+
+  before_script:
+    - yarn install
+
+  script:
+    - yarn build
+    - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc
+    - npm publish
+
+  only:
+    - master
 
 deploy:
   image: node:15
