@@ -14,7 +14,7 @@ export default {
   name: 'AccountingBookTableEntryItem',
   mixins: [mixins.TokenMixin],
   props: {
-    entry: Object,
+    entry: Object
   },
   computed: {
     token() {
@@ -22,10 +22,10 @@ export default {
     },
     chain() {
       return this.getChain(this.token)
-    },
+    }
   },
   created() {
     this.fetchTokenByUrl(this.entry.token)
-  },
+  }
 }
 </script>

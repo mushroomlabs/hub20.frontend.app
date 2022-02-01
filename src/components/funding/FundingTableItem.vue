@@ -45,20 +45,20 @@ export default {
   components: {
     Modal,
     DepositTracker,
-    TransferForm,
+    TransferForm
   },
   filters: {
-    formattedCurrency: hub20.filters.formattedCurrency,
+    formattedCurrency: hub20.filters.formattedCurrency
   },
   props: {
     userToken: {
-      type: Object,
-    },
+      type: Object
+    }
   },
   data() {
     return {
       isDepositModalOpen: false,
-      isWithdrawModalOpen: false,
+      isWithdrawModalOpen: false
     }
   },
   computed: {
@@ -103,7 +103,7 @@ export default {
     },
     withdrawModalId() {
       return `modal-withdraw-${this.userToken.address}`
-    },
+    }
   },
   methods: {
     ...mapActions('coingecko', ['fetchRate']),
@@ -124,10 +124,10 @@ export default {
     closeModals() {
       this.isDepositModalOpen = false
       this.isWithdrawModalOpen = false
-    },
+    }
   },
   created() {
     this.fetchRate(this.token)
-  },
+  }
 }
 </script>

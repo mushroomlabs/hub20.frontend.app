@@ -1,6 +1,6 @@
 <template>
   <div v-if="hasAdminAccess" class="raiden-management">
-     <RaidenNodeDetail v-for="raiden in raidenNodes" :raiden="raiden" :key="raiden.address" />
+    <RaidenNodeDetail v-for="raiden in raidenNodes" :raiden="raiden" :key="raiden.address" />
   </div>
 </template>
 <script>

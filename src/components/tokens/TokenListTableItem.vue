@@ -8,8 +8,7 @@
     </td>
     <td class="tokenlist-tokens">
       <ul>
-        <li v-for="token in currentTokens" :key="token.url">{{ token.symbol }}
-        </li>
+        <li v-for="token in currentTokens" :key="token.url">{{ token.symbol }}</li>
       </ul>
     </td>
 
@@ -23,7 +22,7 @@ export default {
   name: 'TokenListTableItem',
   mixins: [hub20.mixins.TokenMixin],
   props: {
-    tokenList: Object,
+    tokenList: Object
   },
   computed: {
     currentTokens() {
@@ -33,7 +32,7 @@ export default {
   methods: {
     hasLogo(token) {
       return Boolean(this.getLogoUrl(token))
-    },
+    }
   },
   created() {
     this.tokenList.tokens.forEach(tokenUrl => this.fetchTokenByUrl(tokenUrl))

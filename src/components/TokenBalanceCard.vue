@@ -1,10 +1,10 @@
 <template>
-<card v-if="token" :title="token.symbol">
-  <template v-slot:image>
-    <TokenLogo :token="token" :defaultUrl="defaultLogoUrl" />
-  </template>
-  {{ balance | formattedAmount(token) }}
-</card>
+  <card v-if="token" :title="token.symbol">
+    <template v-slot:image>
+      <TokenLogo :token="token" :defaultUrl="defaultLogoUrl" />
+    </template>
+    {{ balance | formattedAmount(token) }}
+  </card>
 </template>
 <script>
 import {mapGetters} from 'vuex'
@@ -20,8 +20,8 @@ export default {
   },
   props: {
     token: {
-      type: Object,
-    },
+      type: Object
+    }
   },
   computed: {
     ...mapGetters('account', ['tokenBalance']),

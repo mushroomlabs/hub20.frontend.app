@@ -17,7 +17,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('tokens', ['fetchUserTokenLists']),
+    ...mapActions('tokens', ['fetchUserTokenLists'])
   },
   beforeMount() {
     this.fetchUserTokenLists()

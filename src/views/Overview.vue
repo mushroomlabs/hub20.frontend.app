@@ -41,13 +41,12 @@ import {mixins} from 'hub20-vue-sdk'
 import TokenBalanceCard from '@/components/TokenBalanceCard'
 import AccountingReportTable from '@/components/accounting/AccountingReportTable.vue'
 
-
 export default {
   name: 'overview',
   mixins: [mixins.TokenMixin, mixins.UserTokenMixin],
   components: {
     TokenBalanceCard,
-    AccountingReportTable,
+    AccountingReportTable
   },
   computed: {
     ...mapGetters('account', ['openBalances', 'hasAdminAccess']),
@@ -56,7 +55,7 @@ export default {
       'walletBook',
       'raidenBook',
       'userBook',
-      'externalAccountBook',
+      'externalAccountBook'
     ]),
     ...mapState('network', ['blockchains']),
     ...mapState('audit', ['wallets']),
@@ -74,7 +73,7 @@ export default {
   methods: {
     ...mapActions('account', {loadAccountData: 'initialize'}),
     ...mapActions('network', {loadBlockchainData: 'initialize'}),
-    ...mapActions('audit', ['fetchAccountingReport', 'fetchWalletBalances']),
+    ...mapActions('audit', ['fetchAccountingReport', 'fetchWalletBalances'])
   },
   created() {
     this.fetchUserTokens()
@@ -82,6 +81,6 @@ export default {
     this.loadBlockchainData()
     this.fetchAccountingReport()
     this.fetchWalletBalances()
-  },
+  }
 }
 </script>

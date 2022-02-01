@@ -22,7 +22,7 @@
       :options="userTokenOptions"
       :errorMessage="submissionErrorMessages.tokens || validationErrors.tokens"
       multiple
-      />
+    />
 
     <p-button block @click.native="save()" :disabled="!isValid">Save</p-button>
   </div>
@@ -78,7 +78,7 @@ export default {
       },
       set(value) {
         this.setName(value && value.trim())
-      },
+      }
     },
     description: {
       get() {
@@ -86,7 +86,7 @@ export default {
       },
       set(value) {
         this.setDescription(value && value.trim())
-      },
+      }
     },
     tokens: {
       get() {
@@ -94,7 +94,7 @@ export default {
       },
       set(value) {
         this.setTokens(value)
-      },
+      }
     }
   },
   methods: {
@@ -110,14 +110,12 @@ export default {
         this.$notify({message: `${this.tokenList.name} saved successfully`, type: 'success'})
         this.$router.push({name: 'tokens'})
       })
-    },
+    }
   },
   created() {
     if (this.tokenListId) {
-      this.fetchUserTokenList(this.tokenListId)
-        .then(data => this.startEditor(data))
-    }
-    else {
+      this.fetchUserTokenList(this.tokenListId).then(data => this.startEditor(data))
+    } else {
       this.startEditor()
     }
   }

@@ -39,7 +39,7 @@ export default {
     ...mapGetters('account', ['transactions'])
   },
   methods: {
-    ...mapActions('account', {loadAccountData: 'initialize'}),
+    ...mapActions('account', {loadAccountData: 'initialize'})
   },
   mounted() {
     this.loadAccountData()

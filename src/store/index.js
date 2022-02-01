@@ -16,13 +16,13 @@ Vue.use(Vuex)
 
 const initialState = () => ({
   running: false,
-  loaded: false,
+  loaded: false
 })
 
 const getters = {
   isRunning: state => state.running,
   isLoaded: state => state.loaded,
-  isReady: state => state.running && state.loaded,
+  isReady: state => state.running && state.loaded
 }
 
 const mutations = {
@@ -41,7 +41,7 @@ const mutations = {
   },
   [APP_RESET_STATE](state) {
     Object.assign(state, initialState())
-  },
+  }
 }
 
 const actions = {
@@ -65,13 +65,13 @@ const actions = {
         case eventTypes.BLOCKCHAIN_BLOCK_CREATED:
           commit('network/NETWORK_SET_BLOCKCHAIN_HEIGHT', {
             chainId: eventData.chain_id,
-            blockNumber: eventData.number,
+            blockNumber: eventData.number
           })
           break
         case eventTypes.BLOCKCHAIN_DEPOSIT_BROADCAST:
           commit('notifications/ADD_NOTIFICATION', {
             message: 'Blockchain transaction sent',
-            type: 'info',
+            type: 'info'
           })
           break
         case eventTypes.RAIDEN_ROUTE_EXPIRED:
@@ -79,26 +79,26 @@ const actions = {
           commit('notifications/ADD_NOTIFICATION', {
             message:
               'Payment route is expired. Any payment received now will may not be credited to your account',
-            type: 'warning',
+            type: 'warning'
           })
           break
         case eventTypes.ETHEREUM_NODE_UNAVAILABLE:
           commit('notifications/ADD_NOTIFICATION', {
             message: 'Server reported loss of connection with ethereum network',
-            type: 'danger',
+            type: 'danger'
           })
           break
         case eventTypes.ETHEREUM_NODE_OK:
           commit('notifications/ADD_NOTIFICATION', {
             message: 'Server connection with ethereum network established',
-            type: 'success',
+            type: 'success'
           })
           break
         case eventTypes.BLOCKCHAIN_DEPOSIT_RECEIVED:
           dispatch('funding/fetchDeposit', eventData.depositId)
           commit('notifications/ADD_NOTIFICATION', {
             message: 'Deposit received via blockchain',
-            type: 'success',
+            type: 'success'
           })
           break
         default:
@@ -123,7 +123,7 @@ const actions = {
         dispatch('audit/tearDown')
       })
       .finally(() => commit(APP_SET_FINALIZED))
-  },
+  }
 }
 
 export default new Vuex.Store({
@@ -133,5 +133,5 @@ export default new Vuex.Store({
   plugins: debug ? [createLogger()] : [],
   actions,
   getters,
-  mutations,
+  mutations
 })

@@ -6,7 +6,6 @@ import {mapActions} from 'vuex'
 
 import TokenListEditor from '@/components/tokens/TokenListEditor'
 
-
 export default {
   name: 'TokenListDetail',
   components: {
@@ -18,10 +17,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions('tokens', ['fetchUserTokens']),
+    ...mapActions('tokens', ['fetchUserTokens'])
   },
   async beforeMount() {
     await this.fetchUserTokens()
-  },
+  }
 }
 </script>

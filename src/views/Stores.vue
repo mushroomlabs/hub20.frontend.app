@@ -1,6 +1,9 @@
 <template>
   <div id="stores">
-    <card title="Store Settings" subTitle="Set up a store for each site integration where you want to accept payments online">
+    <card
+      title="Store Settings"
+      subTitle="Set up a store for each site integration where you want to accept payments online"
+    >
       <ul class="table-action-menu">
         <li>
           <router-link :to="{name: 'store-create'}">Add New</router-link>

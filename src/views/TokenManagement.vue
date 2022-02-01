@@ -20,8 +20,11 @@
       <TokenSearch />
     </card>
 
-    <card title="Token Lists" subTitle="Sets of tokens that you manage with specific purposes" class="user-tokenlists">
-
+    <card
+      title="Token Lists"
+      subTitle="Sets of tokens that you manage with specific purposes"
+      class="user-tokenlists"
+    >
       <ul class="table-action-menu">
         <li>
           <router-link :to="{name: 'tokenlist-create'}">Add New</router-link>
@@ -30,22 +33,26 @@
 
       <table class="table token-list">
         <thead>
-            <th class="name">Name</th>
-            <th class="description">Description</th>
-            <th class="current-token-list">Current Tokens</th>
-            <th class="actions"></th>
+          <th class="name">Name</th>
+          <th class="description">Description</th>
+          <th class="current-token-list">Current Tokens</th>
+          <th class="actions"></th>
         </thead>
         <tbody>
-          <TokenListTableItem v-for="tokenList in userTokenLists" :key="tokenList.id" :tokenList="tokenList">
+          <TokenListTableItem
+            v-for="tokenList in userTokenLists"
+            :key="tokenList.id"
+            :tokenList="tokenList"
+          >
             <td class="actions">
-              <router-link :to="{name: 'tokenlist-edit', params: {id: tokenList.id}}">Edit</router-link>
+              <router-link :to="{name: 'tokenlist-edit', params: {id: tokenList.id}}"
+                >Edit</router-link
+              >
             </td>
           </TokenListTableItem>
         </tbody>
-
       </table>
     </card>
-
   </div>
 </template>
 <script>
@@ -66,10 +73,10 @@ export default {
     TokenSearch,
     TokenTable,
     TokenTableItem,
-    TokenListTableItem,
+    TokenListTableItem
   },
   methods: {
-    ...mapActions('network', ['getBlockchains']),
+    ...mapActions('network', ['getBlockchains'])
   },
   async created() {
     await this.getBlockchains()
@@ -77,6 +84,6 @@ export default {
     await this.fetchUserTokenLists()
 
     this.userTokens.forEach(userToken => this.fetchToken(userToken))
-  },
+  }
 }
 </script>

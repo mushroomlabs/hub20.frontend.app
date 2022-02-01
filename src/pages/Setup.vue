@@ -13,10 +13,10 @@ import Spinner from '@/components/Spinner'
 export default {
   components: {
     InstanceSelectorForm,
-    Spinner,
+    Spinner
   },
   computed: {
-    ...mapState('server', ['processing']),
-  },
+    ...mapState('server', ['processing'])
+  }
 }
 </script>

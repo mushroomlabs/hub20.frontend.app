@@ -1,5 +1,9 @@
 <template>
-  <card class="registration-form" title="Create Account" :class="{'submitted': registrationLoading || registrationCompleted }">
+  <card
+    class="registration-form"
+    title="Create Account"
+    :class="{submitted: registrationLoading || registrationCompleted}"
+  >
     <slot>
       <ServerIndicator>
         Register to an account on
@@ -42,7 +46,7 @@
           id="email"
           placeholder="email"
           :errorMessage="registrationFieldError('email')"
-          />
+        />
         <input type="submit" hidden />
         <span class="error-message" v-if="registrationErrorMessage">
           {{ registrationErrorMessage }}
@@ -88,12 +92,11 @@ export default {
   methods: {
     ...mapActions('signup', ['createAccount', 'clearRegistrationStatus']),
     signUp(inputs) {
-      this.createAccount(inputs)
-        .then((token) => {
-          this.$store.commit('auth/AUTH_SET_TOKEN', token)
-          this.$store.commit('auth/AUTH_SET_USERNAME', inputs.username)
-          this.$store.commit('signup/REGISTRATION_SUCCESS', inputs.username)
-        })
+      this.createAccount(inputs).then(token => {
+        this.$store.commit('auth/AUTH_SET_TOKEN', token)
+        this.$store.commit('auth/AUTH_SET_USERNAME', inputs.username)
+        this.$store.commit('signup/REGISTRATION_SUCCESS', inputs.username)
+      })
     }
   }
 }

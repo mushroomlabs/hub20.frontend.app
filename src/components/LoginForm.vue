@@ -1,10 +1,10 @@
 <template>
-  <card class="login-form" title="Sign in" :class="{'submitted': authenticating}">
+  <card class="login-form" title="Sign in" :class="{submitted: authenticating}">
     <slot>
       <ServerIndicator>
         Sign-in to your account on
       </ServerIndicator>
-      <form @submit.prevent="login(username, password)" :class="{'error': hasErrors}">
+      <form @submit.prevent="login(username, password)" :class="{error: hasErrors}">
         <span class="error-message" v-if="hasErrors">{{ errorMessage }}</span>
         <fg-input
           v-model="username"
@@ -22,7 +22,7 @@
           autocomplete="current-password"
           :disabled="authenticating"
           required
-          />
+        />
         <input type="submit" hidden />
       </form>
     </slot>
@@ -45,12 +45,12 @@ import ServerIndicator from '@/components/ServerIndicator'
 export default {
   name: 'login-form',
   components: {
-    ServerIndicator,
+    ServerIndicator
   },
   data() {
     return {
       username: '',
-      password: '',
+      password: ''
     }
   },
   computed: {
@@ -58,14 +58,12 @@ export default {
     ...mapGetters('auth', ['submissionErrors', 'errorMessage']),
     hasErrors() {
       return this.submissionErrors.length > 0
-    },
+    }
   },
   methods: {
     login(username, password) {
-      this.$store
-        .dispatch('auth/login', {username, password})
-        .catch(err => console.error(err))
-    },
+      this.$store.dispatch('auth/login', {username, password}).catch(err => console.error(err))
+    }
   }
 }
 </script>

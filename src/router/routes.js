@@ -34,20 +34,21 @@ const requireServerConnection = (to, from, next) => {
 }
 
 const requireAuthenticated = (to, from, next) => {
-  store.dispatch('server/initialize')
-       .then(() => store.dispatch('auth/initialize'))
-       .then(() => {
-         if (!store.getters['server/isConnected']) {
-           next('/setup')
-         }
+  store
+    .dispatch('server/initialize')
+    .then(() => store.dispatch('auth/initialize'))
+    .then(() => {
+      if (!store.getters['server/isConnected']) {
+        next('/setup')
+      }
 
-         if (!store.getters['auth/isAuthenticated']) {
-           next('/login')
-         }
+      if (!store.getters['auth/isAuthenticated']) {
+        next('/login')
+      }
 
-         store.dispatch('initialize')
-         next()
-       })
+      store.dispatch('initialize')
+      next()
+    })
 }
 
 const requireAnonymous = (to, from, next) => {
@@ -71,120 +72,120 @@ const routes = [
       {
         path: '',
         name: 'home',
-        component: Overview,
+        component: Overview
       },
       {
         path: 'history',
         name: 'history',
-        component: History,
+        component: History
       },
       {
         path: 'funding',
         name: 'funding',
-        component: Funding,
+        component: Funding
       },
       {
         path: 'receive/:token',
         name: 'payment-order',
         component: Deposit,
         meta: {
-          viewTitle: 'Request Payment',
-        },
+          viewTitle: 'Request Payment'
+        }
       },
       {
         path: 'deposit/:token',
         name: 'deposit',
-        component: Deposit,
+        component: Deposit
       },
       {
         path: 'send/:token',
         name: 'withdraw',
         component: Transfer,
         meta: {
-          viewTitle: 'Send',
-        },
+          viewTitle: 'Send'
+        }
       },
       {
         path: 'transfer/:token',
         name: 'transfer',
         component: Transfer,
         meta: {
-          viewTitle: 'Send Payment',
-        },
+          viewTitle: 'Send Payment'
+        }
       },
       {
         path: 'stores',
         name: 'stores',
-        component: Stores,
+        component: Stores
       },
       {
         path: 'store/new',
         name: 'store-create',
         component: StoreDetail,
         meta: {
-          viewTitle: 'Add Store',
-        },
+          viewTitle: 'Add Store'
+        }
       },
       {
         path: 'store/:id',
         name: 'store',
-        component: StoreDetail,
+        component: StoreDetail
       },
       {
         path: 'raiden',
         name: 'raiden',
-        component: Raiden,
+        component: Raiden
       },
       {
         path: 'tokens',
         name: 'tokens',
-        component: TokenManagement,
+        component: TokenManagement
       },
       {
         path: 'tokens/lists/new',
         name: 'tokenlist-create',
         component: TokenListDetail,
         meta: {
-          viewTitle: 'Create new Token List',
-        },
+          viewTitle: 'Create new Token List'
+        }
       },
       {
         path: 'tokens/lists/:id',
         name: 'tokenlist-edit',
         component: TokenListDetail,
         meta: {
-          viewTitle: 'Edit Token List',
-        },
-      },
-    ],
+          viewTitle: 'Edit Token List'
+        }
+      }
+    ]
   },
   {
     path: '/setup',
     name: 'setup',
     component: Setup,
-    beforeEnter: requireAnonymous,
+    beforeEnter: requireAnonymous
   },
   {
     path: '/login',
     name: 'login',
     component: Login,
-    beforeEnter: requireServerConnection,
+    beforeEnter: requireServerConnection
   },
   {
     path: '/logout',
     name: 'logout',
-    beforeEnter: redirectLogout,
+    beforeEnter: redirectLogout
   },
   {
     path: '/register',
     name: 'register',
     component: Register,
-    beforeEnter: requireServerConnection,
+    beforeEnter: requireServerConnection
   },
   {
     path: '*',
-    component: NotFound,
-  },
+    component: NotFound
+  }
 ]
 
 export default routes

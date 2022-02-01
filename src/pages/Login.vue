@@ -16,15 +16,15 @@ export default {
   name: 'login',
   components: {
     LoginForm,
-    Spinner,
+    Spinner
   },
   data() {
     return {
-      unsubscribe: null,
+      unsubscribe: null
     }
   },
   computed: {
-    ...mapState('auth', ['authenticating', 'isAuthenticated']),
+    ...mapState('auth', ['authenticating', 'isAuthenticated'])
   },
   mounted() {
     this.unsubscribe = this.$store.subscribe(mutation => {
@@ -39,6 +39,6 @@ export default {
     if (this.unsubscribe) {
       this.unsubscribe()
     }
-  },
+  }
 }
 </script>

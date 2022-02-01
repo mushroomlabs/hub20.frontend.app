@@ -1,5 +1,5 @@
 <template>
-  <table class="table" :class="{'empty': !hasEntries}">
+  <table class="table" :class="{empty: !hasEntries}">
     <thead v-if="hasEntries">
       <th>Token</th>
       <th>Chain</th>
@@ -8,13 +8,15 @@
       <th>Balance</th>
     </thead>
     <tbody>
-      <tr v-if="!hasEntries"><td>No book entries</td></tr>
+      <tr v-if="!hasEntries">
+        <td>No book entries</td>
+      </tr>
       <AccountingBookTableEntryItem v-for="entry in book" :key="entry.token" :entry="entry" />
     </tbody>
   </table>
 </template>
 <script>
-  import AccountingBookTableEntryItem from './AccountingBookTableEntryItem'
+import AccountingBookTableEntryItem from './AccountingBookTableEntryItem'
 export default {
   name: 'AccountingReportTable',
   components: {

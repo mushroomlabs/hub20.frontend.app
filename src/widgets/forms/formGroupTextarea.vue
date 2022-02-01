@@ -23,6 +23,6 @@ export default {
     label: String,
     value: [String, Number],
     errorMessage: String
-  },
+  }
 }
 </script>

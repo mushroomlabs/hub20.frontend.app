@@ -21,7 +21,7 @@ export default {
     TokenLogo: hub20.components.TokenLogo
   },
   props: {
-    token: Object,
+    token: Object
   },
   computed: {
     chain() {
@@ -29,7 +29,7 @@ export default {
     },
     chainName() {
       return this.chain.name
-    },
-  },
+    }
+  }
 }
 </script>

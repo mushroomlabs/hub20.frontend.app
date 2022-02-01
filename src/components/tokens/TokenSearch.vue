@@ -39,13 +39,13 @@ export default {
   components: {
     TokenTable,
     TokenTableItem,
-    TokenFavoriteSwitchButton,
+    TokenFavoriteSwitchButton
   },
   data() {
     return {
       searchTerm: '',
       resultsCache: {},
-      searchTimer: null,
+      searchTimer: null
     }
   },
   watch: {
@@ -63,7 +63,7 @@ export default {
           this.search(term)
         }
       }, waitTime)
-    },
+    }
   },
   computed: {
     results() {
@@ -78,7 +78,7 @@ export default {
     },
     noResults() {
       return this.results && this.results.length == 0
-    },
+    }
   },
   methods: {
     ...mapActions('tokens', ['searchTokens']),
@@ -87,10 +87,8 @@ export default {
     },
     search(searchTerm) {
       const queryId = this.getQueryId(searchTerm)
-      this.searchTokens({searchTerm}).then(({data}) =>
-        Vue.set(this.resultsCache, queryId, data)
-      )
-    },
-  },
+      this.searchTokens({searchTerm}).then(({data}) => Vue.set(this.resultsCache, queryId, data))
+    }
+  }
 }
 </script>

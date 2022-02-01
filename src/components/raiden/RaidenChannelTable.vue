@@ -24,7 +24,7 @@ export default {
     }
   },
   components: {
-    RaidenChannelTableItem,
-  },
+    RaidenChannelTableItem
+  }
 }
 </script>

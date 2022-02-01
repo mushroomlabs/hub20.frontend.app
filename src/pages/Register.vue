@@ -1,7 +1,10 @@
 <template>
   <div class="registration-screen">
     <SignupForm v-if="!registrationCompleted" />
-    <Spinner v-if="registrationLoading || registrationCompleted" message="Completing registration..." />
+    <Spinner
+      v-if="registrationLoading || registrationCompleted"
+      message="Completing registration..."
+    />
   </div>
 </template>
 <script>
@@ -25,7 +28,7 @@ export default {
     ...mapState('signup', ['registrationLoading', 'registrationCompleted'])
   },
   methods: {
-    ...mapActions('signup', ['clearRegistrationStatus']),
+    ...mapActions('signup', ['clearRegistrationStatus'])
   },
   mounted() {
     this.unsubscribe = this.$store.subscribe(mutation => {

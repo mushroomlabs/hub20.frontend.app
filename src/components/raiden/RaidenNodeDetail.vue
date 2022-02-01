@@ -1,7 +1,7 @@
 <template>
-<card v-if="hasAdminAccess" class="raiden-node" :title="title">
-  <RaidenChannelTable :raiden="raiden" />
-</card>
+  <card v-if="hasAdminAccess" class="raiden-node" :title="title">
+    <RaidenChannelTable :raiden="raiden" />
+  </card>
 </template>
 <script>
 import {mapGetters} from 'vuex'
@@ -16,12 +16,12 @@ export default {
   props: {
     raiden: {
       type: Object
-    },
+    }
   },
   computed: {
     ...mapGetters('account', ['hasAdminAccess']),
     title() {
-      return `Node ${this.raiden.address }`
+      return `Node ${this.raiden.address}`
     }
   }
 }

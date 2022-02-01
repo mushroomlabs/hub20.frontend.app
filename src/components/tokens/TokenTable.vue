@@ -3,8 +3,7 @@
     <thead>
       <th class="token-data">Token</th>
       <th class="chain-data">Chain</th>
-      <slot name="header">
-      </slot>
+      <slot name="header"> </slot>
     </thead>
     <tbody>
       <slot></slot>
@@ -13,6 +12,6 @@
 </template>
 <script>
 export default {
-  name: 'TokenTable',
+  name: 'TokenTable'
 }
 </script>

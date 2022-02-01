@@ -28,7 +28,7 @@ export default {
           this.$notify({message: `${store.name} removed`, type: 'info'})
         )
       }
-    },
+    }
   }
 }
 </script>

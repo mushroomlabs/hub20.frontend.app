@@ -79,7 +79,7 @@ import AuthMixin from '@/mixins/auth'
 export default {
   mixins: [AuthMixin, hub20.mixins.TokenMixin],
   props: {
-    token: Object,
+    token: Object
   },
   data() {
     return {
@@ -105,11 +105,7 @@ export default {
     },
     amount(value) {
       if (value <= 0) {
-        this.$set(
-          this.validationErrors,
-          'amount',
-          'Transfer amount should be greater than zero'
-        )
+        this.$set(this.validationErrors, 'amount', 'Transfer amount should be greater than zero')
       } else if (value > this.balance) {
         this.$set(
           this.validationErrors,
@@ -150,7 +146,7 @@ export default {
         'identifier',
         isNumericOrEmpty ? null : 'Identifier must be numeric value'
       )
-    },
+    }
   },
   computed: {
     ...mapState('tokens', ['transferCosts']),
@@ -161,7 +157,7 @@ export default {
         token: this.token,
         amount: this.amount,
         memo: this.memo,
-        identifier: this.identifier,
+        identifier: this.identifier
       }
 
       if (this.transferType == 'internal') {
@@ -185,7 +181,7 @@ export default {
         this.amount && this.amount > 0,
         this.transferType == 'internal' ? this.recipientUsername != null : this.address != null,
         !this.validationErrors.identifier,
-        !this.validationErrors.memo,
+        !this.validationErrors.memo
       ].every(pred => Boolean(pred))
     },
     nativeToken() {
@@ -203,8 +199,8 @@ export default {
       const estimate = this.transferCosts[this.token.url]
       const weiCost = estimate && ethers.utils.parseUnits(estimate.toString(), 0)
       const denominator = ethers.BigNumber.from((10 ** this.nativeToken.decimals).toString())
-      return weiCost && (weiCost / denominator)
-    },
+      return weiCost && weiCost / denominator
+    }
   },
   methods: {
     ...mapActions('funding', ['createTransfer']),
@@ -230,7 +226,7 @@ export default {
   },
   mounted() {
     this.transferCostTimer = setInterval(this.updateTransferCost, 120 * 1000)
-   },
+  },
   beforeDestroy() {
     if (this.transferCostTimer) {
       clearInterval(this.transferCostTimer)

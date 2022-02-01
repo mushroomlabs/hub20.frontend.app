@@ -1,9 +1,7 @@
 <template>
-<div v-if="!connected" class="alert alert-warning">
-  <slot>
-    Server has disconnected from {{ chainName }}
-  </slot>
-</div>
+  <div v-if="!connected" class="alert alert-warning">
+    <slot> Server has disconnected from {{ chainName }} </slot>
+  </div>
 </template>
 <script>
 import {mapGetters, mapState} from 'vuex'

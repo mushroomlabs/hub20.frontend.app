@@ -1,5 +1,11 @@
 <template>
-  <input name="token-watchlist" type="checkbox" v-model="selected" :checked="{selected}" :disabled="isTokenNative(token)"  />
+  <input
+    name="token-watchlist"
+    type="checkbox"
+    v-model="selected"
+    :checked="{selected}"
+    :disabled="isTokenNative(token)"
+  />
 </template>
 <script>
 import {mixins} from 'hub20-vue-sdk'

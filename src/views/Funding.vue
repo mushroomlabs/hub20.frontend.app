@@ -2,7 +2,7 @@
   <div>
     <card title="Your Funds" subTitle="Tokens listed and managed by your account">
       <ChainDisconnectionWarning v-for="chain in blockchains" :chainId="chain.id" :key="chain.id">
-        Server reported that can not connect with {{chain.name}} at the moment, so all funding
+        Server reported that can not connect with {{ chain.name }} at the moment, so all funding
         operations are disabled.
       </ChainDisconnectionWarning>
 
@@ -18,7 +18,7 @@ import FundingTable from '@/components/funding/FundingTable'
 
 export default {
   components: {
-   FundingTable,
+    FundingTable,
     ChainDisconnectionWarning
   },
   data() {
@@ -27,7 +27,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('network', ['blockchains']),
+    ...mapState('network', ['blockchains'])
   },
   methods: {
     ...mapActions('network', {getChainState: 'getStatus'}),
@@ -38,7 +38,7 @@ export default {
     },
     refreshChainState() {
       this.blockchains.forEach(chain => this.getChainState(chain.id))
-    },
+    }
   },
   mounted() {
     this.clearTimer()
@@ -47,6 +47,5 @@ export default {
   beforeDestroy() {
     this.clearTimer()
   }
-
 }
 </script>

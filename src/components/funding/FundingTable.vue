@@ -28,17 +28,17 @@ export default {
   name: 'FundingTable',
   mixins: [mixins.TokenMixin, mixins.UserTokenMixin],
   components: {
-    FundingTableItem,
+    FundingTableItem
   },
   computed: {
-    ...mapGetters('account', ['openBalances']),
+    ...mapGetters('account', ['openBalances'])
   },
   methods: {
     ...mapActions('account', ['fetchBalances']),
     ...mapActions('funding', ['fetchOpenDeposits']),
     ...mapActions('network', {loadBlockchainData: 'initialize'}),
     ...mapActions('tokens', ['fetchTokenByUrl', 'fetchUserTokens']),
-    ...mapActions('users', ['fetchUsers']),
+    ...mapActions('users', ['fetchUsers'])
   },
   async created() {
     await this.loadBlockchainData()
@@ -47,6 +47,6 @@ export default {
 
     this.fetchUsers()
     this.fetchOpenDeposits()
-  },
+  }
 }
 </script>

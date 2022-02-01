@@ -27,6 +27,7 @@
     <fg-input
       label="Webhook URL"
       placeholder="https://my.shop.example.com/process_checkout"
+      :errorMessage="submissionErrorMessages.webhookUrl || validationErrors.webhookUrl"
       v-model="webhookUrl"
     />
 
@@ -61,7 +62,7 @@ export default {
   },
   data() {
     return {
-      validationErrors: {},
+      validationErrors: {}
     }
   },
   watch: {
@@ -78,13 +79,13 @@ export default {
       } else {
         this.$set(this.validationErrors, 'siteUrl', null)
       }
-    },
+    }
   },
   computed: {
     ...mapState('stores', {store: 'editingData', submissionErrors: 'submissionErrors'}),
     ...mapGetters('stores', {
       stores: 'storesById',
-      submissionErrorMessages: 'submissionErrorMessages',
+      submissionErrorMessages: 'submissionErrorMessages'
     }),
     isNew() {
       return this.$route.name == 'store-create'
@@ -101,7 +102,7 @@ export default {
       },
       set(value) {
         this.updateName(value.trim())
-      },
+      }
     },
     webhookUrl: {
       get() {
@@ -109,7 +110,7 @@ export default {
       },
       set(value) {
         this.updateWebhookUrl(value.trim())
-      },
+      }
     },
     tokenList: {
       get() {
@@ -117,7 +118,7 @@ export default {
       },
       set(value) {
         this.updateTokenList(value)
-      },
+      }
     },
     siteUrl: {
       get() {
@@ -125,15 +126,15 @@ export default {
       },
       set(value) {
         return this.updateSiteUrl(value)
-      },
-    },
+      }
+    }
   },
   methods: {
     ...mapMutations('stores', {
       updateName: 'STORE_EDIT_SET_NAME',
       updateSiteUrl: 'STORE_EDIT_SET_URL',
       updateWebhookUrl: 'STORE_EDIT_SET_WEBHOOK_URL',
-      updateTokenList: 'STORE_EDIT_SET_TOKEN_LIST',
+      updateTokenList: 'STORE_EDIT_SET_TOKEN_LIST'
     }),
     ...mapActions('stores', ['editStore', 'updateStore', 'createStore', 'fetchStores']),
     save(storeData) {
@@ -145,12 +146,12 @@ export default {
           this.$router.push({name: 'stores'})
         }
       })
-    },
+    }
   },
   mounted() {
     this.editStore(this.storeId).then(() => {
       this.validationErrors = {}
     })
-  },
+  }
 }
 </script>

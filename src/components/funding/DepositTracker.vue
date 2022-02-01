@@ -17,18 +17,18 @@ import hub20 from 'hub20-vue-sdk'
 
 export default {
   components: {
-    PaymentRequest: hub20.components.Payment.Invoice,
+    PaymentRequest: hub20.components.Payment.Invoice
   },
   props: {
     token: {
-      type: Object,
-    },
+      type: Object
+    }
   },
   computed: {
     ...mapGetters('funding', ['openDepositsByToken']),
     openDeposits() {
       return this.openDepositsByToken(this.token)
-    },
+    }
   }
 }
 </script>

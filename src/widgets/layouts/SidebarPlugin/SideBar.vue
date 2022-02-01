@@ -1,9 +1,9 @@
 <template>
-<div class="sidebar">
-  <router-link to="/" class="logo" exact>
-    <img :src="blockie" />
-    <span>{{ userId }}</span>
-  </router-link>
+  <div class="sidebar">
+    <router-link to="/" class="logo" exact>
+      <img :src="blockie" />
+      <span>{{ userId }}</span>
+    </router-link>
     <slot></slot>
     <ul class="nav">
       <slot name="links"> </slot>
@@ -22,22 +22,28 @@ export default {
   props: {
     autoClose: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
   provide() {
     return {
-      autoClose: this.autoClose,
+      autoClose: this.autoClose
     }
   },
   components: {
-    MovingArrow,
+    MovingArrow
   },
   computed: {
     ...mapGetters('server', ['serverHostname']),
     ...mapGetters('auth', ['loggedUsername']),
     blockie() {
-      const blockie = blockies.create({seed: this.userId, size: 12, scale: 3, color: '#235699', spotColor: '#420690'})
+      const blockie = blockies.create({
+        seed: this.userId,
+        size: 12,
+        scale: 3,
+        color: '#235699',
+        spotColor: '#420690'
+      })
       return blockie.toDataURL()
     },
     userId() {
@@ -50,7 +56,7 @@ export default {
     },
     arrowMovePx() {
       return this.linkHeight * this.activeLinkIndex
-    },
+    }
   },
   data() {
     return {
@@ -58,7 +64,7 @@ export default {
       activeLinkIndex: 0,
       windowWidth: 0,
       isWindows: false,
-      hasAutoHeight: false,
+      hasAutoHeight: false
     }
   },
   methods: {
@@ -68,12 +74,12 @@ export default {
           this.activeLinkIndex = index
         }
       })
-    },
+    }
   },
   mounted() {
     this.$watch('$route', this.findActiveLink, {
-      immediate: true,
+      immediate: true
     })
-  },
+  }
 }
 </script>
