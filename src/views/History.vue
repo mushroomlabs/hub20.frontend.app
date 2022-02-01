@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 
 import {filters as hub20filters} from 'hub20-vue-sdk'
 
@@ -37,6 +37,12 @@ export default {
   },
   computed: {
     ...mapGetters('account', ['transactions'])
+  },
+  methods: {
+    ...mapActions('account', {loadAccountData: 'initialize'})
+  },
+  mounted() {
+    this.loadAccountData()
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <card :title="cardTitle">
-    <p>Available: {{ balance }} {{ token.code }}</p>
+    <p>Available: {{ balance }} {{ token.symbol }}</p>
 
     <div class="button-bar">
       <button
@@ -67,7 +67,7 @@ export default {
     ...mapGetters('funding', ['transfers']),
     ...mapGetters('tokens', ['tokensByAddress']),
     cardTitle() {
-      return this.token && `Transfer ${this.token.code}`
+      return this.token && `Transfer ${this.token.symbol}`
     },
     isValid() {
       return this.amount && this.amount > 0

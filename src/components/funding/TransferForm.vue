@@ -58,6 +58,10 @@
         :errorMessage="validationErrors.memo"
       />
 
+      <span v-if="transferCost && nativeToken" class="transfer-cost-estimate">
+        Transfer cost (estimate): {{ transferCost | formattedAmount(nativeToken, 6) }}
+      </span>
+
       <p-button block :disabled="!isValid" @click.native="submitTransfer()">
         Transfer
       </p-button>
@@ -66,12 +70,14 @@
 </template>
 <script>
 import {ethers} from 'ethers'
-import {mapGetters, mapActions} from 'vuex'
+import {mapActions, mapGetters, mapState} from 'vuex'
+
+import hub20 from 'hub20-vue-sdk'
 
 import AuthMixin from '@/mixins/auth'
 
 export default {
-  mixins: [AuthMixin],
+  mixins: [AuthMixin, hub20.mixins.TokenMixin],
   props: {
     token: Object
   },
@@ -84,7 +90,8 @@ export default {
       recipientUsername: null,
       memo: null,
       identifier: null,
-      submitted: false
+      submitted: false,
+      transferCostTimer: null
     }
   },
   watch: {
@@ -142,6 +149,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('tokens', ['transferCosts']),
     ...mapGetters('account', ['tokenBalance']),
     ...mapGetters('users', ['usersByUsername']),
     transferData() {
@@ -160,7 +168,7 @@ export default {
       return payload
     },
     amountLabel() {
-      return `Amount (max. available: ${this.balance} ${this.token.code})`
+      return `Amount (max. available: ${this.balance} ${this.token.symbol})`
     },
     balance() {
       return this.tokenBalance(this.token.address)
@@ -176,6 +184,9 @@ export default {
         !this.validationErrors.memo
       ].every(pred => Boolean(pred))
     },
+    nativeToken() {
+      return this.getNativeToken(this.token)
+    },
     recipients() {
       return Object.values(this.usersByUsername).filter(
         user => user.username != this.loggedUsername
@@ -183,10 +194,17 @@ export default {
     },
     recipientOptions() {
       return this.recipients.map(user => ({value: user.username, text: user.username}))
+    },
+    transferCost() {
+      const estimate = this.transferCosts[this.token.url]
+      const weiCost = estimate && ethers.utils.parseUnits(estimate.toString(), 0)
+      const denominator = ethers.BigNumber.from((10 ** this.nativeToken.decimals).toString())
+      return weiCost && weiCost / denominator
     }
   },
   methods: {
     ...mapActions('funding', ['createTransfer']),
+    ...mapActions('tokens', ['fetchTransferCostEstimate']),
     setTransferType(transferType) {
       this.transferType = transferType
     },
@@ -198,6 +216,20 @@ export default {
         this.$emit('transferFormSubmitted')
         this.submitted = true
       })
+    },
+    updateTransferCost() {
+      this.fetchTransferCostEstimate(this.token)
+    }
+  },
+  created() {
+    this.updateTransferCost()
+  },
+  mounted() {
+    this.transferCostTimer = setInterval(this.updateTransferCost, 120 * 1000)
+  },
+  beforeDestroy() {
+    if (this.transferCostTimer) {
+      clearInterval(this.transferCostTimer)
     }
   }
 }

@@ -13,35 +13,50 @@ import Overview from '@/views/Overview'
 import History from '@/views/History'
 import Funding from '@/views/Funding'
 import Deposit from '@/views/Deposit'
-import Transfer from '@/views/Transfer'
+import Raiden from '@/views/Raiden'
 import Stores from '@/views/Stores'
 import StoreDetail from '@/views/StoreDetail'
+import Transfer from '@/views/Transfer'
+import TokenManagement from '@/views/TokenManagement'
+import TokenListDetail from '@/views/TokenListDetail'
 
 // Everything else
 import store from '@/store/index'
 
-const requireAuthenticated = (to, from, next) => {
-  store.dispatch('initialize').then(() => {
+const requireServerConnection = (to, from, next) => {
+  store.dispatch('server/initialize').then(() => {
     if (!store.getters['server/isConnected']) {
       next('/setup')
-    } else if (!store.getters['auth/isAuthenticated']) {
-      next('/login')
     } else {
       next()
     }
   })
 }
 
-const requireAnonymous = (to, from, next) => {
-  store.dispatch('initialize').then(() => {
-    if (!store.getters['server/isConnected']) {
-      next('/setup')
-    } else if (store.getters['auth/isAuthenticated']) {
-      next('/')
-    } else {
+const requireAuthenticated = (to, from, next) => {
+  store
+    .dispatch('server/initialize')
+    .then(() => store.dispatch('auth/initialize'))
+    .then(() => {
+      if (!store.getters['server/isConnected']) {
+        next('/setup')
+      }
+
+      if (!store.getters['auth/isAuthenticated']) {
+        next('/login')
+      }
+
+      store.dispatch('initialize')
       next()
-    }
-  })
+    })
+}
+
+const requireAnonymous = (to, from, next) => {
+  if (store.getters['auth/isAuthenticated']) {
+    store.dispatch('auth/tearDown').then(() => next())
+  } else {
+    next()
+  }
 }
 
 const redirectLogout = (to, from, next) => {
@@ -115,19 +130,46 @@ const routes = [
         path: 'store/:id',
         name: 'store',
         component: StoreDetail
+      },
+      {
+        path: 'raiden',
+        name: 'raiden',
+        component: Raiden
+      },
+      {
+        path: 'tokens',
+        name: 'tokens',
+        component: TokenManagement
+      },
+      {
+        path: 'tokens/lists/new',
+        name: 'tokenlist-create',
+        component: TokenListDetail,
+        meta: {
+          viewTitle: 'Create new Token List'
+        }
+      },
+      {
+        path: 'tokens/lists/:id',
+        name: 'tokenlist-edit',
+        component: TokenListDetail,
+        meta: {
+          viewTitle: 'Edit Token List'
+        }
       }
     ]
   },
   {
     path: '/setup',
     name: 'setup',
-    component: Setup
+    component: Setup,
+    beforeEnter: requireAnonymous
   },
   {
     path: '/login',
     name: 'login',
     component: Login,
-    beforeEnter: requireAnonymous
+    beforeEnter: requireServerConnection
   },
   {
     path: '/logout',
@@ -138,7 +180,7 @@ const routes = [
     path: '/register',
     name: 'register',
     component: Register,
-    beforeEnter: requireAnonymous
+    beforeEnter: requireServerConnection
   },
   {
     path: '*',

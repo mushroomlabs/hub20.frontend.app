@@ -3,3 +3,13 @@
     @include button($info-color, $info-states-color);
   }
 }
+
+
+#store-detail {
+  div.form-group.input-group {
+    label {
+      display: block;
+      width: 100%;
+    }
+  }
+}

@@ -35,7 +35,7 @@ export default {
     ...mapGetters('tokens', ['tokensByAddress']),
     ...mapGetters('funding', ['deposits']),
     cardTitle() {
-      return this.token && `Deposit ${this.token.code}`
+      return this.token && `Deposit ${this.token.symbol}`
     },
     isValid() {
       return this.amount && this.amount > 0

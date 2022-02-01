@@ -1,55 +1,36 @@
 <template>
-  <table class="table">
-    <thead>
+  <table class="table" :class="{empty: !hasEntries}">
+    <thead v-if="hasEntries">
       <th>Token</th>
-      <th>Treasury</th>
-      <th>Wallet</th>
-      <th>Raiden</th>
-      <th>Total Assets</th>
-      <th>User Accounts (Liabilities)</th>
+      <th>Chain</th>
+      <th>Total Debit</th>
+      <th>Total Credit</th>
+      <th>Balance</th>
     </thead>
     <tbody>
-      <tr v-for="(token, address) in tokensByAddress" :key="address">
-        <td>{{ token.code }}</td>
-        <td>
-          <accounting-token-balance-display :token-balance="treasuryTokenBalance(token)" />
-        </td>
-        <td>
-          <accounting-token-balance-display :token-balance="walletTokenBalance(token)" />
-        </td>
-        <td>
-          <accounting-token-balance-display :token-balance="raidenTokenBalance(token)" />
-        </td>
-        <td>
-          <accounting-token-balance-display :token-balance="totalTokenAssets(token)" />
-        </td>
-        <td>
-          <accounting-token-balance-display :token-balance="userTokenBalance(token)" />
-        </td>
+      <tr v-if="!hasEntries">
+        <td>No book entries</td>
       </tr>
+      <AccountingBookTableEntryItem v-for="entry in book" :key="entry.token" :entry="entry" />
     </tbody>
   </table>
 </template>
 <script>
-import {mapGetters} from 'vuex'
-import {mixins} from 'hub20-vue-sdk'
-
-import AccountingTokenBalanceDisplay from './AccountingTokenBalanceDisplay'
-
+import AccountingBookTableEntryItem from './AccountingBookTableEntryItem'
 export default {
   name: 'AccountingReportTable',
-  mixins: [mixins.TokenMixin],
   components: {
-    AccountingTokenBalanceDisplay
+    AccountingBookTableEntryItem
+  },
+  props: {
+    book: {
+      type: Array
+    }
   },
   computed: {
-    ...mapGetters('audit', [
-      'treasuryTokenBalance',
-      'userTokenBalance',
-      'walletTokenBalance',
-      'raidenTokenBalance',
-      'totalTokenAssets'
-    ])
+    hasEntries() {
+      return this.book.length > 0
+    }
   }
 }
 </script>

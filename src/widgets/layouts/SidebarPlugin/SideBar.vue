@@ -1,8 +1,8 @@
 <template>
   <div class="sidebar">
     <router-link to="/" class="logo" exact>
-      <img src="@/assets/img/logos/ethereum.svg" />
-      <span>{{ title }}</span>
+      <img :src="blockie" />
+      <span>{{ userId }}</span>
     </router-link>
     <slot></slot>
     <ul class="nav">
@@ -12,14 +12,14 @@
   </div>
 </template>
 <script>
+import {mapGetters} from 'vuex'
+
+import blockies from 'ethereum-blockies'
+
 import MovingArrow from './MovingArrow'
 
 export default {
   props: {
-    title: {
-      type: String,
-      default: 'Hub20'
-    },
     autoClose: {
       type: Boolean,
       default: true
@@ -34,6 +34,21 @@ export default {
     MovingArrow
   },
   computed: {
+    ...mapGetters('server', ['serverHostname']),
+    ...mapGetters('auth', ['loggedUsername']),
+    blockie() {
+      const blockie = blockies.create({
+        seed: this.userId,
+        size: 12,
+        scale: 3,
+        color: '#235699',
+        spotColor: '#420690'
+      })
+      return blockie.toDataURL()
+    },
+    userId() {
+      return `${this.loggedUsername}@${this.serverHostname}`
+    },
     links() {
       return this.$children.filter(component => {
         return component.$options.name === 'sidebar-link'

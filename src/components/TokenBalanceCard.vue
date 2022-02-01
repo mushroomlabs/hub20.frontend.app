@@ -1,22 +1,39 @@
 <template>
-  <card :title="tokenBalance.code">
-    <slot>
-      {{ tokenBalance.balance | formattedAmount(tokenBalance) }}
-    </slot>
+  <card v-if="token" :title="token.symbol">
+    <template v-slot:image>
+      <TokenLogo :token="token" :defaultUrl="defaultLogoUrl" />
+    </template>
+    {{ balance | formattedAmount(token) }}
   </card>
 </template>
 <script>
-import {filters} from 'hub20-vue-sdk'
+import {mapGetters} from 'vuex'
+import {mixins, components} from 'hub20-vue-sdk'
+
+import DefaultLogoUrl from '@/assets/img/logos/ethereum.svg'
 
 export default {
   name: 'token-balance-card',
-  filters: {
-    formattedAmount: filters.formattedAmount
+  mixins: [mixins.TokenMixin],
+  components: {
+    TokenLogo: components.TokenLogo
   },
   props: {
-    tokenBalance: {
+    token: {
       type: Object
     }
+  },
+  computed: {
+    ...mapGetters('account', ['tokenBalance']),
+    balance() {
+      return this.tokenBalance(this.token)
+    },
+    defaultLogoUrl() {
+      return DefaultLogoUrl
+    }
+  },
+  beforeMount() {
+    this.fetchToken(this.token)
   }
 }
 </script>

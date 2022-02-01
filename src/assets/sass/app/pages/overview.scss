@@ -11,6 +11,37 @@
     li {
       @include make-col(3, 12);
       padding-right: 1rem;
+      div.card {
+        display: grid;
+
+        grid-template-areas: 'image header header header'
+                             'image body body body';
+        grid-template-columns: 'auto 1fr 1fr 1fr';
+
+        .card-image {
+          display: grid;
+          grid-area: image;
+          height: 100%;
+          margin: auto;
+
+          align-items: center;
+
+          img {
+            max-width: 40px;
+            justify-self: center;
+          }
+        }
+
+        .card-header {
+          padding-left: 0;
+          grid-area: header;
+        }
+
+        .card-body {
+          padding-left: 0;
+          grid-area: body;
+        }
+      }
     }
   }
 }

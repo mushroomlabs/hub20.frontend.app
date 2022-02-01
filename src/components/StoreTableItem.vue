@@ -12,7 +12,7 @@
   </tr>
 </template>
 <script>
-import {mapActions, mapGetters} from 'vuex'
+import {mapActions} from 'vuex'
 
 export default {
   props: {
@@ -20,37 +20,13 @@ export default {
       type: Object
     }
   },
-  computed: {
-    ...mapGetters('tokens', ['tokensByAddress'])
-  },
   methods: {
     ...mapActions('stores', ['removeStore']),
-    getToken(tokenAddress) {
-      return this.tokensByAddress[tokenAddress]
-    },
     promptRemoval(store) {
       if (confirm(`Are you sure you want to remove ${store.name}?`)) {
         this.removeStore(store).then(() =>
           this.$notify({message: `${store.name} removed`, type: 'info'})
         )
-      }
-    },
-    async copyPublicKey(event) {
-      let result = await navigator.permissions.query({name: 'clipboard-write'})
-
-      if (result.state == 'granted' || result.state == 'prompt') {
-        let publicKey = event.target.textContent
-        navigator.clipboard.writeText(publicKey)
-      } else {
-        let range = document.createRange()
-        range.selectNode(event.target)
-        window.getSelection().addRange(range)
-        try {
-          document.execCommand('copy')
-        } catch (err) {
-          console.log('No clipboard for you!')
-          console.log(err)
-        }
       }
     }
   }

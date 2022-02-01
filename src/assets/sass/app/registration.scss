@@ -1,12 +1,24 @@
 div.login-screen, div.registration-screen, div.setup-screen {
   background-color: transparent !important;
-  box-shadow: none !important;
-  display: grid;
   min-height: 100vh;
-  max-width: 45rem;
-  padding: 5vh 3em;
-  margin: auto;
+  display: grid;
   align-content: center;
+
+  div.card, div.spinner {
+    background-color: transparent !important;
+    min-width: 640px;
+    max-width: 45rem;
+    margin: auto;
+    box-shadow: none !important;
+  }
+
+  div.login-form.submitted, div.registration-form.submitted {
+    display: none;
+  }
+
+  div.spinner {
+    text-align: center;
+  }
 }
 
 div.action-panel div.secondary {

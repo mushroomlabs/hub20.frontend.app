@@ -21,7 +21,7 @@ button {
   @include button($primary-color, $primary-states-color)
 }
 
-.form-group {
+form, .form-group {
   .error-message {
     color: $danger-states-color;
     font-size: $font-size-xs;

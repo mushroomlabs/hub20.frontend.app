@@ -49,13 +49,24 @@ const actions = {
     dispatch('server/setUrl', url)
   },
   initialize({commit, dispatch, getters}) {
+    if (!getters['server/isConnected']) {
+      throw 'Not connected to any server'
+    }
+
+    if (!getters['auth/isAuthenticated']) {
+      throw 'Not logged in'
+    }
+
     const eventHandler = evt => {
       let eventTypes = store.EVENT_TYPES
       const message = JSON.parse(evt.data)
       const eventData = message.data
       switch (message.event) {
         case eventTypes.BLOCKCHAIN_BLOCK_CREATED:
-          commit('network/NETWORK_SET_ETHEREUM_CURRENT_BLOCK', eventData.number)
+          commit('network/NETWORK_SET_BLOCKCHAIN_HEIGHT', {
+            chainId: eventData.chain_id,
+            blockNumber: eventData.number
+          })
           break
         case eventTypes.BLOCKCHAIN_DEPOSIT_BROADCAST:
           commit('notifications/ADD_NOTIFICATION', {
@@ -95,50 +106,22 @@ const actions = {
       }
     }
 
-    dispatch('coingecko/initialize')
-    return dispatch('server/initialize').then(() => {
-      if (getters['server/isConnected']) {
-        dispatch('auth/initialize').then(() => {
-          if (getters['auth/isAuthenticated']) {
-            dispatch('tokens/initialize')
-              .then(() => dispatch('account/initialize'))
-              .then(() => dispatch('audit/initialize'))
-              .then(() => dispatch('network/initialize'))
-              .then(() => dispatch('stores/initialize'))
-              .then(() => dispatch('funding/initialize'))
-              .then(() => dispatch('users/initialize'))
-              .then(() => dispatch('events/initialize', getters['server/eventWebsocketUrl']))
-              .then(() => dispatch('events/setEventHandler', eventHandler))
-              .then(() => commit(APP_SET_INITIALIZED))
-          }
-        })
-      }
-    })
-  },
-  refresh({dispatch, getters}) {
-    if (getters['isRunning']) {
-      getters['tokens/listedTokens'].forEach(token => dispatch('coingecko/fetchRate', token))
-
-      if (getters['server/isConnected'] && getters['auth/isAuthenticated']) {
-        dispatch('account/refresh')
-          .then(() => dispatch('stores/refresh'))
-          .then(() => dispatch('funding/refresh'))
-      }
-
-      if (getters['account/hasAdminAccess']) {
-        dispatch('audit/refresh')
-      }
-    }
+    dispatch('events/initialize', getters['server/eventWebsocketUrl'])
+    dispatch('events/setEventHandler', eventHandler)
+    dispatch('network/initialize')
+    commit(APP_SET_INITIALIZED)
   },
   tearDown({commit, dispatch}) {
     return dispatch('auth/logout')
-      .then(() => dispatch('auth/tearDown'))
-      .then(() => dispatch('account/tearDown'))
-      .then(() => dispatch('notifications/tearDown'))
-      .then(() => dispatch('funding/tearDown'))
-      .then(() => dispatch('stores/tearDown'))
-      .then(() => dispatch('events/tearDown'))
-      .then(() => dispatch('audit/tearDown'))
+      .then(() => {
+        dispatch('auth/tearDown')
+        dispatch('account/tearDown')
+        dispatch('notifications/tearDown')
+        dispatch('funding/tearDown')
+        dispatch('stores/tearDown')
+        dispatch('events/tearDown')
+        dispatch('audit/tearDown')
+      })
       .finally(() => commit(APP_SET_FINALIZED))
   }
 }

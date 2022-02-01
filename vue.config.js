@@ -15,7 +15,6 @@ module.exports = {
       sass: {
         implementation: require('sass'),
         sourceMap: true,
-        sourceMapContents: false
       }
     }
   }
