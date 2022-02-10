@@ -33,7 +33,17 @@
         v-if="!isInternalTransfer"
         v-model="address"
         :errorMessage="validationErrors.address"
+        />
+
+      <fg-select
+        type="text"
+        label="Payment Network"
+        v-if="!isInternalTransfer && hasMultipleWithdrawalOptions"
+        v-model="paymentNetwork"
+        :options="withdrawalNetworkOptions"
+        :errorMessage="validationErrors.withdrawalNetworkOptions"
       />
+
 
       <fg-select
         type="text"
@@ -85,6 +95,7 @@ export default {
     return {
       validationErrors: {},
       transferType: 'external',
+      paymentNetwork: 'blockchain',
       amount: 0,
       address: null,
       recipientUsername: null,
@@ -128,6 +139,15 @@ export default {
         this.$set(this.validationErrors, 'address', 'Please provide recipient ethereum address')
       }
     },
+    withdrawalNetworkOptions(value) {
+      if (this.transferType === 'external' && !value) {
+        this.$set(
+          this.validationErrors,
+          'withdrawalNetworkOptions',
+          'Please select the network used to make the transfer'
+        )
+      }
+    },
     recipientUsername(value) {
       if (!value) {
         this.$set(
@@ -149,7 +169,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('tokens', ['transferCosts']),
+    ...mapGetters('network', {getChainData: 'chainData'}),
+    ...mapState('tokens', ['transferCosts', 'routes']),
     ...mapGetters('account', ['tokenBalance']),
     ...mapGetters('users', ['usersByUsername']),
     transferData() {
@@ -157,7 +178,8 @@ export default {
         token: this.token,
         amount: this.amount,
         memo: this.memo,
-        identifier: this.identifier
+        identifier: this.identifier,
+        payment_network: this.paymentNetwork
       }
 
       if (this.transferType == 'internal') {
@@ -171,7 +193,10 @@ export default {
       return `Amount (max. available: ${this.balance} ${this.token.symbol})`
     },
     balance() {
-      return this.tokenBalance(this.token.address)
+      return this.tokenBalance(this.token)
+    },
+    hasMultipleWithdrawalOptions() {
+      return this.withdrawalNetworkOptions.length > 1
     },
     isInternalTransfer() {
       return this.transferType === 'internal'
@@ -179,7 +204,7 @@ export default {
     isValid() {
       return [
         this.amount && this.amount > 0,
-        this.transferType == 'internal' ? this.recipientUsername != null : this.address != null,
+        this.isInternalTransfer ? this.recipientUsername != null : this.address != null,
         !this.validationErrors.identifier,
         !this.validationErrors.memo
       ].every(pred => Boolean(pred))
@@ -195,7 +220,31 @@ export default {
     recipientOptions() {
       return this.recipients.map(user => ({value: user.username, text: user.username}))
     },
+    withdrawalNetworkOptions() {
+      const tokenRoutes = this.routes[this.token.url]
+
+      if (!tokenRoutes) {
+        return []
+      }
+
+      const options = []
+
+      const chainData = this.getChainData(this.token.chain_id)
+      if (tokenRoutes.blockchain) {
+        options.push({value: 'blockchain', text: `${chainData.name} (On-Chain)`})
+      }
+
+      if (tokenRoutes.networks && tokenRoutes.networks.raiden) {
+        options.push({value: 'raiden', text: `${chainData.name} (Raiden)`})
+      }
+
+      return options
+    },
     transferCost() {
+      if (this.transferType === 'internal' || this.paymentNetwork !== 'blockchain'){
+        return null
+      }
+
       const estimate = this.transferCosts[this.token.url]
       const weiCost = estimate && ethers.utils.parseUnits(estimate.toString(), 0)
       const denominator = ethers.BigNumber.from((10 ** this.nativeToken.decimals).toString())
@@ -203,8 +252,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('funding', ['createTransfer']),
-    ...mapActions('tokens', ['fetchTransferCostEstimate']),
+    ...mapActions('funding', ['createTransfer', 'createWithdrawal']),
+    ...mapActions('tokens', ['fetchTransferCostEstimate', 'fetchRoutes']),
     setTransferType(transferType) {
       this.transferType = transferType
     },
@@ -212,7 +261,8 @@ export default {
       this.amount = evt.target.value
     },
     submitTransfer() {
-      this.createTransfer(this.transferData).then(() => {
+      const action = this.isInternalTransfer ? this.createTransfer : this.createWithdrawal
+      action(this.transferData).then(() => {
         this.$emit('transferFormSubmitted')
         this.submitted = true
       })
@@ -222,6 +272,7 @@ export default {
     }
   },
   created() {
+    this.fetchRoutes(this.token)
     this.updateTransferCost()
   },
   mounted() {
