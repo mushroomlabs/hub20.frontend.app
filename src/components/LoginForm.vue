@@ -31,7 +31,7 @@
         <template v-slot:secondary>
           <router-link to="register">Not registered?</router-link>
         </template>
-        <p-button type="submit" @click.native="login(username, password)">Login</p-button>
+        <button type="submit" @click.prevent="login(username, password)">Login</button>
       </action-panel>
     </slot>
   </card>

@@ -68,13 +68,13 @@
         :errorMessage="validationErrors.memo"
       />
 
-      <span v-if="transferCost && nativeToken" class="transfer-cost-estimate">
+      <span v-if="transferCost && nativeToken" class="blockchain-transfer cost-estimate">
         Transfer cost (estimate): {{ transferCost | formattedAmount(nativeToken, 6) }}
       </span>
 
-      <p-button block :disabled="!isValid" @click.native="submitTransfer()">
+      <button block :disabled="!isValid" @click.prevent="submitTransfer()">
         Transfer
-      </p-button>
+      </button>
     </form>
   </div>
 </template>
