@@ -15,19 +15,13 @@ export default {
   },
   computed: {
     ...mapGetters('account', ['hasAdminAccess']),
-    ...mapState('raiden', ['raidenNodeMap']),
-    raidenNodes() {
-      return Object.values(this.raidenNodeMap)
-    }
+    ...mapState('raiden', ['raidenNodes'])
   },
   methods: {
-    ...mapActions('raiden', ['fetchNodeList']),
-    ...mapActions('network', ['getBlockchains'])
+    ...mapActions('raiden', ['fetch'])
   },
-  created() {
-    if (this.raidenNodes.length == 0) {
-      this.fetchNodeList()
-    }
+  mounted() {
+    this.fetch()
   }
 }
 </script>

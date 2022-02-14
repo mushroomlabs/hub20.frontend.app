@@ -14,6 +14,8 @@ import History from '@/views/History'
 import Funding from '@/views/Funding'
 import Deposit from '@/views/Deposit'
 import Raiden from '@/views/Raiden'
+import RaidenChannelDeposit from '@/views/RaidenChannelDeposit'
+import RaidenChannelWithdraw from '@/views/RaidenChannelWithdraw'
 import Stores from '@/views/Stores'
 import StoreDetail from '@/views/StoreDetail'
 import Transfer from '@/views/Transfer'
@@ -50,6 +52,31 @@ const requireAuthenticated = (to, from, next) => {
       next()
     })
 }
+
+const requireAdmin = (to, from, next) => {
+  store
+    .dispatch('server/initialize')
+    .then(() => store.dispatch('auth/initialize'))
+    .then(() => store.dispatch('account/fetchProfileData'))
+    .then(() => {
+      if (!store.getters['server/isConnected']) {
+        next('/setup')
+      }
+
+      if (!store.getters['auth/isAuthenticated']) {
+        next('/login')
+      }
+
+      if (!store.getters['account/hasAdminAccess']) {
+        next('/')
+      }
+
+      store.dispatch('initialize')
+      next()
+    })
+}
+
+
 
 const requireAnonymous = (to, from, next) => {
   if (store.getters['auth/isAuthenticated']) {
@@ -132,11 +159,6 @@ const routes = [
         component: StoreDetail
       },
       {
-        path: 'raiden',
-        name: 'raiden',
-        component: Raiden
-      },
-      {
         path: 'tokens',
         name: 'tokens',
         component: TokenManagement
@@ -157,6 +179,39 @@ const routes = [
           viewTitle: 'Edit Token List'
         }
       }
+    ]
+  },
+  {
+    path: '/admin',
+    component: DashboardLayout,
+    beforeEnter: requireAdmin,
+    children: [
+      {
+        path: '',
+        name: 'admin',
+        component: Overview
+      },
+      {
+        path: 'raiden',
+        name: 'raiden',
+        component: Raiden
+      },
+      {
+        path: 'raiden/:raiden/channel/:channel/deposit',
+        name: 'raiden-channel-deposit',
+        component: RaidenChannelDeposit,
+        meta: {
+          viewTitle: 'Request Deposit into Raiden Channel'
+        }
+      },
+      {
+        path: 'raiden/:raiden/channel/:channel/withdraw',
+        name: 'raiden-channel-withdraw',
+        component: RaidenChannelWithdraw,
+        meta: {
+          viewTitle: 'Request Withdraw from Raiden Channel'
+        }
+      },
     ]
   },
   {
