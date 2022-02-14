@@ -1,5 +1,5 @@
 <template>
-  <card v-if="token" :title="token.symbol">
+  <card v-if="token" :title="token.name" :subTitle="chainName">
     <template v-slot:image>
       <TokenLogo :token="token" :defaultUrl="defaultLogoUrl" />
     </template>
@@ -30,6 +30,10 @@ export default {
     },
     defaultLogoUrl() {
       return DefaultLogoUrl
+    },
+    chainName() {
+      const chain = this.getChain(this.token)
+      return chain && chain.name
     }
   },
   beforeMount() {
