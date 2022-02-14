@@ -1,0 +1,33 @@
+/*!
+
+ =========================================================
+ * Vue Paper Dashboard - v2.0.0
+ =========================================================
+
+ * Product Page: http://www.creative-tim.com/product/paper-dashboard
+ * Copyright 2019 Creative Tim (http://www.creative-tim.com)
+ * Licensed under MIT (https://github.com/creativetimofficial/paper-dashboard/blob/master/LICENSE.md)
+
+ =========================================================
+
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
+
+@import "./variables";
+@import "./mixins";
+@import "./typography";
+// Core CSS
+@import "./misc";
+@import "./buttons";
+@import "./inputs";
+@import "./alerts";
+@import "./tables";
+@import "./checkbox-radio";
+@import "./navbars";
+@import "./footers";
+// Fancy Stuff
+@import "./dropdown";
+@import "./cards";
+@import "./chartist";
+@import "./responsive";

@@ -1,0 +1,32 @@
+// Base Bootstrap
+@import "~bootstrap/scss/bootstrap.scss";
+@import "~bootstrap/scss/_variables.scss";
+
+// theme-specific imports
+@import '../paper';
+@import "../paper/_variables.scss";
+@import "../paper/mixins/_buttons.scss";
+@import "../paper/mixins/_vendor-prefixes.scss";
+@import "../themify-icons.scss";
+
+// Application Mixins
+@import "./mixins/_responsive.scss";
+@import "./mixins/_cards.scss";
+
+// Application base
+@import "./app.scss";
+
+// Base Views/pages
+@import "./registration.scss";
+@import "./dashboard.scss";
+@import "./pages/overview.scss";
+@import "./pages/raiden.scss";
+
+// Custom style of components
+
+@import "./components/tokens";
+@import "./components/funding";
+@import "./components/stores";
+@import "./components/blockchain_payment_timer";
+@import "./components/server_indicator";
+@import "./components/raiden_channel_management";

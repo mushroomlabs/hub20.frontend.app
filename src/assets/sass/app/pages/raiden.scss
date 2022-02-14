@@ -1,7 +1,13 @@
-#overview {
+div.raiden-management {
   @include make-container();
 
-  ul.token-balances {
+  h3 {
+    border-bottom: 1px solid;
+    padding-bottom: 0.25em;
+    margin-bottom: 2vh;
+  }
+
+  ul.raiden-channels {
     @include make-row();
 
     list-style-type: none;
@@ -20,33 +26,32 @@
       }
 
       @include for-size(tablet-landscape-and-up) {
-        @include make-col(4, 12);
+        @include make-col(6, 12);
       }
 
       @include for-size(desktop-and-up) {
-        @include make-col(3, 12);
+        @include make-col(4, 12);
       }
 
       @include for-size(wide-desktop) {
-        @include make-col(2, 12);
+        @include make-col(3, 12);
+      }
+    }
+
+    div.card {
+      @include horizontal-card();
+
+      .card-image {
+        img {
+          max-height: 80px;
+          max-width: 80px;
+          padding-left: 1rem;
+          justify-self: center;
+        }
       }
 
-
-      div.card {
-        @include horizontal-card();
-
-        .card-image {
-          img {
-            max-height: 80px;
-            max-width: 80px;
-            padding-left: 1rem;
-            justify-self: center;
-          }
-        }
-
-        .card-header, .card-body {
-          text-align: right;
-        }
+      .card-header, .card-body {
+        text-align: right;
       }
     }
   }
