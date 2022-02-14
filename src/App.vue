@@ -12,18 +12,15 @@ import BaseLayout from '@/layout/BaseLayout'
 
 export default {
   components: {
-    BaseLayout
+    BaseLayout,
   },
   computed: {
-    ...mapGetters('auth', ['isAuthenticated'])
+    ...mapGetters('auth', ['isAuthenticated']),
   },
   data() {
     return {
-      timer: null
+      timer: null,
     }
-  },
-  created() {
-    document.title = 'Hub20'
   },
   mounted() {
     this.$store.subscribe(mutation => {
@@ -33,14 +30,12 @@ export default {
           break
       }
     })
-  }
+  },
 }
 </script>
 
 <style lang="scss">
-@import '../node_modules/bootstrap/scss/bootstrap.scss';
-@import '../node_modules/bootstrap/scss/variables';
-@import './assets/sass/app.scss';
+@import '@/assets/sass/app';
 
 .vue-notifyjs.notifications {
   .alert {

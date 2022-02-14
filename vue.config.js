@@ -17,5 +17,11 @@ module.exports = {
         sourceMap: true,
       }
     }
+  },
+  pages: {
+    index: {
+      entry: 'src/main.js',
+      title: 'Hub20',
+    },
   }
 }
