@@ -14,7 +14,6 @@
     </div>
     <slot name="raw-content"></slot>
     <div class="card-footer" v-if="$slots.footer">
-      <hr />
       <slot name="footer"></slot>
     </div>
   </component>
