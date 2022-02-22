@@ -1,6 +1,5 @@
 <template>
 <div v-if="hasAdminAccess" class="raiden-node">
-  <h3>{{ title }}</h3>
   <ul class="raiden-channels">
     <li>
       <RaidenChannelCard v-for="channel in raiden.channels" :raiden="raiden" :channel="channel" :key="channel.identifier" />
@@ -25,9 +24,6 @@ export default {
   },
   computed: {
     ...mapGetters('account', ['hasAdminAccess']),
-    title() {
-      return `Node ${this.raiden.address}`
-    }
   }
 }
 </script>

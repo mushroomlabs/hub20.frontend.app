@@ -51,8 +51,14 @@ table.tokens {
 table.token-list {
   td.tokenlist-tokens {
     max-width: 200px;
-    li {
-      display: inline
+    ul {
+      padding-inline-start: 0;
+      margin-bottom: 0;
+
+      li {
+        display: inline-block;
+        padding-left: 0.25rem;
+      }
     }
   }
 

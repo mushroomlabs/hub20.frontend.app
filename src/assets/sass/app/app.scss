@@ -13,9 +13,19 @@ body {
 }
 
 // Generic elements (defined by design system)
+
+a {
+  color: $primary-color !important;
+  &:hover {
+    color: $primary-states-color !important;
+  }
+}
+
+
 ul {
   list-style: outside none none;
 }
+
 
 button {
   @include button($default-color, $default-states-color);

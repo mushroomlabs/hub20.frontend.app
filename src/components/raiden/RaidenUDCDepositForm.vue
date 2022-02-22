@@ -1,7 +1,7 @@
 <template>
-<form class="raiden-channel-operation deposit">
+<form v-if="serviceToken" class="raiden-udc-operation deposit">
   <panel v-if="!balance" class="warning" title="No funds on-chain">
-    No {{ token.symbol }} on {{ raiden.address }} available at the base layer.
+    No {{ serviceToken.symbol }} on {{ raiden.address }} available at the base layer.
   </panel>
 
   <panel v-if="nativeToken && !hasFundsForGas" class="warning" title="Can not pay transaction fees">
@@ -34,10 +34,6 @@ import hub20 from 'hub20-vue-sdk'
 
 export default {
   mixins: [hub20.mixins.TokenMixin, hub20.mixins.RaidenMixin],
-  props: {
-    channel: Object,
-    token: Object,
-  },
   data() {
     return {
       validationErrors: {},
@@ -67,11 +63,11 @@ export default {
     ...mapGetters('audit', ['onChainTokenBalance']),
     amountLabel() {
 
-      const formattedBalance = this.balance && hub20.filters.formattedAmount(this.balance.toNumber(), this.token)
+      const formattedBalance = this.balance && hub20.filters.formattedAmount(this.balance.toNumber(), this.serviceToken)
       return this.balance ? `Amount (max. available: ${formattedBalance})` : 'No funds available'
     },
     balance() {
-      return this.onChainTokenBalance(this.raiden.address, this.token)
+      return this.onChainTokenBalance(this.raiden.address, this.serviceToken)
     },
     hasFunds() {
       return this.hasFundsForGas && this.balance.gte(0)
@@ -89,17 +85,14 @@ export default {
     estimatedCost() {
       const weiAmount = this.raidenOperationsCosts && this.raidenOperationsCosts['channel-deposit']
 
-      return weiAmount && (weiAmount / (10 ** this.token.decimals))
-    },
-    tokenUrl() {
-      return this.channel && this.channel.token
+      return weiAmount && (weiAmount / (10 ** this.nativeToken.decimals))
     }
   },
   methods: {
     ...mapActions('audit', ['fetchWalletBalances']),
-    ...mapActions('raiden', ['createChannelDepositRequest']),
+    ...mapActions('raiden', ['createUDCDepositRequest']),
     submitDepositRequest() {
-      this.createChannelDepositRequest({raiden: this.raiden, channel: this.channel, amount: this.amount})
+      this.createUDCDepositRequest({raiden: this.raiden, amount: this.amount})
     },
     updateEstimatedCost() {
       this.fetchRaidenStatus(this.raiden.id)

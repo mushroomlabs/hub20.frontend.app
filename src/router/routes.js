@@ -13,9 +13,11 @@ import Overview from '@/views/Overview'
 import History from '@/views/History'
 import Funding from '@/views/Funding'
 import Deposit from '@/views/Deposit'
-import Raiden from '@/views/Raiden'
-import RaidenChannelDeposit from '@/views/RaidenChannelDeposit'
-import RaidenChannelWithdraw from '@/views/RaidenChannelWithdraw'
+import Raiden from '@/views/raiden/Main'
+import RaidenChannel from '@/views/raiden/RaidenChannel'
+import RaidenChannelDeposit from '@/views/raiden/RaidenChannelDeposit'
+import RaidenChannelWithdraw from '@/views/raiden/RaidenChannelWithdraw'
+import RaidenUDCDeposit from '@/views/raiden/RaidenUDCDeposit'
 import Stores from '@/views/Stores'
 import StoreDetail from '@/views/StoreDetail'
 import Transfer from '@/views/Transfer'
@@ -194,7 +196,23 @@ const routes = [
       {
         path: 'raiden',
         name: 'raiden',
-        component: Raiden
+        component: Raiden,
+      },
+      {
+        path: 'raiden/:raiden/udc/deposit',
+        name: 'raiden-udc-deposit',
+        component: RaidenUDCDeposit,
+        meta: {
+          viewTitle: 'Deposit to Raiden User Deposit Contract'
+        }
+      },
+      {
+        path: 'raiden/:raiden/channel/:channel',
+        name: 'raiden-channel',
+        component: RaidenChannel,
+        meta: {
+          viewTitle: 'Raiden Channel'
+        },
       },
       {
         path: 'raiden/:raiden/channel/:channel/deposit',
@@ -211,7 +229,7 @@ const routes = [
         meta: {
           viewTitle: 'Request Withdraw from Raiden Channel'
         }
-      },
+      }
     ]
   },
   {

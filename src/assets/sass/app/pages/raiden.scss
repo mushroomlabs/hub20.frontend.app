@@ -1,15 +1,60 @@
 div.raiden-management {
   @include make-container();
 
+  > h2 {
+    margin-top: 3rem;
+  }
+
   h3 {
     border-bottom: 1px solid;
     padding-bottom: 0.25em;
     margin-bottom: 2vh;
   }
 
-  ul.raiden-channels {
+  table.table.raiden-nodes {
+
+    td {
+      border-top: none !important;
+    }
+  }
+
+  div.card {
+    @include horizontal-card();
+
+    .card-image {
+      img {
+        max-height: 80px;
+        max-width: 80px;
+        padding-left: 1rem;
+        justify-self: center;
+      }
+    }
+  }
+
+  .card-body {
     @include make-row();
 
+    form, dl {
+      width: 100%;
+      padding: 1rem;
+    }
+
+    dd span.onchain-balance {
+      display: block;
+    }
+
+    @include for-size(desktop-and-up) {
+      form {
+        @include make-col(6, 12);
+      }
+
+      dl {
+        @include make-col(6, 12);
+      }
+    }
+  }
+
+  ul.raiden-channels, ul.token-networks, ul.raiden-user-deposits {
     list-style-type: none;
     list-style-position: inside;
     padding-inline-start: 0;
@@ -35,19 +80,6 @@ div.raiden-management {
 
       @include for-size(wide-desktop) {
         @include make-col(3, 12);
-      }
-    }
-
-    div.card {
-      @include horizontal-card();
-
-      .card-image {
-        img {
-          max-height: 80px;
-          max-width: 80px;
-          padding-left: 1rem;
-          justify-self: center;
-        }
       }
 
       .card-header, .card-body {

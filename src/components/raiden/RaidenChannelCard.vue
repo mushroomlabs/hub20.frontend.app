@@ -1,9 +1,17 @@
 <template>
-<card :title="cardTitle" :subTitle="cardSubTitle">
+<card v-if="token" :title="cardTitle" :subTitle="cardSubTitle">
   <template v-slot:image>
     <TokenLogo :token="token" :defaultUrl="defaultLogoUrl" />
   </template>
-  Current Balance: {{ channel.balance | formattedAmount(token) }}
+  <dl>
+    <dt>Node</dt>
+    <dd>{{ raiden.hostname }} ({{ raiden.address | shortAddress }})</dd>
+    <dt>Token Network</dt>
+    <dd>{{ token.name }} ({{ token.symbol }})</dd>
+    <dt>Current Balance</dt>
+    <dd>{{ channel.balance | formattedAmount(token) }}</dd>
+  </dl>
+
   <template v-slot:footer>
     <router-link :to="{name: 'raiden-channel-deposit', params: {raiden: raiden.id, channel: channel.identifier}}">Deposit</router-link>
     <router-link :to="{name: 'raiden-channel-withdraw', params: {raiden: raiden.id, channel: channel.identifier}}">Withdraw</router-link>
@@ -22,9 +30,7 @@ export default {
   components: {
     TokenLogo: hub20.components.TokenLogo
   },
-  filters: {
-    formattedAmount: hub20.filters.formattedAmount
-  },
+  filters: hub20.filters,
   props: {
     raiden: {
       type: Object
@@ -35,18 +41,24 @@ export default {
   },
   computed: {
     token() {
-      return this.channel.token
+      return this.tokensByUrl[this.channel.token]
     },
     cardTitle() {
       return `Channel #${this.channel.identifier}`
     },
-    cardSubTitle() {
+    chainName() {
       const chainData = this.getChain(this.token)
       return chainData && chainData.name
+    },
+    cardSubTitle() {
+      return this.chainName
     },
     defaultLogoUrl() {
       return DefaultLogoUrl
     }
+  },
+  created() {
+    this.fetchTokenByUrl(this.channel.token)
   }
 }
 </script>
