@@ -8,13 +8,15 @@
     <dd>{{ raiden.hostname }} ({{ raiden.address | shortAddress }})</dd>
     <dt>Token Network</dt>
     <dd>{{ token.name }} ({{ token.symbol }})</dd>
+    <dt>Partner Address</dt>
+    <dd>{{ channel.partner_address }}</dd>
     <dt>Current Balance</dt>
     <dd>{{ channel.balance | formattedAmount(token) }}</dd>
   </dl>
 
   <template v-slot:footer>
-    <router-link :to="{name: 'raiden-channel-deposit', params: {raiden: raiden.id, channel: channel.identifier}}">Deposit</router-link>
-    <router-link :to="{name: 'raiden-channel-withdraw', params: {raiden: raiden.id, channel: channel.identifier}}">Withdraw</router-link>
+    <router-link :to="{name: 'raiden-channel-deposit', params: {raiden: raiden.id, channel: channel.id}}">Deposit</router-link>
+    <router-link :to="{name: 'raiden-channel-withdraw', params: {raiden: raiden.id, channel: channel.id}}">Withdraw</router-link>
   </template>
   </card>
 </template>

@@ -2,7 +2,7 @@
 <div v-if="hasAdminAccess" class="raiden-node">
   <ul class="raiden-channels">
     <li>
-      <RaidenChannelCard v-for="channel in raiden.channels" :raiden="raiden" :channel="channel" :key="channel.identifier" />
+      <RaidenChannelCard v-for="channel in raiden.channels" :raiden="raiden" :channel="channel" :key="channel.id" />
     </li>
   </ul>
 </div>

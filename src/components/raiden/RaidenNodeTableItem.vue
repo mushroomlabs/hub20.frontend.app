@@ -8,7 +8,7 @@
       </router-link>
     </td>
     <td rowspan="raiden.channels.length">
-      <tr v-for="channel in raiden.channels" :key="channel.identifier">
+      <tr v-for="channel in raiden.channels" :key="channel.id">
         <td v-if="getChannelToken(channel)">
           <router-link :to="{name: 'raiden-channel', params: {raiden: raiden.id, channel: channel.id}}">
             {{ getChannelToken(channel).symbol }}

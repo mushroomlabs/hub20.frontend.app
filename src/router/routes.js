@@ -16,7 +16,7 @@ import Deposit from '@/views/Deposit'
 import Raiden from '@/views/raiden/Main'
 import RaidenChannel from '@/views/raiden/RaidenChannel'
 import RaidenChannelDeposit from '@/views/raiden/RaidenChannelDeposit'
-import RaidenChannelWithdraw from '@/views/raiden/RaidenChannelWithdraw'
+import RaidenChannelWithdrawal from '@/views/raiden/RaidenChannelWithdrawal'
 import RaidenUDCDeposit from '@/views/raiden/RaidenUDCDeposit'
 import Stores from '@/views/Stores'
 import StoreDetail from '@/views/StoreDetail'
@@ -225,7 +225,7 @@ const routes = [
       {
         path: 'raiden/:raiden/channel/:channel/withdraw',
         name: 'raiden-channel-withdraw',
-        component: RaidenChannelWithdraw,
+        component: RaidenChannelWithdrawal,
         meta: {
           viewTitle: 'Request Withdraw from Raiden Channel'
         }

@@ -1,20 +1,20 @@
 <template>
 <card v-if="hasAdminAccess" class="raiden-management" :title="cardTitle">
   <RaidenChannelLiquidityPanel v-if="channel && raiden && token" :channel="channel" :raiden="raiden" :token="token"/>
-  <RaidenChannelDepositForm v-if="channel && raiden && token" :channel="channel" :raiden="raiden" :token="token" />
+  <RaidenChannelWithdrawalForm v-if="channel && raiden && token" :channel="channel" :raiden="raiden" :token="token" />
   <router-link :to="{name: 'raiden'}">Back</router-link>
 </card>
 </template>
 <script>
 import {mapActions, mapGetters} from 'vuex'
 
-import RaidenChannelDepositForm from '@/components/raiden/RaidenChannelDepositForm'
+import RaidenChannelWithdrawalForm from '@/components/raiden/RaidenChannelWithdrawalForm'
 import RaidenChannelLiquidityPanel from '@/components/raiden/RaidenChannelLiquidityPanel'
 
 export default {
-  name: 'RaidenChannelDeposit',
+  name: 'RaidenChannelWithdrawal',
   components: {
-    RaidenChannelDepositForm,
+    RaidenChannelWithdrawalForm,
     RaidenChannelLiquidityPanel
   },
   computed: {
@@ -22,7 +22,7 @@ export default {
     ...mapGetters('raiden', ['raidenNodesById']),
     ...mapGetters('tokens', ['tokensByUrl']),
     cardTitle() {
-      return this.token && `Add Liquidity to ${this.token.name} (${this.token.symbol}) channel`
+      return this.token && `Remove Liquidity from ${this.token.name} (${this.token.symbol}) channel`
     },
     raidenId() {
       return this.$route.params.raiden
