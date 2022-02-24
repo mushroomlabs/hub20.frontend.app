@@ -10,6 +10,7 @@ div.login-screen, div.registration-screen, div.setup-screen {
     max-width: 45rem;
     margin: auto;
     box-shadow: none !important;
+    border: none !important;
   }
 
   div.login-form.submitted, div.registration-form.submitted {

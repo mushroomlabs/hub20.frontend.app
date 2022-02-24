@@ -1,0 +1,91 @@
+@mixin horizontal-card() {
+  display: grid;
+
+  @include for-size(phone-only) {
+    grid-template-areas: 'image header'
+                         'image body'
+                         'image body'
+                         'footer footer';
+
+    grid-template-columns: minmax(80px, 1fr) 1fr;
+  }
+
+  @include for-size(tablet-portrait-and-up) {
+    grid-template-areas: 'image header header'
+                         'image body body'
+                         'image body body'
+                         'footer footer footer';
+
+    grid-template-columns: minmax(80px, 1fr) 1fr 1fr;
+  }
+
+  @include for-size(tablet-landscape-and-up) {
+    grid-template-areas: 'image header header header'
+                         'image body body body'
+                         'image body body body'
+                         'footer footer footer footer';
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+
+  .card-image {
+    display: grid;
+    grid-area: image;
+    height: 100%;
+    margin: auto;
+
+    align-items: center;
+  }
+
+  .card-header {
+    padding-left: 0;
+    grid-area: header;
+  }
+
+  .card-body {
+    padding-left: 0;
+    grid-area: body;
+    margin-bottom: 0.5em;
+  }
+
+  .card-footer {
+    padding: 0.75rem 1rem;
+    margin-top: 1vh;
+    grid-area: footer;
+
+    display: flex;
+    justify-content: space-around;
+    a {
+      @include button-link($primary-color, $primary-states-color);
+      text-transform: uppercase;
+    }
+  }
+}
+
+@mixin panel() {
+  border: 1px solid;
+  padding: 1rem;
+  margin: 1vh auto;
+
+  background-color: $gray-input-bg;
+  color: $muted-color;
+
+  &.warning {
+    background-color: $light-orange;
+    color: $font-color;
+    border-color: $warning-states-color;
+  }
+
+  &.info {
+    background-color: $info-bg;
+    color: $fill-font-color;
+    border-color: $info-states-color;
+  }
+
+  .panel-title {
+    font-size: $font-size-h5 !important;
+  }
+
+  .panel-body {
+    font-size: 14px;
+  }
+}

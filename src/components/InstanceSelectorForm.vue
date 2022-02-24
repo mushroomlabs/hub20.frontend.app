@@ -17,9 +17,9 @@
         <template v-slot:secondary>
           <span v-if="isConnected">Currently connected to: {{ current }} (v.{{ version }})</span>
         </template>
-        <p-button type="submit" @click.native="setupServer(serverUrl)" :disabled="processing"
-          >Next</p-button
-        >
+        <button @click.prevent="setupServer(serverUrl)" :disabled="processing">
+          Next
+        </button>
       </action-panel>
     </slot>
   </card>

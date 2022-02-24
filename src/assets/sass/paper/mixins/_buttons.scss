@@ -9,10 +9,11 @@
   border-width: $border-thick;
   border-color: $btn-color;
   border-style: solid;
-  color: $white-color;
+  color: $white-color !important;
   font-weight: $font-weight-bold;
   line-height: 1.75;
-  text-transform: uppercase;
+  text-transform: uppercase !important;
+  text-decoration: none;
   cursor: pointer;
   @include opacity(1);
 
@@ -146,7 +147,7 @@
   @include btn-size($padding-vertical, $padding-horizontal, $font-size);
 }
 
-@mixin button-simple($btn-color, $btn-states-color, $font-size) {
+@mixin button-simple($btn-color, $btn-states-color, $font-size: defaults.$font-size) {
   @include btn-simple-styles($btn-color, $btn-states-color);
   @include btn-size($padding-simple-vertical, $padding-simple-horizontal, $font-size);
   padding: $padding-simple-vertical (2 * $padding-simple-horizontal);

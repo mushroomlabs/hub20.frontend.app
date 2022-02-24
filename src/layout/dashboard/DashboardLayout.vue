@@ -9,8 +9,8 @@
         <sidebar-link to="/history" name="History" icon="ti-receipt" />
       </template>
       <template v-if="hasAdminAccess" slot="links">
-        <sidebar-link to="/" name="Overview" icon="ti-dashboard" />
-        <sidebar-link to="/raiden" name="Raiden" icon="ti-bolt" />
+        <sidebar-link to="/admin" name="Overview" icon="ti-dashboard" />
+        <sidebar-link to="/admin/raiden" name="Raiden" icon="ti-bolt" />
       </template>
     </side-bar>
     <div class="main-panel">

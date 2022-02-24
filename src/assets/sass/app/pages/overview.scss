@@ -9,37 +9,43 @@
     padding-inline-start: 0;
 
     li {
-      @include make-col(3, 12);
       padding-right: 1rem;
-      div.card {
-        display: grid;
 
-        grid-template-areas: 'image header header header'
-                             'image body body body';
-        grid-template-columns: 'auto 1fr 1fr 1fr';
+      @include for-size(phone-only) {
+        @include make-col(12, 12);
+      }
+
+      @include for-size(tablet-portrait-and-up) {
+        @include make-col(6, 12);
+      }
+
+      @include for-size(tablet-landscape-and-up) {
+        @include make-col(4, 12);
+      }
+
+      @include for-size(desktop-and-up) {
+        @include make-col(3, 12);
+      }
+
+      @include for-size(wide-desktop) {
+        @include make-col(2, 12);
+      }
+
+
+      div.card {
+        @include horizontal-card();
 
         .card-image {
-          display: grid;
-          grid-area: image;
-          height: 100%;
-          margin: auto;
-
-          align-items: center;
-
           img {
-            max-width: 40px;
+            max-height: 80px;
+            max-width: 80px;
+            padding-left: 1rem;
             justify-self: center;
           }
         }
 
-        .card-header {
-          padding-left: 0;
-          grid-area: header;
-        }
-
-        .card-body {
-          padding-left: 0;
-          grid-area: body;
+        .card-header, .card-body {
+          text-align: right;
         }
       }
     }

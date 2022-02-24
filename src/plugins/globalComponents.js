@@ -3,6 +3,7 @@ import {
   FormGroupInput,
   FormGroupTextarea,
   FormGroupSelect,
+  Panel,
   Card,
   DropDown,
   Button
@@ -14,6 +15,7 @@ const GlobalComponents = {
     Vue.component('fg-select', FormGroupSelect)
     Vue.component('fg-textarea', FormGroupTextarea)
     Vue.component('drop-down', DropDown)
+    Vue.component('panel', Panel)
     Vue.component('card', Card)
     Vue.component('p-button', Button)
     Vue.component('action-panel', ActionPanel)

@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     hasEntries() {
-      return this.book.length > 0
+      return this.book && this.book.length > 0
     }
   }
 }

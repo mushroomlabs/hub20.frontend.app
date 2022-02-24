@@ -7,10 +7,6 @@
     </ul>
 
     <div v-if="hasAdminAccess">
-      <card title="Wallet">
-        <accounting-report-table :book="walletBook" />
-      </card>
-
       <card title="Raiden">
         <accounting-report-table :book="raidenBook" />
       </card>
@@ -20,7 +16,7 @@
       </card>
 
       <card title="External Accounts" subTitle="Accounts not under control of the Hub">
-        <accounting-report-table :book="userBook" />
+        <accounting-report-table :book="externalAccountBook" />
       </card>
 
       <card title="Treasury">

@@ -19,6 +19,7 @@ import PaperDashboard from './plugins/paperDashboard'
 import VueClipboard from 'vue-clipboard2'
 
 import 'vue-notifyjs/themes/default.css'
+import '@/assets/css/themify-icons.css'
 
 Vue.use(VueClipboard)
 Vue.use(PaperDashboard)

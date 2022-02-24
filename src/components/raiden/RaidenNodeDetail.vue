@@ -1,17 +1,21 @@
 <template>
-  <card v-if="hasAdminAccess" class="raiden-node" :title="title">
-    <RaidenChannelTable :raiden="raiden" />
-  </card>
+<div v-if="hasAdminAccess" class="raiden-node">
+  <ul class="raiden-channels">
+    <li>
+      <RaidenChannelCard v-for="channel in raiden.channels" :raiden="raiden" :channel="channel" :key="channel.id" />
+    </li>
+  </ul>
+</div>
 </template>
 <script>
 import {mapGetters} from 'vuex'
 
-import RaidenChannelTable from '@/components/raiden/RaidenChannelTable'
+import RaidenChannelCard from '@/components/raiden/RaidenChannelCard'
 
 export default {
   name: 'raiden-node-detail',
   components: {
-    RaidenChannelTable
+    RaidenChannelCard
   },
   props: {
     raiden: {
@@ -20,9 +24,6 @@ export default {
   },
   computed: {
     ...mapGetters('account', ['hasAdminAccess']),
-    title() {
-      return `Node ${this.raiden.address}`
-    }
   }
 }
 </script>

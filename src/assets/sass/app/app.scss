@@ -13,12 +13,27 @@ body {
 }
 
 // Generic elements (defined by design system)
+
+a {
+  color: $primary-color !important;
+  &:hover {
+    color: $primary-states-color !important;
+  }
+}
+
+
 ul {
   list-style: outside none none;
 }
 
+
 button {
-  @include button($primary-color, $primary-states-color)
+  @include button($default-color, $default-states-color);
+  text-transform: uppercase;
+
+  &.destructive-action {
+    @include button($danger-color, $danger-states-color, $font-size: $font-size-small);
+  }
 }
 
 form, .form-group {
@@ -28,6 +43,22 @@ form, .form-group {
     font-style: italic;
     margin-bottom: 0.25vh;
   }
+
+  .cost-estimate {
+    display: block;
+    font-size: $font-size-small;
+    color: #505050;
+    text-align: right;
+  }
+
+  button:last-child {
+    display: block;
+    width: 100%;
+  }
+}
+
+div.panel {
+  @include panel();
 }
 
 div.modal-dialog {
@@ -47,6 +78,92 @@ div.modal-dialog {
 
     h4 {
       margin-bottom: 0;
+    }
+
+  }
+}
+
+dl {
+  dt {
+    &::after {
+      content: ':';
+    }
+  }
+  dd {
+    color: $default-color;
+    margin-bottom: 1em;
+  }
+}
+
+div.action-panel, section.header  {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+div.button-bar {
+  margin: 1vh auto;
+
+  button {
+    @include button-outline($primary-color, $primary-states-color);
+    border-style: solid;
+    border-radius: 0 !important;
+
+    &.active {
+      @include button-outline($primary-bg, $primary-color);
+    }
+
+    &:first-child {
+      border-top-left-radius: $border-radius-btn-small !important;
+      border-bottom-left-radius: $border-radius-btn-small !important;
+    }
+    &:last-child {
+      border-top-right-radius: $border-radius-btn-small !important;
+      border-bottom-right-radius: $border-radius-btn-small !important;
+    }
+  }
+}
+
+table {
+  th {
+    align-content: center;
+    text-align: center;
+  }
+  .description {
+    font-size: inherit !important;
+    color: inherit !important;
+  }
+
+  td {
+    text-align: center;
+    &.actions {
+      text-align: right;
+      align-items: space-around;
+
+      > * {
+        display: inline-block;
+        margin: 0.25vh 1em;
+      }
+
+      a, button {
+        @include button($info-color, $info-states-color, $font-size: $font-size-small);
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+ul.table-action-menu {
+  li {
+    text-align: right;
+    margin-right: 15px;
+
+    a {
+      @include button($default-color, $default-states-color);
+    }
+
+    &:last-child {
+      padding-right: 15px;
     }
 
   }
