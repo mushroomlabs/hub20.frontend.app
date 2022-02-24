@@ -1,14 +1,14 @@
 <template>
   <tr v-if="raiden">
-    <td rowspan="raiden.channels.length">{{ raiden.hostname }}</td>
-    <td rowspan="raiden.channels.length">{{ raiden.address }}</td>
-    <td rowspan="raiden.channels.length">
+    <td rowspan="openChannels.length">{{ raiden.hostname }}</td>
+    <td rowspan="openChannels.length">{{ raiden.address }}</td>
+    <td rowspan="openChannels.length">
       <router-link :to="{name: 'raiden-udc-deposit', params: {raiden: raiden.id}}">
         {{ raiden.service_deposit_balance.balance | formattedAmount(serviceToken, 6) }}
       </router-link>
     </td>
-    <td rowspan="raiden.channels.length">
-      <tr v-for="channel in raiden.channels" :key="channel.id">
+    <td rowspan="openChannels.length">
+      <tr v-for="channel in openChannels" :key="channel.id">
         <td v-if="getChannelToken(channel)">
           <router-link :to="{name: 'raiden-channel', params: {raiden: raiden.id, channel: channel.id}}">
             {{ getChannelToken(channel).symbol }}
