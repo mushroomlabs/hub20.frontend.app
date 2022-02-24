@@ -10,7 +10,9 @@
     <td rowspan="openChannels.length">
       <tr v-for="channel in openChannels" :key="channel.id">
         <td v-if="getChannelToken(channel)">
-          <router-link :to="{name: 'raiden-channel', params: {raiden: raiden.id, channel: channel.id}}">
+          <router-link
+            :to="{name: 'raiden-channel', params: {raiden: raiden.id, channel: channel.id}}"
+          >
             {{ getChannelToken(channel).symbol }}
           </router-link>
         </td>
@@ -24,6 +26,6 @@ import hub20 from 'hub20-vue-sdk'
 
 export default {
   name: 'raiden-node-table-item',
-  mixins: [hub20.mixins.TokenMixin, hub20.mixins.RaidenMixin],
+  mixins: [hub20.mixins.TokenMixin, hub20.mixins.RaidenMixin]
 }
 </script>

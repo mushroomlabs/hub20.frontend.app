@@ -1,9 +1,19 @@
 <template>
-<card v-if="hasAdminAccess" class="raiden-management" :title="cardTitle">
-  <RaidenChannelLiquidityPanel v-if="channel && raiden && token" :channel="channel" :raiden="raiden" :token="token"/>
-  <RaidenChannelDepositForm v-if="channel && raiden && token" :channel="channel" :raiden="raiden" :token="token" />
-  <router-link :to="{name: 'raiden'}">Back</router-link>
-</card>
+  <card v-if="hasAdminAccess" class="raiden-management" :title="cardTitle">
+    <RaidenChannelLiquidityPanel
+      v-if="channel && raiden && token"
+      :channel="channel"
+      :raiden="raiden"
+      :token="token"
+    />
+    <RaidenChannelDepositForm
+      v-if="channel && raiden && token"
+      :channel="channel"
+      :raiden="raiden"
+      :token="token"
+    />
+    <router-link :to="{name: 'raiden'}">Back</router-link>
+  </card>
 </template>
 <script>
 import {mapActions, mapGetters} from 'vuex'
@@ -45,7 +55,7 @@ export default {
     },
     tokenUrl() {
       return this.channel && this.channel.token
-    },
+    }
   },
   methods: {
     ...mapActions('raiden', ['fetchNode']),

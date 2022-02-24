@@ -1,6 +1,6 @@
 <template>
   <div v-if="raiden && channel && hasAdminAccess" class="raiden-management">
-    <RaidenChannelCard :raiden="raiden" :channel="channel"/>
+    <RaidenChannelCard :raiden="raiden" :channel="channel" />
   </div>
 </template>
 <script>
@@ -33,7 +33,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('raiden', ['fetchNode']),
+    ...mapActions('raiden', ['fetchNode'])
   },
   created() {
     this.fetchNode(this.raidenId)

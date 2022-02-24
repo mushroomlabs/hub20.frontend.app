@@ -33,7 +33,7 @@
         v-if="!isInternalTransfer"
         v-model="address"
         :errorMessage="validationErrors.address"
-        />
+      />
 
       <fg-select
         type="text"
@@ -43,7 +43,6 @@
         :options="withdrawalNetworkOptions"
         :errorMessage="validationErrors.withdrawalNetworkOptions"
       />
-
 
       <fg-select
         type="text"
@@ -241,7 +240,7 @@ export default {
       return options
     },
     transferCost() {
-      if (this.transferType === 'internal' || this.paymentNetwork !== 'blockchain'){
+      if (this.transferType === 'internal' || this.paymentNetwork !== 'blockchain') {
         return null
       }
 

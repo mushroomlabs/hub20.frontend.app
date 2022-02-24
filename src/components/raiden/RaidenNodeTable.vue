@@ -22,15 +22,15 @@ export default {
     RaidenNodeTableItem
   },
   computed: {
-    ...mapGetters('raiden', ['raidenNodes']),
+    ...mapGetters('raiden', ['raidenNodes'])
   },
   methods: {
-    ...mapActions('raiden', ['fetchNodeList']),
+    ...mapActions('raiden', ['fetchNodeList'])
   },
   created() {
     if (this.raidenNodes.length == 0) {
       this.fetchNodeList()
     }
-  },
+  }
 }
 </script>

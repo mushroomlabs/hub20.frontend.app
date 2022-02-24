@@ -22,7 +22,7 @@ import hub20 from 'hub20-vue-sdk'
 export default {
   mixins: [hub20.mixins.TokenMixin, hub20.mixins.RaidenMixin],
   components: {
-    TokenLogo: hub20.components.TokenLogo,
+    TokenLogo: hub20.components.TokenLogo
   },
   computed: {
     ...mapGetters('audit', ['onChainTokenBalance']),
@@ -31,10 +31,10 @@ export default {
     },
     nativeTokenBalance() {
       return this.onChainTokenBalance(this.raiden.address, this.nativeToken) || 0
-    },
+    }
   },
   created() {
     this.fetchRaidenStatus(this.raiden.id)
-  },
+  }
 }
 </script>

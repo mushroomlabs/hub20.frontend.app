@@ -1,17 +1,15 @@
 <template>
-<card v-if="hasAdminAccess && chain" class="raiden-management" :title="cardTitle">
-  <RaidenUDCLiquidityPanel v-if="raiden" :raiden="raiden" />
-  <RaidenUDCDepositForm v-if="raiden" :raiden="raiden"/>
-  <router-link :to="{name: 'raiden'}">Back</router-link>
-</card>
+  <card v-if="hasAdminAccess && chain" class="raiden-management" :title="cardTitle">
+    <RaidenUDCLiquidityPanel v-if="raiden" :raiden="raiden" />
+    <RaidenUDCDepositForm v-if="raiden" :raiden="raiden" />
+    <router-link :to="{name: 'raiden'}">Back</router-link>
+  </card>
 </template>
 <script>
 import {mapActions, mapGetters} from 'vuex'
 
 import RaidenUDCDepositForm from '@/components/raiden/RaidenUDCDepositForm'
 import RaidenUDCLiquidityPanel from '@/components/raiden/RaidenUDCLiquidityPanel'
-
-
 
 export default {
   components: {
@@ -37,7 +35,7 @@ export default {
   },
   methods: {
     ...mapActions('raiden', ['fetchNode']),
-    ...mapActions('network', ['getBlockchains']),
+    ...mapActions('network', ['getBlockchains'])
   },
   created() {
     this.fetchNode(this.raidenId)

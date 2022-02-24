@@ -12,14 +12,14 @@ import BaseLayout from '@/layout/BaseLayout'
 
 export default {
   components: {
-    BaseLayout,
+    BaseLayout
   },
   computed: {
-    ...mapGetters('auth', ['isAuthenticated']),
+    ...mapGetters('auth', ['isAuthenticated'])
   },
   data() {
     return {
-      timer: null,
+      timer: null
     }
   },
   mounted() {
@@ -30,7 +30,7 @@ export default {
           break
       }
     })
-  },
+  }
 }
 </script>
 

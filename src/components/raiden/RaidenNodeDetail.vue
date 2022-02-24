@@ -1,11 +1,16 @@
 <template>
-<div v-if="hasAdminAccess" class="raiden-node">
-  <ul class="raiden-channels">
-    <li>
-      <RaidenChannelCard v-for="channel in raiden.channels" :raiden="raiden" :channel="channel" :key="channel.id" />
-    </li>
-  </ul>
-</div>
+  <div v-if="hasAdminAccess" class="raiden-node">
+    <ul class="raiden-channels">
+      <li>
+        <RaidenChannelCard
+          v-for="channel in raiden.channels"
+          :raiden="raiden"
+          :channel="channel"
+          :key="channel.id"
+        />
+      </li>
+    </ul>
+  </div>
 </template>
 <script>
 import {mapGetters} from 'vuex'
@@ -23,7 +28,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('account', ['hasAdminAccess']),
+    ...mapGetters('account', ['hasAdminAccess'])
   }
 }
 </script>

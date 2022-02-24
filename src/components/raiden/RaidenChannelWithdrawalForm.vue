@@ -1,26 +1,31 @@
 <template>
-<form class="raiden-channel-operation withdrawal">
-  <panel v-if="nativeToken && !hasFundsForGas" class="warning" title="Can not pay transaction fees">
-    Wallet {{ raiden.address }} does not have enough {{ nativeToken.name }} to pay for on-chain transaction fees.
-  </panel>
+  <form class="raiden-channel-operation withdrawal">
+    <panel
+      v-if="nativeToken && !hasFundsForGas"
+      class="warning"
+      title="Can not pay transaction fees"
+    >
+      Wallet {{ raiden.address }} does not have enough {{ nativeToken.name }} to pay for on-chain
+      transaction fees.
+    </panel>
 
-  <fg-input
-    type="number"
-    :label="amountLabel"
-    v-model="amount"
-    :errorMessage="validationErrors.amount"
-    required
-    :disabled="!hasFunds"
+    <fg-input
+      type="number"
+      :label="amountLabel"
+      v-model="amount"
+      :errorMessage="validationErrors.amount"
+      required
+      :disabled="!hasFunds"
     />
 
-  <span v-if="estimatedCost && nativeToken" class="raiden-operation cost-estimate">
-    cost (estimate): {{ estimatedCost | formattedAmount(nativeToken, 2) }}
-  </span>
+    <span v-if="estimatedCost && nativeToken" class="raiden-operation cost-estimate">
+      cost (estimate): {{ estimatedCost | formattedAmount(nativeToken, 2) }}
+    </span>
 
-  <button :disabled="!isValid" @click.prevent="submitWithdrawalRequest()">
-    Submit
-  </button>
-</form>
+    <button :disabled="!isValid" @click.prevent="submitWithdrawalRequest()">
+      Submit
+    </button>
+  </form>
 </template>
 <script>
 import Decimal from 'decimal.js-light'
@@ -32,7 +37,7 @@ export default {
   mixins: [hub20.mixins.TokenMixin, hub20.mixins.RaidenMixin],
   props: {
     channel: Object,
-    token: Object,
+    token: Object
   },
   data() {
     return {
@@ -56,15 +61,18 @@ export default {
       } else {
         this.$set(this.validationErrors, 'amount', null)
       }
-    },
+    }
   },
   computed: {
     ...mapGetters('network', {getChainData: 'chainData'}),
     ...mapGetters('audit', ['onChainTokenBalance']),
     amountLabel() {
-
-      const formattedBalance = this.channelBalance && hub20.filters.formattedAmount(this.channelBalance.toNumber(), this.token)
-      return this.onChainBalance ? `Amount (max. available: ${formattedBalance})` : 'No funds available'
+      const formattedBalance =
+        this.channelBalance &&
+        hub20.filters.formattedAmount(this.channelBalance.toNumber(), this.token)
+      return this.onChainBalance
+        ? `Amount (max. available: ${formattedBalance})`
+        : 'No funds available'
     },
     channelBalance() {
       return new Decimal(this.channel.balance)
@@ -86,9 +94,10 @@ export default {
       return this.onChainTokenBalance(this.raiden.address, this.nativeToken) || 0
     },
     estimatedCost() {
-      const weiAmount = this.raidenOperationsCosts && this.raidenOperationsCosts['channel-withdraw']
+      const weiAmount =
+        this.raidenOperationsCosts && this.raidenOperationsCosts['channel-withdraw']
 
-      return weiAmount && (weiAmount / (10 ** this.token.decimals))
+      return weiAmount && weiAmount / 10 ** this.token.decimals
     },
     tokenUrl() {
       return this.channel && this.channel.token
@@ -98,7 +107,11 @@ export default {
     ...mapActions('audit', ['fetchWalletBalances']),
     ...mapActions('raiden', ['createChannelWithdrawalRequest']),
     submitWithdrawalRequest() {
-      this.createChannelWithdrawalRequest({raiden: this.raiden, channel: this.channel, amount: this.amount})
+      this.createChannelWithdrawalRequest({
+        raiden: this.raiden,
+        channel: this.channel,
+        amount: this.amount
+      })
     },
     updateEstimatedCost() {
       this.fetchRaidenStatus(this.raiden.id)

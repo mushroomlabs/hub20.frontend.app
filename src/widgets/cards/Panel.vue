@@ -16,7 +16,7 @@ export default {
       type: String,
       default: 'div'
     },
-    title: String,
+    title: String
   }
 }
 </script>

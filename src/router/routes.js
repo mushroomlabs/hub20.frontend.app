@@ -78,8 +78,6 @@ const requireAdmin = (to, from, next) => {
     })
 }
 
-
-
 const requireAnonymous = (to, from, next) => {
   if (store.getters['auth/isAuthenticated']) {
     store.dispatch('auth/tearDown').then(() => next())
@@ -196,7 +194,7 @@ const routes = [
       {
         path: 'raiden',
         name: 'raiden',
-        component: Raiden,
+        component: Raiden
       },
       {
         path: 'raiden/:raiden/udc/deposit',
@@ -212,7 +210,7 @@ const routes = [
         component: RaidenChannel,
         meta: {
           viewTitle: 'Raiden Channel'
-        },
+        }
       },
       {
         path: 'raiden/:raiden/channel/:channel/deposit',

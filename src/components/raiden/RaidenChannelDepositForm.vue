@@ -1,30 +1,35 @@
 <template>
-<form class="raiden-channel-operation deposit">
-  <panel v-if="!balance" class="warning" title="No funds on-chain">
-    No {{ token.symbol }} on {{ raiden.address }} available at the base layer.
-  </panel>
+  <form class="raiden-channel-operation deposit">
+    <panel v-if="!balance" class="warning" title="No funds on-chain">
+      No {{ token.symbol }} on {{ raiden.address }} available at the base layer.
+    </panel>
 
-  <panel v-if="nativeToken && !hasFundsForGas" class="warning" title="Can not pay transaction fees">
-    Wallet {{ raiden.address }} does not have enough {{ nativeToken.name }} to pay for on-chain transaction fees.
-  </panel>
+    <panel
+      v-if="nativeToken && !hasFundsForGas"
+      class="warning"
+      title="Can not pay transaction fees"
+    >
+      Wallet {{ raiden.address }} does not have enough {{ nativeToken.name }} to pay for on-chain
+      transaction fees.
+    </panel>
 
-  <fg-input
-    type="number"
-    :label="amountLabel"
-    v-model="amount"
-    :errorMessage="validationErrors.amount"
-    required
-    :disabled="!hasFunds"
+    <fg-input
+      type="number"
+      :label="amountLabel"
+      v-model="amount"
+      :errorMessage="validationErrors.amount"
+      required
+      :disabled="!hasFunds"
     />
 
-  <span v-if="estimatedCost && nativeToken" class="raiden-operation cost-estimate">
-    cost (estimate): {{ estimatedCost | formattedAmount(nativeToken, 2) }}
-  </span>
+    <span v-if="estimatedCost && nativeToken" class="raiden-operation cost-estimate">
+      cost (estimate): {{ estimatedCost | formattedAmount(nativeToken, 2) }}
+    </span>
 
-  <button :disabled="!isValid" @click.prevent="submitDepositRequest()">
-    Submit
-  </button>
-</form>
+    <button :disabled="!isValid" @click.prevent="submitDepositRequest()">
+      Submit
+    </button>
+  </form>
 </template>
 <script>
 import Decimal from 'decimal.js-light'
@@ -36,7 +41,7 @@ export default {
   mixins: [hub20.mixins.TokenMixin, hub20.mixins.RaidenMixin],
   props: {
     channel: Object,
-    token: Object,
+    token: Object
   },
   data() {
     return {
@@ -60,14 +65,14 @@ export default {
       } else {
         this.$set(this.validationErrors, 'amount', null)
       }
-    },
+    }
   },
   computed: {
     ...mapGetters('network', {getChainData: 'chainData'}),
     ...mapGetters('audit', ['onChainTokenBalance']),
     amountLabel() {
-
-      const formattedBalance = this.balance && hub20.filters.formattedAmount(this.balance.toNumber(), this.token)
+      const formattedBalance =
+        this.balance && hub20.filters.formattedAmount(this.balance.toNumber(), this.token)
       return this.balance ? `Amount (max. available: ${formattedBalance})` : 'No funds available'
     },
     balance() {
@@ -89,7 +94,7 @@ export default {
     estimatedCost() {
       const weiAmount = this.raidenOperationsCosts && this.raidenOperationsCosts['channel-deposit']
 
-      return weiAmount && (weiAmount / (10 ** this.token.decimals))
+      return weiAmount && weiAmount / 10 ** this.token.decimals
     },
     tokenUrl() {
       return this.channel && this.channel.token
@@ -99,7 +104,11 @@ export default {
     ...mapActions('audit', ['fetchWalletBalances']),
     ...mapActions('raiden', ['createChannelDepositRequest']),
     submitDepositRequest() {
-      this.createChannelDepositRequest({raiden: this.raiden, channel: this.channel, amount: this.amount})
+      this.createChannelDepositRequest({
+        raiden: this.raiden,
+        channel: this.channel,
+        amount: this.amount
+      })
     },
     updateEstimatedCost() {
       this.fetchRaidenStatus(this.raiden.id)
