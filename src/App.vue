@@ -22,9 +22,6 @@ export default {
       timer: null
     }
   },
-  created() {
-    document.title = 'Hub20'
-  },
   mounted() {
     this.$store.subscribe(mutation => {
       switch (mutation.type) {
@@ -38,9 +35,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../node_modules/bootstrap/scss/bootstrap.scss';
-@import '../node_modules/bootstrap/scss/variables';
-@import './assets/sass/app.scss';
+@import '@/assets/sass/app';
 
 .vue-notifyjs.notifications {
   .alert {

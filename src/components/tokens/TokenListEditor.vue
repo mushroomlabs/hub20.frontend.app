@@ -1,5 +1,5 @@
 <template>
-  <div v-if="tokenList" class="token-list-editor">
+  <form v-if="tokenList" class="token-list-editor">
     <fg-input
       label="Name"
       v-model="name"
@@ -24,8 +24,8 @@
       multiple
     />
 
-    <p-button block @click.native="save()" :disabled="!isValid">Save</p-button>
-  </div>
+    <button @click.prevent="save()" :disabled="!isValid">Save</button>
+  </form>
 </template>
 <script>
 import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'

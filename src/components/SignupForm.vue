@@ -58,7 +58,7 @@
         <template v-slot:secondary>
           <router-link to="/login">Already have an account?</router-link>
         </template>
-        <p-button @click.native="signUp(inputs)">Signup</p-button>
+        <button @click.prevent="signUp(inputs)">Signup</button>
       </action-panel>
       <div v-if="registrationCompleted">
         Registration complete. <router-link to="/login">Return to login page</router-link>

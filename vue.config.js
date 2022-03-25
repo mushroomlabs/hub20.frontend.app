@@ -14,8 +14,14 @@ module.exports = {
     loaderOptions: {
       sass: {
         implementation: require('sass'),
-        sourceMap: true,
+        sourceMap: true
       }
+    }
+  },
+  pages: {
+    index: {
+      entry: 'src/main.js',
+      title: 'Hub20'
     }
   }
 }

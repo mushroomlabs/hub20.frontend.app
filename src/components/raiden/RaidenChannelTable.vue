@@ -2,7 +2,7 @@
   <table class="table raiden-channels">
     <thead>
       <th class="identifier">Identifier</th>
-      <th class="network">Network</th>
+      <th class="network">Base Chain</th>
       <th class="balance">Balance</th>
     </thead>
     <tbody>

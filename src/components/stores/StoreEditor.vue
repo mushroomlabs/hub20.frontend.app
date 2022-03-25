@@ -47,7 +47,7 @@
       disabled
     />
 
-    <p-button block @click.native="save(store)" :disabled="!isValid">Save</p-button>
+    <button @click.prevent="save(store)" :disabled="!isValid">Save</button>
   </card>
 </template>
 <script>

@@ -5,10 +5,6 @@ import GlobalDirectives from './globalDirectives'
 
 import 'es6-promise/auto'
 
-//css assets
-import '@/assets/sass/paper-dashboard.scss'
-import '@/assets/css/themify-icons.css'
-
 export default {
   install(Vue) {
     Vue.use(GlobalComponents)
