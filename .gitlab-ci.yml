@@ -30,9 +30,6 @@ publish_npm_release:
     - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc
     - npm publish
 
-  when:
-    - tags
-
   rules:
     - if: '$CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+-release$/'
 
