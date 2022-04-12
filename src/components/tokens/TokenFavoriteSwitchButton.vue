@@ -4,7 +4,6 @@
     type="checkbox"
     v-model="selected"
     :checked="{selected}"
-    :disabled="isTokenNative(token)"
   />
 </template>
 <script>

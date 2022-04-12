@@ -2,22 +2,20 @@
   <div class="token-management">
     <card title="Tokens" subTitle="See and choose tokens available for trading">
       <p>
-        The base currency of every active chain is always going to be in your watchlist, because
-        they are needed to pay for transfer fees.
+        This is the list all tradeable tokens and their respective
+        chains. You can add or remove them from your watch list.
       </p>
       <TokenTable>
         <template v-slot:header>
           <th>On Watch List</th>
         </template>
 
-        <TokenTableItem v-for="userToken in userTokens" :key="userToken.url" :token="userToken">
+        <TokenTableItem v-for="token in tokens" :key="token.url" :token="token">
           <td>
-            <TokenFavoriteSwitchButton :token="asToken(userToken)" />
+            <TokenFavoriteSwitchButton :token="token" />
           </td>
         </TokenTableItem>
       </TokenTable>
-
-      <TokenSearch />
     </card>
 
     <card
@@ -59,7 +57,6 @@
 import {mapActions} from 'vuex'
 import {mixins} from 'hub20-vue-sdk'
 
-import TokenSearch from '@/components/tokens/TokenSearch'
 import TokenTable from '@/components/tokens/TokenTable'
 import TokenTableItem from '@/components/tokens/TokenTableItem'
 import TokenFavoriteSwitchButton from '@/components/tokens/TokenFavoriteSwitchButton'
@@ -70,7 +67,6 @@ export default {
   mixins: [mixins.TokenMixin, mixins.UserTokenMixin],
   components: {
     TokenFavoriteSwitchButton,
-    TokenSearch,
     TokenTable,
     TokenTableItem,
     TokenListTableItem
@@ -80,10 +76,9 @@ export default {
   },
   async created() {
     await this.getBlockchains()
+    await this.fetchTokens()
     await this.fetchUserTokens()
     await this.fetchUserTokenLists()
-
-    this.userTokens.forEach(userToken => this.fetchToken(userToken))
   }
 }
 </script>
