@@ -1,7 +1,7 @@
 <template>
   <div id="overview">
     <ul v-if="!hasAdminAccess" class="token-balances">
-      <li v-for="token in tokensToDisplay" :key="token.url">
+      <li v-for="token in tokens" :key="token.url">
         <token-balance-card :token="token" />
       </li>
     </ul>
@@ -72,7 +72,7 @@ export default {
     ...mapActions('audit', ['fetchAccountingReport', 'fetchWalletBalances'])
   },
   created() {
-    this.fetchUserTokens()
+    this.fetchTokens()
     this.loadAccountData()
     this.loadBlockchainData()
     this.fetchAccountingReport()
