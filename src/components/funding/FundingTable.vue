@@ -37,11 +37,12 @@ export default {
     ...mapActions('account', ['fetchBalances']),
     ...mapActions('funding', ['fetchOpenDeposits']),
     ...mapActions('network', {loadBlockchainData: 'initialize'}),
-    ...mapActions('tokens', ['fetchTokenByUrl', 'fetchUserTokens']),
+    ...mapActions('tokens', ['fetchUserTokens', 'fetchTokens']),
     ...mapActions('users', ['fetchUsers'])
   },
   async created() {
     await this.loadBlockchainData()
+    await this.fetchTokens()
     await this.fetchBalances()
     await this.fetchUserTokens()
 

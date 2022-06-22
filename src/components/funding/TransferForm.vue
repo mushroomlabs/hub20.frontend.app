@@ -168,7 +168,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('network', {getChainData: 'chainData'}),
+    ...mapGetters('network', ['getChainData']),
     ...mapState('tokens', ['transferCosts', 'routes']),
     ...mapGetters('account', ['tokenBalance']),
     ...mapGetters('users', ['usersByUsername']),
@@ -219,6 +219,9 @@ export default {
     recipientOptions() {
       return this.recipients.map(user => ({value: user.username, text: user.username}))
     },
+    chain() {
+      return this.getChainData(this.token.chain_id)
+    },
     withdrawalNetworkOptions() {
       const tokenRoutes = this.routes[this.token.url]
 
@@ -228,23 +231,27 @@ export default {
 
       const options = []
 
-      const chainData = this.getChainData(this.token.chain_id)
       if (tokenRoutes.blockchain) {
-        options.push({value: 'blockchain', text: `${chainData.name} (On-Chain)`})
+        options.push({value: 'blockchain', text: `${this.chain.name} (On-Chain)`})
       }
 
       if (tokenRoutes.networks && tokenRoutes.networks.raiden) {
-        options.push({value: 'raiden', text: `${chainData.name} (Raiden)`})
+        options.push({value: 'raiden', text: `${this.chain.name} (Raiden)`})
       }
 
       return options
     },
     transferCost() {
+      if (!this.nativeToken) {
+        return null
+
+      }
       if (this.transferType === 'internal' || this.paymentNetwork !== 'blockchain') {
         return null
       }
 
-      const estimate = this.transferCosts[this.token.url]
+      const networkEstimates = this.transferCosts[this.token.url]
+      const estimate = networkEstimates && networkEstimates[this.chain.url]
       const weiCost = estimate && ethers.utils.parseUnits(estimate.toString(), 0)
       const denominator = ethers.BigNumber.from((10 ** this.nativeToken.decimals).toString())
       return weiCost && weiCost / denominator

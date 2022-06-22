@@ -1,7 +1,7 @@
 <template>
   <tr v-if="userToken">
-    <td class="name" :title="token.address">{{ token.name }} ({{ token.symbol }})</td>
-    <td class="network" :title="chain.name">{{ chain.name }}</td>
+    <td class="name" :title="token.id">{{ token.name }} ({{ token.symbol }})</td>
+    <td class="network" :title="network.name">{{ network.name }}</td>
     <td class="price">{{ exchangeRate(token) | formattedCurrency(baseCurrency) }}</td>
     <td class="balance">{{ balance }}</td>
     <td class="actions">
@@ -64,30 +64,29 @@ export default {
   computed: {
     ...mapGetters('account', ['tokenBalance']),
     ...mapGetters('funding', ['openDepositsByToken']),
-    ...mapGetters('network', ['chainsById', 'IsNodeOnline', 'IsNodeSynced', 'chainData']),
+    ...mapGetters('network', ['isOnline', 'getChainData']),
     ...mapGetters('coingecko', ['exchangeRate']),
     ...mapState('coingecko', ['baseCurrency']),
-    ...mapState('network', ['blockchains']),
     token() {
-      return this.asToken(this.userToken)
+      return this.tokensByUrl[this.userToken.token]
     },
     balance() {
       return (this.token && this.tokenBalance(this.token)) || 'N/A'
     },
+    chainId() {
+      return this.token.chain_id
+    },
     canDeposit() {
-      return this.IsNodeOnline(this.chainId) && this.IsNodeSynced(this.chainId)
+      return this.isOnline(this.networkId)
     },
     canWithdraw() {
-      return this.IsNodeOnline(this.chainId) && this.IsNodeSynced(this.chainId) && this.hasFunds
+      return this.isOnline(this.networkId) && this.hasFunds
     },
-    chainId() {
-      return this.userToken.chain_id
+    networkId() {
+      return this.network && this.network.id
     },
-    chain() {
-      return this.chainsById[this.chainId]
-    },
-    chainState() {
-      return this.chainData(this.chainId)
+    network() {
+      return this.getChainData(this.chainId)
     },
     hasFunds() {
       return this.balance.gt(0)
@@ -96,17 +95,16 @@ export default {
       return `Deposit ${this.userToken.symbol}`
     },
     depositModalId() {
-      return `modal-deposit-${this.userToken.address}`
+      return `modal-deposit-${this.userToken.id}`
     },
     withdrawModalTitle() {
       return `Withdraw ${this.userToken.symbol}`
     },
     withdrawModalId() {
-      return `modal-withdraw-${this.userToken.address}`
+      return `modal-withdraw-${this.userToken.id}`
     }
   },
   methods: {
-    ...mapActions('coingecko', ['fetchRate']),
     ...mapActions('funding', ['createDeposit']),
     async openDepositModal() {
       const hasOpenDeposits = this.openDeposits.length > 0
@@ -125,9 +123,6 @@ export default {
       this.isDepositModalOpen = false
       this.isWithdrawModalOpen = false
     }
-  },
-  created() {
-    this.fetchRate(this.token)
   }
 }
 </script>
