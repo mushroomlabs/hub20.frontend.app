@@ -25,7 +25,7 @@ export default {
   mounted() {
     this.$store.subscribe(mutation => {
       switch (mutation.type) {
-        case 'notifications/ADD_NOTIFICATION':
+        case 'notifications/NOTIFICATION_ADD':
           this.$notify(mutation.payload)
           break
       }
