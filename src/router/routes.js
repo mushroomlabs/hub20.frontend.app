@@ -14,10 +14,6 @@ import History from '@/views/History'
 import Funding from '@/views/Funding'
 import Deposit from '@/views/Deposit'
 import Raiden from '@/views/raiden/Main'
-import RaidenChannel from '@/views/raiden/RaidenChannel'
-import RaidenChannelDeposit from '@/views/raiden/RaidenChannelDeposit'
-import RaidenChannelWithdrawal from '@/views/raiden/RaidenChannelWithdrawal'
-import RaidenUDCDeposit from '@/views/raiden/RaidenUDCDeposit'
 import Stores from '@/views/Stores'
 import StoreDetail from '@/views/StoreDetail'
 import Transfer from '@/views/Transfer'
@@ -38,21 +34,21 @@ const requireServerConnection = (to, from, next) => {
 }
 
 const requireAuthenticated = (to, from, next) => {
-  store
-    .dispatch('server/initialize')
-    .then(() => store.dispatch('auth/initialize'))
-    .then(() => {
-      if (!store.getters['server/isConnected']) {
-        next('/setup')
-      }
+  store.dispatch('server/initialize')
+       .then(() => store.dispatch('network/initialize'))
+       .then(() => store.dispatch('auth/initialize'))
+       .then(() => {
+         if (!store.getters['server/isConnected']) {
+           next('/setup')
+         }
 
-      if (!store.getters['auth/isAuthenticated']) {
-        next('/login')
-      }
+         if (!store.getters['auth/isAuthenticated']) {
+           next('/login')
+         }
 
-      store.dispatch('initialize')
-      next()
-    })
+         store.dispatch('initialize')
+         next()
+       })
 }
 
 const requireAdmin = (to, from, next) => {
@@ -112,15 +108,7 @@ const routes = [
         component: Funding
       },
       {
-        path: 'receive/:token',
-        name: 'payment-order',
-        component: Deposit,
-        meta: {
-          viewTitle: 'Request Payment'
-        }
-      },
-      {
-        path: 'deposit/:token',
+        path: 'deposit/:depositId',
         name: 'deposit',
         component: Deposit
       },
@@ -196,38 +184,6 @@ const routes = [
         name: 'raiden',
         component: Raiden
       },
-      {
-        path: 'raiden/:raiden/udc/deposit',
-        name: 'raiden-udc-deposit',
-        component: RaidenUDCDeposit,
-        meta: {
-          viewTitle: 'Deposit to Raiden User Deposit Contract'
-        }
-      },
-      {
-        path: 'raiden/:raiden/channel/:channel',
-        name: 'raiden-channel',
-        component: RaidenChannel,
-        meta: {
-          viewTitle: 'Raiden Channel'
-        }
-      },
-      {
-        path: 'raiden/:raiden/channel/:channel/deposit',
-        name: 'raiden-channel-deposit',
-        component: RaidenChannelDeposit,
-        meta: {
-          viewTitle: 'Request Deposit into Raiden Channel'
-        }
-      },
-      {
-        path: 'raiden/:raiden/channel/:channel/withdraw',
-        name: 'raiden-channel-withdraw',
-        component: RaidenChannelWithdrawal,
-        meta: {
-          viewTitle: 'Request Withdraw from Raiden Channel'
-        }
-      }
     ]
   },
   {

@@ -1,51 +1,72 @@
 <template>
-  <card :title="cardTitle">
-    <fg-input
-      type="number"
-      label="Amount"
-      v-model="amount"
-      :errorMessage="validationErrors.amount"
-      required
-    />
-    <p-button block @click.native="createDeposit({token, amount})" :disabled="!isValid"
-      >Deposit</p-button
-    >
-  </card>
+<card :title="cardTitle">
+  <div v-if="!hasOpenRoute">
+    <button v-for="network in depositNetworks" :key="network.id" @click="makeRoute(network)">
+      Deposit via {{network.name}}
+    </button>
+  </div>
+  <PaymentRequest v-if="deposit" :paymentRequest="deposit" />
+</card>
 </template>
 <script>
 import {mapGetters, mapActions} from 'vuex'
+import hub20 from 'hub20-vue-sdk'
 
 export default {
+  name: 'Deposit',
+  mixins: [hub20.mixins.TokenMixin],
+  components: {
+    PaymentRequest: hub20.components.Payment.Invoice
+  },
   data() {
     return {
-      validationErrors: {},
-      amount: 0
-    }
-  },
-  watch: {
-    amount() {
-      if (this.amount <= 0) {
-        this.$set(this.validationErrors, 'amount', 'Deposit amount should be greater than zero')
-      } else {
-        this.$set(this.validationErrors, 'amount', null)
-      }
+      deposit: null
     }
   },
   computed: {
-    ...mapGetters('tokens', ['tokensByAddress']),
-    ...mapGetters('funding', ['deposits']),
+    ...mapGetters('funding', ['depositsById']),
+    ...mapGetters('network', ['networksByUrl']),
     cardTitle() {
       return this.token && `Deposit ${this.token.symbol}`
     },
-    isValid() {
-      return this.amount && this.amount > 0
+    networks() {
+      const networkUrls = this.usableNetworksForToken(this.token)
+      return networkUrls && networkUrls.map(url => this.networksByUrl[url])
+    },
+    depositNetworks() {
+      return this.networks && this.networks.filter(network => network.type !== "internal")
+    },
+    depositId() {
+      return this.$route.params.depositId
+    },
+    routes() {
+      return this.deposit && this.deposit.routes
+    },
+    openRoutes() {
+      return this.routes && this.routes.filter(route => route.is_open)
     },
     token() {
-      return this.tokensByAddress[this.$route.params.token]
+      return this.deposit && this.deposit.token && this.tokensByUrl[this.deposit.token]
+    },
+    hasOpenRoute() {
+      return this.openRoutes && this.openRoutes.length > 0
     }
   },
   methods: {
-    ...mapActions('funding', ['createDeposit'])
+    ...mapActions('network', ['fetchNetworks']),
+    ...mapActions('funding', ['createDepositRoute', 'fetchDeposit']),
+    makeRoute(network) {
+      this.createDepositRoute({deposit: this.deposit, network})
+        .then(() => this.fetchDeposit(this.depositId))
+        .then(deposit => this.deposit = deposit)
+    },
+  },
+  async created() {
+    await this.fetchNetworks()
+    this.deposit = await this.fetchDeposit(this.depositId)
+    const token = await this.fetchTokenByUrl(this.deposit.token)
+    await this.fetchTokenNetworks(token)
+
   }
 }
 </script>

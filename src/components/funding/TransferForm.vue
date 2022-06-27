@@ -169,7 +169,7 @@ export default {
   },
   computed: {
     ...mapGetters('network', ['getChainData']),
-    ...mapState('tokens', ['transferCosts', 'routes']),
+    ...mapState('tokens', ['transferCosts', 'tokenNetworkMap']),
     ...mapGetters('account', ['tokenBalance']),
     ...mapGetters('users', ['usersByUsername']),
     transferData() {
@@ -223,7 +223,7 @@ export default {
       return this.getChainData(this.token.chain_id)
     },
     withdrawalNetworkOptions() {
-      const tokenRoutes = this.routes[this.token.url]
+      const tokenRoutes = this.tokenNetworkMap[this.token.url]
 
       if (!tokenRoutes) {
         return []
@@ -259,7 +259,7 @@ export default {
   },
   methods: {
     ...mapActions('funding', ['createTransfer', 'createWithdrawal']),
-    ...mapActions('tokens', ['fetchTransferCostEstimate', 'fetchRoutes']),
+    ...mapActions('tokens', ['fetchTransferCostEstimate', 'fetchTokenNetworks']),
     setTransferType(transferType) {
       this.transferType = transferType
     },
@@ -278,7 +278,7 @@ export default {
     }
   },
   created() {
-    this.fetchRoutes(this.token)
+    this.fetchTokenNetworks(this.token)
     this.updateTransferCost()
   },
   mounted() {

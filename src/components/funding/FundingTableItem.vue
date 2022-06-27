@@ -1,24 +1,13 @@
 <template>
-  <tr v-if="userToken">
-    <td class="name" :title="token.id">{{ token.name }} ({{ token.symbol }})</td>
-    <td class="network" :title="network.name">{{ network.name }}</td>
-    <td class="price">{{ exchangeRate(token) | formattedCurrency(baseCurrency) }}</td>
+  <tr v-if="token">
+    <td class="name" :title="token.symbol">{{ token.name }} ({{ token.symbol }})</td>
     <td class="balance">{{ balance }}</td>
     <td class="actions">
-      <button @click="openDepositModal()" :disabled="!canDeposit">Receive</button>
-      <button @click="openTransferModal()" :disabled="!canWithdraw">
+      <button @click="openDeposit()">Receive</button>
+      <button @click="openTransferModal()" :disabled="!hasFunds">
         Send
       </button>
     </td>
-    <Modal
-      label="deposit-modal"
-      :title="depositModalTitle"
-      :id="depositModalId"
-      :hidden="!isDepositModalOpen"
-      @modalClosed="closeModals()"
-    >
-      <DepositTracker :token="token" />
-    </Modal>
     <Modal
       label="withdraw-modal"
       :title="withdrawModalTitle"
@@ -36,7 +25,6 @@ import hub20 from 'hub20-vue-sdk'
 
 import Modal from '@/widgets/dialogs/Modal'
 
-import DepositTracker from './DepositTracker'
 import TransferForm from './TransferForm'
 
 export default {
@@ -44,7 +32,6 @@ export default {
   mixins: [hub20.mixins.UserTokenMixin, hub20.mixins.TokenMixin],
   components: {
     Modal,
-    DepositTracker,
     TransferForm
   },
   filters: {
@@ -64,29 +51,12 @@ export default {
   computed: {
     ...mapGetters('account', ['tokenBalance']),
     ...mapGetters('funding', ['openDepositsByToken']),
-    ...mapGetters('network', ['isOnline', 'getChainData']),
-    ...mapGetters('coingecko', ['exchangeRate']),
     ...mapState('coingecko', ['baseCurrency']),
     token() {
       return this.tokensByUrl[this.userToken.token]
     },
     balance() {
       return (this.token && this.tokenBalance(this.token)) || 'N/A'
-    },
-    chainId() {
-      return this.token.chain_id
-    },
-    canDeposit() {
-      return this.isOnline(this.networkId)
-    },
-    canWithdraw() {
-      return this.isOnline(this.networkId) && this.hasFunds
-    },
-    networkId() {
-      return this.network && this.network.id
-    },
-    network() {
-      return this.getChainData(this.chainId)
     },
     hasFunds() {
       return this.balance.gt(0)
@@ -106,15 +76,10 @@ export default {
   },
   methods: {
     ...mapActions('funding', ['createDeposit']),
-    async openDepositModal() {
-      const hasOpenDeposits = this.openDeposits.length > 0
-      if (!hasOpenDeposits) {
-        await this.createDeposit(this.token)
-      }
-      this.isDepositModalOpen = true
-    },
-    openDeposits() {
-      return this.openDepositsByToken(this.token)
+    openDeposit() {
+      this.createDeposit(this.token).then(
+        deposit => this.$router.push({name: 'deposit', params: {depositId: deposit.id}})
+      )
     },
     openTransferModal() {
       this.isWithdrawModalOpen = true

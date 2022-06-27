@@ -3,8 +3,22 @@ $_qrcode_max_size: 250px !important;
 $_vertical_padding: 0.25em;
 
 table.funding-status {
-  .balance, .price {
+  .balance {
     text-align: right;
+  }
+
+  .network span {
+    margin-left: 0.5rem;
+    &::after {
+      content: "/";
+      margin-left: 0.5rem;
+    }
+    &:last-child {
+      &::after {
+        content: "";
+        margin-left: 0;
+      }
+    }
   }
 
   th.name, td.name {
@@ -28,13 +42,7 @@ div.payment-request {
   }
 
   div.payment-route {
-    &:not(.selected) {
-      display: none;
-    }
-
-    &.selected {
-      display: grid;
-    }
+    display: grid;
 
     .blockchain-route-countdown {
       $line-height: 2em;
