@@ -2,8 +2,6 @@
   <table id="funding-data" class="table funding-status">
     <thead>
       <th class="name">Token</th>
-      <th class="chain">Network</th>
-      <th class="price">Price</th>
       <th class="balance">Current Balance</th>
       <th class="actions"></th>
     </thead>
@@ -36,14 +34,19 @@ export default {
   methods: {
     ...mapActions('account', ['fetchBalances']),
     ...mapActions('funding', ['fetchOpenDeposits']),
-    ...mapActions('network', {loadBlockchainData: 'initialize'}),
-    ...mapActions('tokens', ['fetchTokenByUrl', 'fetchUserTokens']),
+    ...mapActions('network', {fetchNetworks: 'initialize'}),
+    ...mapActions('tokens', ['fetchUserTokens']),
     ...mapActions('users', ['fetchUsers'])
   },
   async created() {
-    await this.loadBlockchainData()
+    await this.fetchNetworks()
     await this.fetchBalances()
-    await this.fetchUserTokens()
+    const userTokens = await this.fetchUserTokens()
+
+    userTokens.forEach(async userToken => {
+      const token = await this.fetchTokenByUrl(userToken.token)
+      this.fetchTokenNetworks(token)
+    })
 
     this.fetchUsers()
     this.fetchOpenDeposits()

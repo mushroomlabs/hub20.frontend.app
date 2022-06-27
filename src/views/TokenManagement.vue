@@ -72,10 +72,10 @@ export default {
     TokenListTableItem
   },
   methods: {
-    ...mapActions('network', ['getBlockchains'])
+    ...mapActions('network', ['fetchNetworks'])
   },
   async created() {
-    await this.getBlockchains()
+    await this.fetchNetworks()
     await this.fetchTokens()
     await this.fetchUserTokens()
     await this.fetchUserTokenLists()

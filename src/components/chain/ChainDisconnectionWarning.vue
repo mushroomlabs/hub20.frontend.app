@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import {mapGetters, mapState} from 'vuex'
+import {mapGetters} from 'vuex'
 
 export default {
   props: {
@@ -12,16 +12,18 @@ export default {
   },
   computed: {
     chain() {
-      return this.chainData(this.chainId)
+      return this.getChainData(this.chainId)
+    },
+    chainState() {
+      return this.getChainState(this.chainId)
     },
     chainName() {
       return this.chain.name
     },
     connected() {
-      return this.IsNodeOnline(this.chainId)
+      return this.chainState && this.chainState.online && this.chainState.synced
     },
-    ...mapState('network', ['blockchains']),
-    ...mapGetters('network', ['chainData', 'IsNodeOnline'])
+    ...mapGetters('network', ['getChainData', 'getChainState'])
   }
 }
 </script>

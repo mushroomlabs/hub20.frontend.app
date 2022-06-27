@@ -61,42 +61,41 @@ const actions = {
       let eventTypes = store.EVENT_TYPES
       const message = JSON.parse(evt.data)
       const eventData = message.data
+
+
       switch (message.event) {
-        case eventTypes.BLOCKCHAIN_BLOCK_CREATED:
-          commit('network/NETWORK_SET_BLOCKCHAIN_HEIGHT', {
-            chainId: eventData.chain_id,
-            blockNumber: eventData.number
-          })
+        case eventTypes.ETHEREUM_BLOCK_CREATED:
+          dispatch('network/updateBlockHeight', {chainId: eventData.chain_id, blockNumber: eventData.number})
           break
-        case eventTypes.BLOCKCHAIN_DEPOSIT_BROADCAST:
-          commit('notifications/ADD_NOTIFICATION', {
+        case eventTypes.ETHEREUM_DEPOSIT_BROADCAST:
+          commit('notifications/NOTIFICATION_ADD', {
             message: 'Blockchain transaction sent',
             type: 'info'
           })
           break
         case eventTypes.RAIDEN_ROUTE_EXPIRED:
-        case eventTypes.BLOCKCHAIN_ROUTE_EXPIRED:
-          commit('notifications/ADD_NOTIFICATION', {
+        case eventTypes.ETHEREUM_ROUTE_EXPIRED:
+          commit('notifications/NOTIFICATION_ADD', {
             message:
               'Payment route is expired. Any payment received now will may not be credited to your account',
             type: 'warning'
           })
           break
         case eventTypes.ETHEREUM_NODE_UNAVAILABLE:
-          commit('notifications/ADD_NOTIFICATION', {
+          commit('notifications/NOTIFICATION_ADD', {
             message: 'Server reported loss of connection with ethereum network',
             type: 'danger'
           })
           break
         case eventTypes.ETHEREUM_NODE_OK:
-          commit('notifications/ADD_NOTIFICATION', {
+          commit('notifications/NOTIFICATION_ADD', {
             message: 'Server connection with ethereum network established',
             type: 'success'
           })
           break
-        case eventTypes.BLOCKCHAIN_DEPOSIT_RECEIVED:
+        case eventTypes.ETHEREUM_DEPOSIT_RECEIVED:
           dispatch('funding/fetchDeposit', eventData.depositId)
-          commit('notifications/ADD_NOTIFICATION', {
+          commit('notifications/NOTIFICATION_ADD', {
             message: 'Deposit received via blockchain',
             type: 'success'
           })
@@ -109,6 +108,10 @@ const actions = {
     dispatch('events/initialize', getters['server/eventWebsocketUrl'])
     dispatch('events/setEventHandler', eventHandler)
     dispatch('network/initialize')
+      .then(() => {
+        const blockchains = getters['network/blockchains']
+        blockchains.forEach(chain => dispatch('tokens/fetchTokenByUrl', chain.token))
+      })
     commit(APP_SET_INITIALIZED)
   },
   tearDown({commit, dispatch}) {

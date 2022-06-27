@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 
 import hub20 from 'hub20-vue-sdk'
 
@@ -29,6 +29,11 @@ export default {
     openDeposits() {
       return this.openDepositsByToken(this.token)
     }
+  },
+  methods: {
+    ...mapActions('network', ['createDepositRoute'])
+  },
+  mounted() {
   }
 }
 </script>
