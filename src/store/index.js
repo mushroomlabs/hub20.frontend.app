@@ -73,33 +73,40 @@ const actions = {
             type: 'info'
           })
           break
-        case eventTypes.RAIDEN_ROUTE_EXPIRED:
-        case eventTypes.ETHEREUM_ROUTE_EXPIRED:
+        case eventTypes.ROUTE_EXPIRED:
           commit('notifications/NOTIFICATION_ADD', {
             message:
               'Payment route is expired. Any payment received now will may not be credited to your account',
             type: 'warning'
           })
           break
-        case eventTypes.ETHEREUM_NODE_UNAVAILABLE:
+        case eventTypes.PROVIDER_OFFLINE:
           commit('notifications/NOTIFICATION_ADD', {
             message: 'Server reported loss of connection with ethereum network',
             type: 'danger'
           })
           break
-        case eventTypes.ETHEREUM_NODE_OK:
+        case eventTypes.PROVIDER_ONLINE:
           commit('notifications/NOTIFICATION_ADD', {
             message: 'Server connection with ethereum network established',
             type: 'success'
           })
           break
-        case eventTypes.ETHEREUM_DEPOSIT_RECEIVED:
-          dispatch('funding/fetchDeposit', eventData.depositId)
+        case eventTypes.DEPOSIT_RECEIVED:
+          dispatch('funding/fetchDeposit', eventData.payment_request_id)
           commit('notifications/NOTIFICATION_ADD', {
-            message: 'Deposit received via blockchain',
+            message: 'Payment received',
             type: 'success'
           })
           break
+        case eventTypes.DEPOSIT_CONFIRMED:
+          dispatch('funding/fetchDeposit', eventData.payment_request_id)
+          commit('notifications/NOTIFICATION_ADD', {
+            message: 'Payment confirmed',
+            type: 'success'
+          })
+          break
+
         default:
           console.log(evt)
       }
