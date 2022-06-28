@@ -48,6 +48,10 @@ div.payment-route {
     max-height: $_qrcode_max_size;
   }
 
+  div.qr-code-display > span {
+    display: none;
+  }
+
   dl {
     dt {
 
@@ -124,26 +128,34 @@ div.payment-route {
     bottom: 0;
   }
 
-  div.web3-transfer {
-    text-align: left;
+  button.payment-route-display-toggle {
+    display: block;
     width: 100%;
-    margin: 1vh auto;
+  }
 
-    div.amount-selector {
-      > span {
-        display: block;
-      }
-      input {
-        padding: 1em 0.5rem;
-        width: 100%;
-        display: block;
-      }
+  div.web3-wallet-display {
+
+    &::before {
+      content: "or";
+      display: block;
+      padding: 1vh 0;
+      text-align: center;
     }
 
-    button {
-      display: block;
+    > span, div.amount-selector {
+        display: none;
+    }
+
+    div.web3-transfer {
+      text-align: left;
       width: 100%;
       margin: 1vh auto;
+
+      button {
+        display: block;
+        width: 100%;
+        margin: 1vh auto;
+      }
     }
   }
 
