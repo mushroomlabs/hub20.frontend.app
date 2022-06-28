@@ -1,11 +1,16 @@
 <template>
 <card :title="cardTitle">
+  <PaymentRoute
+    v-for="route in openRoutes"
+    :route="route"
+    :token="token"
+    :key="route.id"
+    />
   <div v-if="!hasOpenRoute">
     <button v-for="network in depositNetworks" :key="network.id" @click="makeRoute(network)">
       Deposit via {{network.name}}
     </button>
   </div>
-  <PaymentRequest v-if="deposit" :paymentRequest="deposit" />
 </card>
 </template>
 <script>
@@ -16,11 +21,13 @@ export default {
   name: 'Deposit',
   mixins: [hub20.mixins.TokenMixin],
   components: {
-    PaymentRequest: hub20.components.Payment.Invoice
+    PaymentRoute: hub20.components.Payment.PaymentRoute
   },
   data() {
     return {
-      deposit: null
+      deposit: null,
+      routes: [],
+      payments: []
     }
   },
   computed: {
@@ -39,11 +46,8 @@ export default {
     depositId() {
       return this.$route.params.depositId
     },
-    routes() {
-      return this.deposit && this.deposit.routes
-    },
     openRoutes() {
-      return this.routes && this.routes.filter(route => route.is_open)
+      return this.routes.filter(route => route.is_open)
     },
     token() {
       return this.deposit && this.deposit.token && this.tokensByUrl[this.deposit.token]
@@ -57,8 +61,8 @@ export default {
     ...mapActions('funding', ['createDepositRoute', 'fetchDeposit']),
     makeRoute(network) {
       this.createDepositRoute({deposit: this.deposit, network})
-        .then(() => this.fetchDeposit(this.depositId))
-        .then(deposit => this.deposit = deposit)
+        .then((route) => this.routes.push(route))
+        .catch(error => console.error(error))
     },
   },
   async created() {
@@ -67,6 +71,8 @@ export default {
     const token = await this.fetchTokenByUrl(this.deposit.token)
     await this.fetchTokenNetworks(token)
 
+    this.deposit.routes.forEach(route => this.routes.push(route))
+    this.deposit.payments.forEach(payment => this.payments.push(payment))
   }
 }
 </script>
