@@ -36,17 +36,44 @@ div.payment-request, form[name='transfer'] {
   }
 }
 
-div.payment-request {
+div.payment-route {
+  display: grid;
+
   canvas.qr-code {
-    text-align: center;
+    display: block;
+    margin: auto;
+    width: $_qrcode_size;
+    height: $_qrcode_size;
+    max-width: $_qrcode_max_size;
+    max-height: $_qrcode_max_size;
   }
 
-  div.payment-route {
-    display: grid;
+  dl {
+    dt {
 
-    .blockchain-route-countdown {
-      $line-height: 2em;
-      grid-area: routing-timer;
+    }
+    dd {
+      margin-inline-start: 0;
+      margin-bottom: 0.5em;
+      padding: 1vh 0.75rem;
+      border: 1px solid #DDD;
+      border-radius: 4px;
+
+      span.clipboard-copier {
+        text-overflow: clip;
+        cursor: pointer;
+
+        @include icon-after("layers");
+        &::after {
+          text-align: right;
+        }
+      }
+    }
+  }
+
+  .blockchain-route-countdown {
+    $line-height: 2em;
+    grid-area: routing-timer;
 
       display: grid;
       grid-template-areas: 'spinner .'
@@ -89,45 +116,12 @@ div.payment-request {
           display: none;
         }
       }
-    }
   }
 
   div.blockchain-timer {
     position: absolute;
     right: 0;
     bottom: 0;
-  }
-
-  dl {
-    dt {
-
-    }
-    dd {
-      margin-inline-start: 0;
-      margin-bottom: 0.5em;
-      padding: 1vh 0.75rem;
-      border: 1px solid #DDD;
-      border-radius: 4px;
-
-      span.clipboard-copier {
-        text-overflow: clip;
-        cursor: pointer;
-
-        @include icon-after("layers");
-        &::after {
-          text-align: right;
-        }
-      }
-    }
-  }
-
-  canvas.qr-code {
-    display: block;
-    margin: auto;
-    width: $_qrcode_size;
-    height: $_qrcode_size;
-    max-width: $_qrcode_max_size;
-    max-height: $_qrcode_max_size;
   }
 
   div.web3-transfer {
@@ -160,36 +154,36 @@ div.payment-request {
       text-align: start;
     }
   }
+}
 
-  div.payments {
-    margin-top: 2vh;
-    text-align: start;
+div.payments {
+  margin-top: 2vh;
+  text-align: start;
 
-    ul {
-      padding-inline-start: 0;
+  ul {
+    padding-inline-start: 0;
 
-      li {
-        align-items: center;
-        vertical-align: middle;
+    li {
+      align-items: center;
+      vertical-align: middle;
 
-        &.confirmed {
-          @include icon-before("check")
-        }
-
-        &:not(.confirmed) {
-          @include icon-before("reload")
-        }
-
-        span.identifier {
-          float: right;
-          display: inline-block;
-          max-width: 8rem;
-          overflow-x: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-
+      &.confirmed {
+        @include icon-before("check")
       }
+
+      &:not(.confirmed) {
+        @include icon-before("reload")
+      }
+
+      span.identifier {
+        float: right;
+        display: inline-block;
+        max-width: 8rem;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
     }
   }
 }
