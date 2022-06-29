@@ -13,10 +13,12 @@ import Overview from '@/views/Overview'
 import History from '@/views/History'
 import Funding from '@/views/Funding'
 import Deposit from '@/views/Deposit'
+import TransferDetail from '@/views/TransferDetail'
+import InternalTransferForm from '@/views/TransferForm'
+import WithdrawalForm from '@/views/WithdrawalForm'
 import Raiden from '@/views/raiden/Main'
 import Stores from '@/views/Stores'
 import StoreDetail from '@/views/StoreDetail'
-import Transfer from '@/views/Transfer'
 import TokenManagement from '@/views/TokenManagement'
 import TokenListDetail from '@/views/TokenListDetail'
 
@@ -113,19 +115,27 @@ const routes = [
         component: Deposit
       },
       {
-        path: 'send/:token',
-        name: 'withdraw',
-        component: Transfer,
+        path: 'send/:tokenId',
+        name: 'withdrawal-create',
+        component: WithdrawalForm,
         meta: {
-          viewTitle: 'Send'
+          viewTitle: 'Withdraw'
         }
       },
       {
-        path: 'transfer/:token',
-        name: 'transfer',
-        component: Transfer,
+        path: 'transfer/:tokenId',
+        name: 'internal-transfer-create',
+        component: InternalTransferForm,
         meta: {
-          viewTitle: 'Send Payment'
+          viewTitle: 'Transfer'
+        }
+      },
+      {
+        path: 'transfer/:transferId',
+        name: 'transfer-detail',
+        component: TransferDetail,
+        meta: {
+          viewTitle: 'Transfer Detail'
         }
       },
       {
