@@ -1,16 +1,26 @@
 <template>
-<card :title="cardTitle">
-  <PaymentRoute
-    v-for="route in openRoutes"
-    :route="route"
-    :token="token"
-    :key="route.id"
-    />
-  <div v-if="!hasOpenRoute">
-    <button v-for="network in depositNetworks" :key="network.id" @click="makeRoute(network)">
-      Deposit via {{network.name}}
-    </button>
-  </div>
+<card :title="cardTitle" v-if="token && deposit">
+  <section v-if="payments.length">
+    <h5>Received Payments</h5>
+    <PaymentList :payments="payments" />
+  </section>
+
+  <section>
+    <PaymentRoute
+      v-for="route in openRoutes"
+      :route="route"
+      :token="token"
+      :key="route.id"
+      />
+  </section>
+  <section class="route-selector" v-if="!hasOpenRoute">
+    <p>
+        Select one of the payment networks below to make a payment:
+    </p>
+    <div class="routing-options">
+      <button v-for="network in depositNetworks" :key="network.id"  @click="makeRoute(network)">{{network.name}}</button>
+    </div>
+  </section>
 </card>
 </template>
 <script>
@@ -21,7 +31,8 @@ export default {
   name: 'Deposit',
   mixins: [hub20.mixins.TokenMixin],
   components: {
-    PaymentRoute: hub20.components.Payment.PaymentRoute
+    PaymentRoute: hub20.components.Payment.PaymentRoute,
+    PaymentList: hub20.components.Payment.PaymentList
   },
   data() {
     return {

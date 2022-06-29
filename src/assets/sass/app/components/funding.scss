@@ -36,6 +36,19 @@ div.payment-request, form[name='transfer'] {
   }
 }
 
+ul.payments-received details > span {
+  display: block;
+
+  span.display-label {
+    font-weight: 700;
+  }
+}
+
+div.routing-options {
+  display: flex;
+  justify-content: space-evenly;
+}
+
 div.payment-route {
   display: grid;
 
