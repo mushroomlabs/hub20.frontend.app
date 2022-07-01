@@ -61,7 +61,7 @@ const actions = {
       let eventTypes = store.EVENT_TYPES
       const message = JSON.parse(evt.data)
       const eventData = message.data
-
+      const network = getters['network/networksById'][eventData.network]
 
       switch (message.event) {
         case eventTypes.ETHEREUM_BLOCK_CREATED:
@@ -81,16 +81,20 @@ const actions = {
           })
           break
         case eventTypes.PROVIDER_OFFLINE:
-          commit('notifications/NOTIFICATION_ADD', {
-            message: 'Server reported loss of connection with ethereum network',
-            type: 'danger'
-          })
+          if (network) {
+            commit('notifications/NOTIFICATION_ADD', {
+              message: `Server reported loss of connection with ${network.name}`,
+              type: 'danger'
+            })
+          }
           break
         case eventTypes.PROVIDER_ONLINE:
-          commit('notifications/NOTIFICATION_ADD', {
-            message: 'Server connection with ethereum network established',
-            type: 'success'
-          })
+          if (network) {
+            commit('notifications/NOTIFICATION_ADD', {
+              message: `Server connection with ${network.name} network established`,
+              type: 'success'
+            })
+          }
           break
         case eventTypes.DEPOSIT_RECEIVED:
           dispatch('funding/fetchDeposit', eventData.payment_request_id)
@@ -111,14 +115,13 @@ const actions = {
           console.log(evt)
       }
     }
-
-    dispatch('events/initialize', getters['server/eventWebsocketUrl'])
-    dispatch('events/setEventHandler', eventHandler)
     dispatch('network/initialize')
       .then(() => {
         const blockchains = getters['network/blockchains']
         blockchains.forEach(chain => dispatch('tokens/fetchTokenByUrl', chain.token))
       })
+    dispatch('events/initialize', getters['server/eventWebsocketUrl'])
+    dispatch('events/setEventHandler', eventHandler)
     commit(APP_SET_INITIALIZED)
   },
   tearDown({commit, dispatch}) {

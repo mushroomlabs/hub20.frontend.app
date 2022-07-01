@@ -1,23 +1,13 @@
 <template>
   <div>
-    <span v-if="submitted">Transfer submitted successfully!</span>
-    <form v-if="!submitted" name="transfer">
-      <div class="button-bar">
-        <button
-          type="button"
-          :class="{active: isInternalTransfer}"
-          @click="setTransferType('internal')"
-        >
-          Internal
-        </button>
-        <button
-          type="button"
-          :class="{active: !isInternalTransfer}"
-          @click="setTransferType('external')"
-        >
-          External
-        </button>
-      </div>
+    <form name="transfer">
+      <fg-select
+        type="text"
+        label="Payment Network"
+        v-model="selectedNetworkUrl"
+        :options="withdrawalNetworkOptions"
+        :errorMessage="validationErrors.withdrawalNetworkOptions"
+      />
 
       <fg-input
         type="number"
@@ -30,27 +20,8 @@
       <fg-input
         type="text"
         label="Address"
-        v-if="!isInternalTransfer"
         v-model="address"
         :errorMessage="validationErrors.address"
-      />
-
-      <fg-select
-        type="text"
-        label="Payment Network"
-        v-if="!isInternalTransfer && hasMultipleWithdrawalOptions"
-        v-model="paymentNetwork"
-        :options="withdrawalNetworkOptions"
-        :errorMessage="validationErrors.withdrawalNetworkOptions"
-      />
-
-      <fg-select
-        type="text"
-        label="Recipient"
-        v-if="isInternalTransfer"
-        v-model="recipientUsername"
-        :options="recipientOptions"
-        :errorMessage="validationErrors.recipientUsername"
       />
 
       <fg-input
@@ -83,24 +54,20 @@ import {mapActions, mapGetters, mapState} from 'vuex'
 
 import hub20 from 'hub20-vue-sdk'
 
-import AuthMixin from '@/mixins/auth'
-
 export default {
-  mixins: [AuthMixin, hub20.mixins.TokenMixin],
+  name: 'WithdrawalForm',
+  mixins: [hub20.mixins.TokenMixin, hub20.mixins.PaymentNetworkMixin],
   props: {
     token: Object
   },
   data() {
     return {
       validationErrors: {},
-      transferType: 'external',
-      paymentNetwork: 'blockchain',
+      selectedNetworkUrl: null,
       amount: 0,
       address: null,
-      recipientUsername: null,
       memo: null,
       identifier: null,
-      submitted: false,
       transferCostTimer: null
     }
   },
@@ -126,36 +93,13 @@ export default {
         this.$set(this.validationErrors, 'amount', null)
       }
     },
-    transferType(value) {
-      if (value === 'internal' && !this.recipientUsername) {
-        this.$set(
-          this.validationErrors,
-          'recipientUsername',
-          'Please provide username of recipient'
-        )
-      }
-      if (value === 'external' && !this.address) {
-        this.$set(this.validationErrors, 'address', 'Please provide recipient ethereum address')
-      }
-    },
     withdrawalNetworkOptions(value) {
-      if (this.transferType === 'external' && !value) {
+      if (!value) {
         this.$set(
           this.validationErrors,
           'withdrawalNetworkOptions',
           'Please select the network used to make the transfer'
         )
-      }
-    },
-    recipientUsername(value) {
-      if (!value) {
-        this.$set(
-          this.validationErrors,
-          'recipientUsername',
-          'Please provide username of recipient'
-        )
-      } else {
-        this.$set(this.validationErrors, 'recipientUsername', null)
       }
     },
     identifier(value) {
@@ -168,25 +112,19 @@ export default {
     }
   },
   computed: {
+    ...mapState('account', {hasBalances: 'initialized'}),
     ...mapGetters('network', ['getChainData']),
     ...mapState('tokens', ['transferCosts', 'tokenNetworkMap']),
     ...mapGetters('account', ['tokenBalance']),
     ...mapGetters('users', ['usersByUsername']),
     transferData() {
-      let payload = {
+      return {
         token: this.token,
         amount: this.amount,
         memo: this.memo,
         identifier: this.identifier,
-        payment_network: this.paymentNetwork
+        address: this.address
       }
-
-      if (this.transferType == 'internal') {
-        payload.recipient = this.recipientUsername
-      } else {
-        payload.address = this.address
-      }
-      return payload
     },
     amountLabel() {
       return `Amount (max. available: ${this.balance} ${this.token.symbol})`
@@ -197,13 +135,12 @@ export default {
     hasMultipleWithdrawalOptions() {
       return this.withdrawalNetworkOptions.length > 1
     },
-    isInternalTransfer() {
-      return this.transferType === 'internal'
-    },
     isValid() {
       return [
         this.amount && this.amount > 0,
-        this.isInternalTransfer ? this.recipientUsername != null : this.address != null,
+        this.amount && this.amount <= this.balance,
+        this.address != null,
+        this.selectedNetwork != null,
         !this.validationErrors.identifier,
         !this.validationErrors.memo
       ].every(pred => Boolean(pred))
@@ -211,67 +148,44 @@ export default {
     nativeToken() {
       return this.getNativeToken(this.token)
     },
-    recipients() {
-      return Object.values(this.usersByUsername).filter(
-        user => user.username != this.loggedUsername
-      )
-    },
-    recipientOptions() {
-      return this.recipients.map(user => ({value: user.username, text: user.username}))
-    },
     chain() {
       return this.getChainData(this.token.chain_id)
     },
+    networks() {
+      return this.usableNetworksForToken(this.token).map(networkUrl => this.networksByUrl[networkUrl])
+    },
+    withdrawalNetworks() {
+      return this.networks && this.networks.filter(network => network && network.type !== 'internal')
+    },
     withdrawalNetworkOptions() {
-      const tokenRoutes = this.tokenNetworkMap[this.token.url]
-
-      if (!tokenRoutes) {
-        return []
-      }
-
-      const options = []
-
-      if (tokenRoutes.blockchain) {
-        options.push({value: 'blockchain', text: `${this.chain.name} (On-Chain)`})
-      }
-
-      if (tokenRoutes.networks && tokenRoutes.networks.raiden) {
-        options.push({value: 'raiden', text: `${this.chain.name} (Raiden)`})
-      }
-
-      return options
+      return this.networks && this.withdrawalNetworks.map(network => ({value: network.url, text: network.name}))
+    },
+    selectedNetwork() {
+      return this.selectedNetworkUrl && this.networksByUrl[this.selectedNetworkUrl]
     },
     transferCost() {
-      if (!this.nativeToken) {
-        return null
-
-      }
-      if (this.transferType === 'internal' || this.paymentNetwork !== 'blockchain') {
+      if (!this.nativeToken || !this.token) {
         return null
       }
 
       const networkEstimates = this.transferCosts[this.token.url]
-      const estimate = networkEstimates && networkEstimates[this.chain.url]
+      const estimate = networkEstimates && networkEstimates[this.selectedNetworkUrl]
       const weiCost = estimate && ethers.utils.parseUnits(estimate.toString(), 0)
       const denominator = ethers.BigNumber.from((10 ** this.nativeToken.decimals).toString())
       return weiCost && weiCost / denominator
     }
   },
   methods: {
-    ...mapActions('funding', ['createTransfer', 'createWithdrawal']),
+    ...mapActions('account', ['fetchBalances']),
+    ...mapActions('funding', ['createTransfer']),
     ...mapActions('tokens', ['fetchTransferCostEstimate', 'fetchTokenNetworks']),
-    setTransferType(transferType) {
-      this.transferType = transferType
-    },
     selectAmount(evt) {
       this.amount = evt.target.value
     },
     submitTransfer() {
-      const action = this.isInternalTransfer ? this.createTransfer : this.createWithdrawal
-      action(this.transferData).then(() => {
-        this.$emit('transferFormSubmitted')
-        this.submitted = true
-      })
+      this.createTransfer({payload: this.transferData, network: this.selectedNetwork})
+        .then(transferData => this.$router.push({name: 'transfer-detail', params: {transferId: transferData.id}}))
+        .catch(error => console.error(error))
     },
     updateTransferCost() {
       this.fetchTransferCostEstimate(this.token)
@@ -280,6 +194,9 @@ export default {
   created() {
     this.fetchTokenNetworks(this.token)
     this.updateTransferCost()
+    if (!this.hasBalances) {
+      this.fetchBalances()
+    }
   },
   mounted() {
     this.transferCostTimer = setInterval(this.updateTransferCost, 120 * 1000)
