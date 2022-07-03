@@ -48,7 +48,7 @@ export default {
     },
     isFinalized() {
       const FINALIZED_STATUSES = [
-        'confirmed', 'failed', 'canceled'
+        'processed', 'confirmed', 'failed', 'canceled'
       ]
       return this.transfer && FINALIZED_STATUSES.includes(this.transfer.status)
     }
